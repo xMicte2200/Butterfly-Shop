@@ -169,6 +169,7 @@
 
       <div class="input-group">
         <label for="username">👤 Nombre de usuario</label>
+
         <input
           type="text"
           id="username"
@@ -180,6 +181,7 @@
 
       <div class="input-group">
         <label for="password">🔐 Contraseña</label>
+
         <input
           type="password"
           id="password"
@@ -202,7 +204,11 @@
 
       </div>
 
-      <button type="submit" class="login-btn" id="login-button">
+      <button
+        type="submit"
+        class="login-btn"
+        id="login-button"
+      >
         🦋 Iniciar sesión
       </button>
 
@@ -228,17 +234,12 @@
   <script src="supabase-config.js"></script>
 
   <script>
-    const { createClient } = supabase;
-
-    const supabaseClient = createClient(
-      SUPABASE_URL,
-      SUPABASE_ANON_KEY
-    );
 
     const form = document.getElementById("login-form");
     const button = document.getElementById("login-button");
 
     form.addEventListener("submit", async (event) => {
+
       event.preventDefault();
 
       const username =
@@ -253,18 +254,22 @@
       try {
 
         /*
-         * Primero buscamos internamente el correo
-         * asociado al nombre de usuario.
+         * Buscamos el correo asociado
+         * al nombre de usuario.
          */
-        const { data: email, error: lookupError } =
-          await supabaseClient.rpc(
-            "get_login_email",
-            {
-              p_username: username
-            }
-          );
+
+        const {
+          data: email,
+          error: lookupError
+        } = await supabaseClient.rpc(
+          "get_login_email",
+          {
+            p_username: username
+          }
+        );
 
         if (lookupError) {
+
           console.error(lookupError);
 
           alert(
@@ -278,6 +283,7 @@
         }
 
         if (!email) {
+
           alert(
             "No se encontró una cuenta con ese nombre de usuario. 🦋"
           );
@@ -291,16 +297,20 @@
         button.textContent = "Iniciando sesión... 🦋";
 
         /*
-         * Usamos el correo encontrado internamente
-         * para autenticar al usuario con Supabase.
+         * Iniciamos sesión utilizando
+         * el correo encontrado y la contraseña.
          */
-        const { data, error } =
-          await supabaseClient.auth.signInWithPassword({
-            email: email,
-            password: password
-          });
+
+        const {
+          data,
+          error
+        } = await supabaseClient.auth.signInWithPassword({
+          email: email,
+          password: password
+        });
 
         if (error) {
+
           console.error(error);
 
           alert(
@@ -314,6 +324,7 @@
         }
 
         if (!data.user) {
+
           alert("No se encontró la cuenta.");
 
           button.disabled = false;
@@ -322,7 +333,9 @@
           return;
         }
 
-        alert("¡Bienvenido a Butterfly Shop! 🦋💗");
+        alert(
+          "¡Bienvenido a Butterfly Shop! 🦋💗"
+        );
 
         window.location.href = "panel.html";
 
@@ -337,13 +350,15 @@
         button.disabled = false;
         button.textContent = "🦋 Iniciar sesión";
       }
+
     });
 
 
     /*
-     * Recuperación de contraseña mediante usuario.
-     * El correo se busca internamente.
+     * Recuperación de contraseña
+     * mediante nombre de usuario.
      */
+
     document
       .getElementById("forgot-password")
       .addEventListener("click", async (event) => {
@@ -354,39 +369,47 @@
           document.getElementById("username").value.trim();
 
         if (!username) {
+
           alert(
             "Primero escribe tu nombre de usuario. 🦋"
           );
+
           return;
         }
 
         try {
 
-          const { data: email, error: lookupError } =
-            await supabaseClient.rpc(
-              "get_login_email",
-              {
-                p_username: username
-              }
-            );
+          const {
+            data: email,
+            error: lookupError
+          } = await supabaseClient.rpc(
+            "get_login_email",
+            {
+              p_username: username
+            }
+          );
 
           if (lookupError || !email) {
+
             alert(
               "No se encontró una cuenta con ese nombre de usuario. 🦋"
             );
+
             return;
           }
 
-          const { error } =
-            await supabaseClient.auth.resetPasswordForEmail(
-              email,
-              {
-                redirectTo:
-                  window.location.origin + "/login.html"
-              }
-            );
+          const {
+            error
+          } = await supabaseClient.auth.resetPasswordForEmail(
+            email,
+            {
+              redirectTo:
+                window.location.origin + "/login.html"
+            }
+          );
 
           if (error) {
+
             console.error(error);
 
             alert(
@@ -408,7 +431,9 @@
             "Ocurrió un error inesperado. Inténtalo nuevamente."
           );
         }
+
       });
+
   </script>
 
 </body>
