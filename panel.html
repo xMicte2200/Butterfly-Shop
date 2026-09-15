@@ -111,6 +111,41 @@
     button:hover {
       background: #8e44ad;
     }
+
+    .username-box {
+      margin-top: 25px;
+      padding: 20px;
+      background: white;
+      border-radius: 18px;
+      box-shadow: 0 4px 15px rgba(100,60,130,0.10);
+    }
+
+    .username-box h3 {
+      color: #8e44ad;
+      margin-bottom: 8px;
+    }
+
+    .username-box p {
+      margin-bottom: 15px;
+      font-size: 14px;
+    }
+
+    .username-box input {
+      width: 100%;
+      padding: 12px;
+      border: 2px solid #e5d2f0;
+      border-radius: 10px;
+      outline: none;
+      font-size: 15px;
+    }
+
+    .username-box input:focus {
+      border-color: #9b59b6;
+    }
+
+    #username-button {
+      margin-top: 12px;
+    }
   </style>
 </head>
 
@@ -133,6 +168,7 @@
   <main class="container">
 
     <section class="welcome">
+
       <h2>¡Hola, <span id="username">Usuario</span>! 🦋</h2>
 
       <p>Bienvenido a tu panel de Butterfly Shop.</p>
@@ -141,7 +177,31 @@
         💜 Créditos: <span id="credits">0</span>
       </div>
 
+      <div class="username-box">
+
+        <h3>👤 Cambiar nombre de usuario</h3>
+
+        <p>
+          Puedes cambiar tu nombre de usuario cuando quieras.
+          Debe tener entre 3 y 30 caracteres.
+        </p>
+
+        <input
+          type="text"
+          id="new-username"
+          placeholder="Nuevo nombre de usuario"
+          maxlength="30"
+          autocomplete="off"
+        >
+
+        <button id="username-button">
+          ✨ Guardar nuevo usuario
+        </button>
+
+      </div>
+
       <button id="logout-button">Cerrar sesión</button>
+
     </section>
 
     <section class="actions">
@@ -231,6 +291,9 @@
       document.getElementById("credits").textContent =
         profile.credits ?? 0;
 
+      document.getElementById("new-username").value =
+        profile.username || "";
+
       if (profile.role === "admin") {
 
         document.getElementById("admin-menu").style.display = "inline-block";
@@ -238,6 +301,53 @@
         document.getElementById("admin-action").style.display = "block";
       }
     }
+
+    document.getElementById("username-button").addEventListener("click", async () => {
+
+      const input = document.getElementById("new-username");
+      const button = document.getElementById("username-button");
+
+      const newUsername = input.value.trim();
+
+      if (!newUsername) {
+        alert("Escribe un nombre de usuario.");
+        return;
+      }
+
+      if (newUsername.length < 3) {
+        alert("El nombre de usuario debe tener al menos 3 caracteres.");
+        return;
+      }
+
+      if (newUsername.length > 30) {
+        alert("El nombre de usuario no puede superar 30 caracteres.");
+        return;
+      }
+
+      button.disabled = true;
+      button.textContent = "Guardando...";
+
+      const { data, error } = await supabaseClient.rpc(
+        "change_username",
+        {
+          p_new_username: newUsername
+        }
+      );
+
+      button.disabled = false;
+      button.textContent = "✨ Guardar nuevo usuario";
+
+      if (error) {
+        console.error(error);
+        alert(error.message || "No se pudo cambiar el nombre de usuario.");
+        return;
+      }
+
+      document.getElementById("username").textContent = data;
+      input.value = data;
+
+      alert("✨ ¡Nombre de usuario cambiado correctamente!");
+    });
 
     document.getElementById("logout-button").addEventListener("click", async () => {
 
