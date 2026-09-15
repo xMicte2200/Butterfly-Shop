@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Butterfly Shop 🦋</title>
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', sans-serif;
+        }
+
+        body {
+            background: linear-gradient(135deg, #f8edff, #eee1ff, #fff5fb);
+            color: #4b356b;
+            min-height: 100vh;
+        }
+
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px 7%;
+            background: rgba(255,255,255,0.75);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid #ead8ff;
+        }
+
+        .logo {
+            font-size: 24px;
+            font-weight: bold;
+            color: #8c5bc4;
+        }
+
+        nav a {
+            text-decoration: none;
+            color: #6e4b91;
+            margin-left: 18px;
+            font-size: 14px;
+        }
+
+        .hero {
+            text-align: center;
+            padding: 100px 20px 70px;
+        }
+
+        .butterfly {
+            font-size: 55px;
+            margin-bottom: 15px;
+        }
+
+        .hero h1 {
+            font-size: clamp(35px, 7vw, 65px);
+            color: #7544a8;
+            margin-bottom: 18px;
+        }
+
+        .hero p {
+            max-width: 600px;
+            margin: auto;
+            font-size: 17px;
+            line-height: 1.7;
+            color: #806b96;
+        }
+
+        .buttons {
+            margin-top: 30px;
+        }
+
+        .btn {
+            display: inline-block;
+            padding: 14px 28px;
+            margin: 8px;
+            border-radius: 30px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: 0.3s;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #a978df, #8050b4);
+            color: white;
+            box-shadow: 0 8px 20px rgba(128,80,180,0.25);
+        }
+
+        .btn-secondary {
+            background: white;
+            color: #8050b4;
+            border: 1px solid #dfc8f7;
+        }
+
+        .btn:hover {
+            transform: translateY(-3px);
+        }
+
+        .features {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 20px;
+            max-width: 1000px;
+            margin: auto;
+            padding: 20px;
+        }
+
+        .card {
+            background: rgba(255,255,255,0.8);
+            padding: 30px 20px;
+            border-radius: 22px;
+            text-align: center;
+            border: 1px solid #ead8ff;
+            box-shadow: 0 8px 25px rgba(130,90,170,0.06);
+        }
+
+        .card span {
+            font-size: 32px;
+            display: block;
+            margin-bottom: 12px;
+        }
+
+        .card h3 {
+            color: #7544a8;
+            margin-bottom: 8px;
+        }
+
+        .card p {
+            font-size: 14px;
+            color: #8c789f;
+            line-height: 1.5;
+        }
+
+        footer {
+            text-align: center;
+            padding: 40px 20px;
+            margin-top: 50px;
+            color: #9b83b3;
+            font-size: 13px;
+        }
+    </style>
+</head>
+
+<body>
+
+    <header>
+        <div class="logo">🦋 Butterfly Shop</div>
+
+        <nav>
+            <a href="index.html">Inicio</a>
+            <a href="catalogo.html">Catálogo</a>
+            <a href="login.html">Iniciar sesión</a>
+        </nav>
+    </header>
+
+    <section class="hero">
+
+        <div class="butterfly">🦋</div>
+
+        <h1>Butterfly Shop</h1>
+
+        <p>
+            Tu espacio digital para descubrir plataformas,
+            servicios y productos disponibles de forma sencilla,
+            segura y organizada.
+        </p>
+
+        <div class="buttons">
+            <a href="catalogo.html" class="btn btn-primary">
+                🛍️ Explorar catálogo
+            </a>
+
+            <a href="registro.html" class="btn btn-secondary">
+                ✨ Crear una cuenta
+            </a>
+        </div>
+
+    </section>
+
+    <section class="features">
+
+        <div class="card">
+            <span>💎</span>
+            <h3>Sistema de créditos</h3>
+            <p>
+                Administra tu saldo y utiliza tus créditos
+                para adquirir productos disponibles.
+            </p>
+        </div>
+
+        <div class="card">
+            <span>⚡</span>
+            <h3>Entrega digital</h3>
+            <p>
+                Compra productos digitales disponibles
+                desde tu cuenta.
+            </p>
+        </div>
+
+        <div class="card">
+            <span>🚨</span>
+            <h3>Centro de reportes</h3>
+            <p>
+                Envía reportes y consulta el seguimiento
+                de tus compras.
+            </p>
+        </div>
+
+    </section>
+
+    <footer>
+        🦋 Butterfly Shop · Todos los derechos reservados
+    </footer>
+
+</body>
+</html>
