@@ -1,0 +1,346 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Butterfly Shop | Administración</title>
+
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: Arial, sans-serif;
+    }
+
+    body {
+      background: #faf7ff;
+      color: #33243f;
+    }
+
+    header {
+      background: linear-gradient(135deg, #b98cff, #e7a8d8);
+      color: white;
+      padding: 20px;
+      box-shadow: 0 4px 15px #b98cff55;
+    }
+
+    .header-content {
+      max-width: 1200px;
+      margin: auto;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 15px;
+    }
+
+    .logo {
+      font-size: 24px;
+      font-weight: bold;
+    }
+
+    .admin-tag {
+      background: #ffffff33;
+      padding: 8px 14px;
+      border-radius: 20px;
+      font-size: 13px;
+    }
+
+    .container {
+      max-width: 1200px;
+      margin: 30px auto;
+      padding: 0 18px;
+    }
+
+    .welcome {
+      margin-bottom: 25px;
+    }
+
+    .welcome h1 {
+      color: #743d91;
+      margin-bottom: 8px;
+    }
+
+    .welcome p {
+      color: #77677f;
+    }
+
+    .stats {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(190px, 1fr));
+      gap: 18px;
+      margin-bottom: 30px;
+    }
+
+    .stat {
+      background: white;
+      padding: 20px;
+      border-radius: 18px;
+      box-shadow: 0 5px 18px #8d5ca522;
+      border: 1px solid #eadcff;
+    }
+
+    .stat-icon {
+      font-size: 28px;
+      margin-bottom: 10px;
+    }
+
+    .stat h3 {
+      font-size: 26px;
+      color: #743d91;
+    }
+
+    .stat p {
+      color: #81758a;
+      font-size: 14px;
+      margin-top: 4px;
+    }
+
+    .section-title {
+      color: #743d91;
+      margin: 28px 0 15px;
+      font-size: 21px;
+    }
+
+    .admin-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
+      gap: 18px;
+    }
+
+    .admin-card {
+      background: white;
+      border: 1px solid #eadcff;
+      border-radius: 18px;
+      padding: 22px;
+      box-shadow: 0 5px 18px #8d5ca515;
+    }
+
+    .admin-card .icon {
+      font-size: 32px;
+      margin-bottom: 12px;
+    }
+
+    .admin-card h3 {
+      color: #66377f;
+      margin-bottom: 8px;
+    }
+
+    .admin-card p {
+      color: #77677f;
+      font-size: 14px;
+      line-height: 1.5;
+      margin-bottom: 16px;
+    }
+
+    .btn {
+      display: inline-block;
+      text-decoration: none;
+      border: none;
+      cursor: pointer;
+      background: linear-gradient(135deg, #9b6de3, #d98bc9);
+      color: white;
+      padding: 10px 15px;
+      border-radius: 12px;
+      font-weight: bold;
+      font-size: 14px;
+    }
+
+    .btn:hover {
+      opacity: 0.9;
+    }
+
+    .activity {
+      background: white;
+      border: 1px solid #eadcff;
+      border-radius: 18px;
+      padding: 20px;
+      box-shadow: 0 5px 18px #8d5ca515;
+      margin-bottom: 30px;
+    }
+
+    .activity-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 15px;
+      padding: 15px 0;
+      border-bottom: 1px solid #eee5f7;
+    }
+
+    .activity-item:last-child {
+      border-bottom: none;
+    }
+
+    .activity-name {
+      font-weight: bold;
+      color: #5d3970;
+    }
+
+    .activity-info {
+      color: #8a7b91;
+      font-size: 13px;
+      margin-top: 4px;
+    }
+
+    .status {
+      padding: 6px 10px;
+      border-radius: 20px;
+      font-size: 12px;
+      font-weight: bold;
+      background: #f0e6ff;
+      color: #7546a1;
+      white-space: nowrap;
+    }
+
+    footer {
+      text-align: center;
+      padding: 25px;
+      color: #8b7b91;
+      font-size: 13px;
+    }
+
+    @media (max-width: 600px) {
+      .header-content {
+        flex-direction: column;
+        text-align: center;
+      }
+
+      .activity-item {
+        align-items: flex-start;
+        flex-direction: column;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <header>
+    <div class="header-content">
+      <div class="logo">🦋 Butterfly Shop</div>
+      <div class="admin-tag">👑 Panel de Administración</div>
+    </div>
+  </header>
+
+  <main class="container">
+
+    <div class="welcome">
+      <h1>¡Bienvenida, administradora! 🦋</h1>
+      <p>Desde aquí podrás controlar y administrar Butterfly Shop.</p>
+    </div>
+
+    <div class="stats">
+
+      <div class="stat">
+        <div class="stat-icon">👥</div>
+        <h3>0</h3>
+        <p>Usuarios registrados</p>
+      </div>
+
+      <div class="stat">
+        <div class="stat-icon">💎</div>
+        <h3>0</h3>
+        <p>Créditos vendidos</p>
+      </div>
+
+      <div class="stat">
+        <div class="stat-icon">🛍️</div>
+        <h3>0</h3>
+        <p>Ventas realizadas</p>
+      </div>
+
+      <div class="stat">
+        <div class="stat-icon">⚠️</div>
+        <h3>0</h3>
+        <p>Reportes pendientes</p>
+      </div>
+
+    </div>
+
+    <h2 class="section-title">⚙️ Gestión de la tienda</h2>
+
+    <div class="admin-grid">
+
+      <div class="admin-card">
+        <div class="icon">👥</div>
+        <h3>Usuarios</h3>
+        <p>Consulta usuarios registrados y administra sus cuentas.</p>
+        <a href="#" class="btn">Gestionar usuarios</a>
+      </div>
+
+      <div class="admin-card">
+        <div class="icon">💎</div>
+        <h3>Créditos</h3>
+        <p>Consulta balances y administra las recargas de créditos.</p>
+        <a href="#" class="btn">Gestionar créditos</a>
+      </div>
+
+      <div class="admin-card">
+        <div class="icon">🛍️</div>
+        <h3>Productos</h3>
+        <p>Crea, modifica, activa o desactiva productos de la tienda.</p>
+        <a href="#" class="btn">Gestionar productos</a>
+      </div>
+
+      <div class="admin-card">
+        <div class="icon">📦</div>
+        <h3>Inventario</h3>
+        <p>Administra los elementos disponibles para entrega digital.</p>
+        <a href="#" class="btn">Gestionar inventario</a>
+      </div>
+
+      <div class="admin-card">
+        <div class="icon">💰</div>
+        <h3>Ventas</h3>
+        <p>Consulta las compras realizadas y su estado de entrega.</p>
+        <a href="#" class="btn">Ver ventas</a>
+      </div>
+
+      <div class="admin-card">
+        <div class="icon">🔄</div>
+        <h3>Recargas</h3>
+        <p>Revisa solicitudes de recarga y acredita créditos a usuarios.</p>
+        <a href="#" class="btn">Ver recargas</a>
+      </div>
+
+      <div class="admin-card">
+        <div class="icon">⚠️</div>
+        <h3>Reportes</h3>
+        <p>Revisa problemas reportados por los clientes y dales seguimiento.</p>
+        <a href="reportar.html" class="btn">Ver reportes</a>
+      </div>
+
+      <div class="admin-card">
+        <div class="icon">📊</div>
+        <h3>Estadísticas</h3>
+        <p>Consulta el rendimiento general de Butterfly Shop.</p>
+        <a href="#" class="btn">Ver estadísticas</a>
+      </div>
+
+    </div>
+
+    <h2 class="section-title">🕐 Actividad reciente</h2>
+
+    <div class="activity">
+
+      <div class="activity-item">
+        <div>
+          <div class="activity-name">No hay actividad todavía</div>
+          <div class="activity-info">
+            Aquí aparecerán las compras, recargas y reportes recientes.
+          </div>
+        </div>
+        <span class="status">Esperando datos</span>
+      </div>
+
+    </div>
+
+  </main>
+
+  <footer>
+    🦋 Butterfly Shop · Panel administrativo
+  </footer>
+
+</body>
+</html>
