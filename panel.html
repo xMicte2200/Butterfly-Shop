@@ -166,10 +166,6 @@
       border-radius: 12px;
       font-size: 14px;
     }
-
-    .hidden {
-      display: none;
-    }
   </style>
 </head>
 
@@ -314,12 +310,6 @@
   </main>
 
   <script>
-    const { createClient } = supabase;
-
-    const supabaseClient = createClient(
-      SUPABASE_URL,
-      SUPABASE_ANON_KEY
-    );
 
     async function cargarPanel() {
 
@@ -333,15 +323,17 @@
         return;
       }
 
-      const { data: profile, error: profileError } =
-        await supabaseClient
-          .from("profiles")
-          .select("username, email, credits, role")
-          .eq("id", user.id)
-          .single();
+      const {
+        data: profile,
+        error: profileError
+      } = await supabaseClient
+        .from("profiles")
+        .select("username, email, credits, role")
+        .eq("id", user.id)
+        .single();
 
       if (profileError) {
-        console.error(profileError);
+        console.error("Error cargando perfil:", profileError);
         alert("No se pudo cargar tu perfil.");
         return;
       }
@@ -357,133 +349,195 @@
 
       if (profile.role === "admin") {
 
-        document.getElementById("admin-menu").style.display = "inline-block";
+        document.getElementById("admin-menu").style.display =
+          "inline-block";
 
-        document.getElementById("admin-action").style.display = "block";
+        document.getElementById("admin-action").style.display =
+          "block";
       }
     }
 
-    document.getElementById("username-button").addEventListener("click", async () => {
 
-      const input = document.getElementById("new-username");
-      const button = document.getElementById("username-button");
+    document.getElementById("username-button")
+      .addEventListener("click", async () => {
 
-      const newUsername = input.value.trim();
+        const input =
+          document.getElementById("new-username");
 
-      if (!newUsername) {
-        alert("Escribe un nombre de usuario.");
-        return;
-      }
+        const button =
+          document.getElementById("username-button");
 
-      if (newUsername.length < 3) {
-        alert("El nombre de usuario debe tener al menos 3 caracteres.");
-        return;
-      }
+        const newUsername =
+          input.value.trim();
 
-      if (newUsername.length > 30) {
-        alert("El nombre de usuario no puede superar 30 caracteres.");
-        return;
-      }
-
-      button.disabled = true;
-      button.textContent = "Guardando...";
-
-      const { data, error } = await supabaseClient.rpc(
-        "change_username",
-        {
-          p_new_username: newUsername
+        if (!newUsername) {
+          alert("Escribe un nombre de usuario.");
+          return;
         }
-      );
 
-      button.disabled = false;
-      button.textContent = "✨ Guardar nuevo usuario";
-
-      if (error) {
-        console.error(error);
-        alert(error.message || "No se pudo cambiar el nombre de usuario.");
-        return;
-      }
-
-      document.getElementById("username").textContent = data;
-      input.value = data;
-
-      alert("✨ ¡Nombre de usuario cambiado correctamente!");
-    });
-
-    document.getElementById("topup-button").addEventListener("click", async () => {
-
-      const amountInput = document.getElementById("topup-amount");
-      const referenceInput = document.getElementById("payment-reference");
-      const button = document.getElementById("topup-button");
-
-      const amount = Number(amountInput.value);
-      const reference = referenceInput.value.trim();
-
-      if (!Number.isInteger(amount) || amount <= 0) {
-        alert("Escribe una cantidad válida de créditos.");
-        return;
-      }
-
-      button.disabled = true;
-      button.textContent = "Enviando...";
-
-      const { data, error } = await supabaseClient.rpc(
-        "request_topup",
-        {
-          p_amount_credits: amount,
-          p_payment_reference: reference || null
+        if (newUsername.length < 3) {
+          alert(
+            "El nombre de usuario debe tener al menos 3 caracteres."
+          );
+          return;
         }
-      );
 
-      button.disabled = false;
-      button.textContent = "🦋 Enviar solicitud";
+        if (newUsername.length > 30) {
+          alert(
+            "El nombre de usuario no puede superar 30 caracteres."
+          );
+          return;
+        }
 
-      if (error) {
-        console.error(error);
-        alert(error.message || "No se pudo enviar la solicitud.");
-        return;
-      }
+        button.disabled = true;
+        button.textContent = "Guardando...";
 
-      amountInput.value = "";
-      referenceInput.value = "";
+        const {
+          data,
+          error
+        } = await supabaseClient.rpc(
+          "change_username",
+          {
+            p_new_username: newUsername
+          }
+        );
 
-      alert(
-        "🦋 ¡Solicitud enviada correctamente!\\n\\n" +
-        "Solicitud: " + data + "\\n" +
-        "Créditos solicitados: " + amount + "\\n" +
-        "Total: $" + amount + " MXN\\n\\n" +
-        "El administrador verificará tu pago."
-      );
-    });
+        button.disabled = false;
+        button.textContent =
+          "✨ Guardar nuevo usuario";
 
-    document.getElementById("topup-action").addEventListener("click", (event) => {
+        if (error) {
+          console.error(error);
+          alert(
+            error.message ||
+            "No se pudo cambiar el nombre de usuario."
+          );
+          return;
+        }
 
-      event.preventDefault();
+        document.getElementById("username").textContent =
+          data;
 
-      document.querySelector(".topup-box").scrollIntoView({
-        behavior: "smooth",
-        block: "center"
+        input.value = data;
+
+        alert(
+          "✨ ¡Nombre de usuario cambiado correctamente!"
+        );
       });
-    });
 
-    document.getElementById("logout-button").addEventListener("click", async () => {
 
-      await supabaseClient.auth.signOut();
+    document.getElementById("topup-button")
+      .addEventListener("click", async () => {
 
-      window.location.href = "login.html";
-    });
+        const amountInput =
+          document.getElementById("topup-amount");
 
-    document.getElementById("history-action").addEventListener("click", (event) => {
-      event.preventDefault();
-      alert("El historial estará disponible próximamente.");
-    });
+        const referenceInput =
+          document.getElementById("payment-reference");
 
-    document.getElementById("purchases-action").addEventListener("click", (event) => {
-      event.preventDefault();
-      alert("La sección de compras estará disponible próximamente.");
-    });
+        const button =
+          document.getElementById("topup-button");
+
+        const amount =
+          Number(amountInput.value);
+
+        const reference =
+          referenceInput.value.trim();
+
+        if (!Number.isInteger(amount) || amount <= 0) {
+          alert(
+            "Escribe una cantidad válida de créditos."
+          );
+          return;
+        }
+
+        button.disabled = true;
+        button.textContent = "Enviando...";
+
+        const {
+          data,
+          error
+        } = await supabaseClient.rpc(
+          "request_topup",
+          {
+            p_amount_credits: amount,
+            p_payment_reference:
+              reference || null
+          }
+        );
+
+        button.disabled = false;
+        button.textContent =
+          "🦋 Enviar solicitud";
+
+        if (error) {
+          console.error(error);
+          alert(
+            error.message ||
+            "No se pudo enviar la solicitud."
+          );
+          return;
+        }
+
+        amountInput.value = "";
+        referenceInput.value = "";
+
+        alert(
+          "🦋 ¡Solicitud enviada correctamente!\n\n" +
+          "Solicitud: " + data + "\n" +
+          "Créditos solicitados: " + amount + "\n" +
+          "Total: $" + amount + " MXN\n\n" +
+          "El administrador verificará tu pago."
+        );
+      });
+
+
+    document.getElementById("topup-action")
+      .addEventListener("click", (event) => {
+
+        event.preventDefault();
+
+        document.querySelector(".topup-box")
+          .scrollIntoView({
+            behavior: "smooth",
+            block: "center"
+          });
+      });
+
+
+    document.getElementById("logout-button")
+      .addEventListener("click", async () => {
+
+        await supabaseClient.auth.signOut();
+
+        window.location.href = "login.html";
+      });
+
+
+    document.getElementById("history-action")
+      .addEventListener("click", (event) => {
+
+        event.preventDefault();
+
+        alert(
+          "El historial estará disponible próximamente."
+        );
+      });
+
+
+    document.getElementById("purchases-action")
+      .addEventListener("click", (event) => {
+
+        event.preventDefault();
+
+        alert(
+          "La sección de compras estará disponible próximamente."
+        );
+      });
+
 
     cargarPanel();
+
   </script>
 
 </body>
