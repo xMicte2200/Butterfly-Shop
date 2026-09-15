@@ -193,6 +193,65 @@
       white-space: nowrap;
     }
 
+    /* RECARGAS */
+
+    .topups-box {
+      background: white;
+      border: 1px solid #eadcff;
+      border-radius: 18px;
+      padding: 20px;
+      box-shadow: 0 5px 18px #8d5ca515;
+      margin-bottom: 30px;
+    }
+
+    .topup-item {
+      border-bottom: 1px solid #eee5f7;
+      padding: 18px 0;
+    }
+
+    .topup-item:last-child {
+      border-bottom: none;
+    }
+
+    .topup-user {
+      font-size: 17px;
+      font-weight: bold;
+      color: #5d3970;
+      margin-bottom: 7px;
+    }
+
+    .topup-info {
+      color: #77677f;
+      font-size: 14px;
+      line-height: 1.6;
+      margin-bottom: 12px;
+    }
+
+    .topup-info strong {
+      color: #66377f;
+    }
+
+    .approve-btn {
+      border: none;
+      cursor: pointer;
+      background: linear-gradient(135deg, #8f6bdc, #c982c4);
+      color: white;
+      padding: 10px 15px;
+      border-radius: 12px;
+      font-weight: bold;
+      font-size: 14px;
+    }
+
+    .approve-btn:hover {
+      opacity: 0.9;
+    }
+
+    .empty-message {
+      color: #8a7b91;
+      text-align: center;
+      padding: 20px 5px;
+    }
+
     footer {
       text-align: center;
       padding: 25px;
@@ -279,6 +338,23 @@
 
       </div>
 
+      <!-- SOLICITUDES DE RECARGA -->
+
+      <h2 class="section-title">
+        💳 Solicitudes de recarga
+      </h2>
+
+      <div class="topups-box">
+
+        <div id="topups-container">
+          <div class="empty-message">
+            🦋 Cargando solicitudes...
+          </div>
+        </div>
+
+      </div>
+
+
       <h2 class="section-title">
         ⚙️ Gestión de la tienda
       </h2>
@@ -346,7 +422,7 @@
           <p>
             Revisa solicitudes de recarga y acredita créditos a usuarios.
           </p>
-          <a href="#" class="btn">
+          <a href="#solicitudes-recarga" class="btn">
             Ver recargas
           </a>
         </div>
@@ -438,8 +514,6 @@
         } = await supabaseClient.auth.getUser();
 
 
-        /* NO HAY SESIÓN */
-
         if (userError || !user) {
 
           window.location.href = "login.html";
@@ -447,8 +521,6 @@
 
         }
 
-
-        /* BUSCAR PERFIL */
 
         const {
           data: profile,
@@ -470,8 +542,6 @@
         }
 
 
-        /* COMPROBAR ROL */
-
         if (profile.role !== "admin") {
 
           alert("No tienes permisos de administrador. 🦋");
@@ -481,8 +551,6 @@
 
         }
 
-
-        /* MOSTRAR NOMBRE */
 
         const nombre =
           profile.username ||
@@ -495,10 +563,10 @@
           "¡Bienvenida, " + nombre + "! 🦋";
 
 
-        /* MOSTRAR PANEL */
-
         loading.style.display = "none";
         adminContent.style.display = "block";
+
+        cargarRecargas();
 
       } catch (error) {
 
@@ -507,6 +575,202 @@
         alert("Ocurrió un error al verificar el acceso.");
 
         window.location.href = "panel.html";
+
+      }
+
+    }
+
+
+    async function cargarRecargas() {
+
+      const container =
+        document.getElementById("topups-container");
+
+      try {
+
+        const {
+          data,
+          error
+        } = await supabaseClient
+          .from("topups")
+          .select(`
+            id,
+            amount_credits,
+            payment_method,
+            payment_reference,
+            status,
+            created_at,
+            user_id
+          `)
+          .eq("status", "pending")
+          .order("created_at", {
+            ascending: false
+          });
+
+
+        if (error) {
+          throw error;
+        }
+
+
+        if (!data || data.length === 0) {
+
+          container.innerHTML = `
+            <div class="empty-message">
+              🦋 No hay solicitudes de recarga pendientes.
+            </div>
+          `;
+
+          return;
+
+        }
+
+
+        const userIds =
+          [...new Set(data.map(item => item.user_id))];
+
+
+        const {
+          data: profiles,
+          error: profilesError
+        } = await supabaseClient
+          .from("profiles")
+          .select("id, username, email")
+          .in("id", userIds);
+
+
+        if (profilesError) {
+          throw profilesError;
+        }
+
+
+        const profileMap = {};
+
+        profiles.forEach(profile => {
+          profileMap[profile.id] = profile;
+        });
+
+
+        container.innerHTML = data.map(item => {
+
+          const profile =
+            profileMap[item.user_id] || {};
+
+
+          const fecha =
+            new Date(item.created_at).toLocaleString(
+              "es-MX",
+              {
+                dateStyle: "medium",
+                timeStyle: "short"
+              }
+            );
+
+
+          return `
+            <div class="topup-item">
+
+              <div class="topup-user">
+                👤 ${profile.username || "Usuario"}
+              </div>
+
+              <div class="topup-info">
+
+                💎 Créditos solicitados:
+                <strong>${item.amount_credits}</strong><br>
+
+                💰 Total:
+                <strong>$${item.amount_credits} MXN</strong><br>
+
+                💳 Método:
+                ${item.payment_method || "No especificado"}<br>
+
+                🧾 Referencia:
+                ${item.payment_reference || "Sin referencia"}<br>
+
+                🕐 Fecha:
+                ${fecha}
+
+              </div>
+
+              <button
+                class="approve-btn"
+                onclick="aprobarRecarga('${item.id}')"
+              >
+                ✅ Aprobar y agregar créditos
+              </button>
+
+            </div>
+          `;
+
+        }).join("");
+
+
+      } catch (error) {
+
+        console.error(error);
+
+        container.innerHTML = `
+          <div class="empty-message">
+            ❌ No se pudieron cargar las solicitudes.
+          </div>
+        `;
+
+      }
+
+    }
+
+
+    async function aprobarRecarga(topupId) {
+
+      const confirmar =
+        confirm(
+          "¿Ya verificaste el pago de esta solicitud?\n\n" +
+          "Al aprobarla, los créditos se agregarán automáticamente al usuario."
+        );
+
+
+      if (!confirmar) {
+        return;
+      }
+
+
+      try {
+
+        const {
+          data,
+          error
+        } = await supabaseClient.rpc(
+          "approve_topup",
+          {
+            p_topup_id: topupId
+          }
+        );
+
+
+        if (error) {
+          throw error;
+        }
+
+
+        alert(
+          "✅ Recarga aprobada correctamente.\n\n" +
+          "Los créditos fueron agregados al usuario.\n\n" +
+          "Nuevo saldo: " + data + " créditos."
+        );
+
+
+        cargarRecargas();
+
+
+      } catch (error) {
+
+        console.error(error);
+
+        alert(
+          "❌ No se pudo aprobar la recarga.\n\n" +
+          error.message
+        );
 
       }
 
