@@ -119,6 +119,169 @@
       transform: translateY(-2px);
     }
 
+    .login-btn:disabled {
+      opacity: 0.7;
+      cursor: wait;
+      transform: none;
+    }
+
+    .register {
+      margin-top: 23px;
+      color: #777;
+      font-size: 14px;
+    }
+
+    .register a {
+      color: #984eb9;
+      font-weight: bold;
+      text-decoration: none;
+    }
+
+    .home {
+      display: inline-block;
+      margin-top: 20px;
+      color: #8b4bb5;
+      text-decoration: none;
+      font-size: 13px;
+    }
+
+    .butterflies {
+      margin-top: 18px;
+      font-size: 18px;
+      letter-spacing: 7px;
+    }
+  </style>
+</head>
+
+<body>
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Iniciar sesión | Butterfly Shop</title>
+
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: Arial, sans-serif;
+    }
+
+    body {
+      min-height: 100vh;
+      background: linear-gradient(135deg, #f8eaff, #ead7ff, #ffe4f3);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+    }
+
+    .login-box {
+      width: 100%;
+      max-width: 430px;
+      background: rgba(255, 255, 255, 0.95);
+      padding: 35px 30px;
+      border-radius: 25px;
+      box-shadow: 0 10px 35px rgba(130, 70, 160, 0.18);
+      text-align: center;
+    }
+
+    .logo {
+      font-size: 45px;
+      margin-bottom: 8px;
+    }
+
+    h1 {
+      color: #8b4bb5;
+      margin-bottom: 8px;
+      font-size: 28px;
+    }
+
+    .subtitle {
+      color: #777;
+      font-size: 14px;
+      margin-bottom: 28px;
+    }
+
+    .input-group {
+      text-align: left;
+      margin-bottom: 18px;
+    }
+
+    label {
+      display: block;
+      color: #70408f;
+      font-weight: bold;
+      font-size: 14px;
+      margin-bottom: 7px;
+    }
+
+    input {
+      width: 100%;
+      padding: 14px;
+      border: 2px solid #ead8f5;
+      border-radius: 12px;
+      outline: none;
+      font-size: 15px;
+      transition: 0.2s;
+    }
+
+    input:focus {
+      border-color: #b66ed6;
+      box-shadow: 0 0 0 3px rgba(182, 110, 214, 0.12);
+    }
+
+    .options {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin: 5px 0 22px;
+      font-size: 13px;
+    }
+
+    .remember {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      color: #777;
+    }
+
+    .remember input {
+      width: auto;
+    }
+
+    .forgot {
+      color: #9b55bd;
+      text-decoration: none;
+    }
+
+    .login-btn {
+      width: 100%;
+      border: none;
+      padding: 14px;
+      border-radius: 14px;
+      background: linear-gradient(90deg, #a957c8, #d878b2);
+      color: white;
+      font-size: 16px;
+      font-weight: bold;
+      cursor: pointer;
+      box-shadow: 0 7px 18px rgba(169, 87, 200, 0.25);
+      transition: 0.2s;
+    }
+
+    .login-btn:hover {
+      transform: translateY(-2px);
+    }
+
+    .login-btn:disabled {
+      opacity: 0.7;
+      cursor: wait;
+      transform: none;
+    }
+
     .register {
       margin-top: 23px;
       color: #777;
@@ -159,7 +322,7 @@
       Inicia sesión para entrar a tu cuenta de Butterfly Shop ✨
     </p>
 
-    <form>
+    <form id="login-form">
 
       <div class="input-group">
         <label for="email">📧 Correo electrónico</label>
@@ -184,17 +347,17 @@
       <div class="options">
 
         <label class="remember">
-          <input type="checkbox">
+          <input type="checkbox" id="remember">
           Recordarme
         </label>
 
-        <a href="#" class="forgot">
+        <a href="#" class="forgot" id="forgot-password">
           ¿Olvidaste tu contraseña?
         </a>
 
       </div>
 
-      <button type="submit" class="login-btn">
+      <button type="submit" class="login-btn" id="login-button">
         🦋 Iniciar sesión
       </button>
 
@@ -214,6 +377,120 @@
     </div>
 
   </div>
+
+  <!-- Supabase -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="supabase-config.js"></script>
+
+  <script>
+    const { createClient } = supabase;
+
+    const supabaseClient = createClient(
+      SUPABASE_URL,
+      SUPABASE_ANON_KEY
+    );
+
+    const form = document.getElementById("login-form");
+    const button = document.getElementById("login-button");
+
+    form.addEventListener("submit", async (event) => {
+      event.preventDefault();
+
+      const email =
+        document.getElementById("email").value.trim();
+
+      const password =
+        document.getElementById("password").value;
+
+      button.disabled = true;
+      button.textContent = "Iniciando sesión... 🦋";
+
+      try {
+
+        const { data, error } =
+          await supabaseClient.auth.signInWithPassword({
+            email: email,
+            password: password
+          });
+
+        if (error) {
+          alert(
+            "No se pudo iniciar sesión:\n\n" +
+            error.message
+          );
+
+          button.disabled = false;
+          button.textContent = "🦋 Iniciar sesión";
+
+          return;
+        }
+
+        if (!data.user) {
+          alert("No se encontró la cuenta.");
+          
+          button.disabled = false;
+          button.textContent = "🦋 Iniciar sesión";
+
+          return;
+        }
+
+        alert("¡Bienvenido a Butterfly Shop! 🦋💗");
+
+        window.location.href = "panel.html";
+
+      } catch (error) {
+
+        console.error(error);
+
+        alert(
+          "Ocurrió un error inesperado. Inténtalo nuevamente."
+        );
+
+        button.disabled = false;
+        button.textContent = "🦋 Iniciar sesión";
+      }
+    });
+
+
+    document
+      .getElementById("forgot-password")
+      .addEventListener("click", async (event) => {
+
+        event.preventDefault();
+
+        const email =
+          document.getElementById("email").value.trim();
+
+        if (!email) {
+          alert(
+            "Primero escribe tu correo electrónico. 🦋"
+          );
+          return;
+        }
+
+        const { error } =
+          await supabaseClient.auth.resetPasswordForEmail(
+            email,
+            {
+              redirectTo:
+                window.location.origin + "/login.html"
+            }
+          );
+
+        if (error) {
+          alert(
+            "No se pudo enviar el correo:\n\n" +
+            error.message
+          );
+
+          return;
+        }
+
+        alert(
+          "Si el correo está registrado, recibirás instrucciones para recuperar tu contraseña. 🦋💗"
+        );
+      });
+  </script>
 
 </body>
 </html>
