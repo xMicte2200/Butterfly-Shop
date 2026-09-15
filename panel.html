@@ -87,6 +87,7 @@
       text-align: center;
       box-shadow: 0 4px 15px rgba(100,60,130,0.12);
       transition: 0.2s;
+      cursor: pointer;
     }
 
     .action:hover {
@@ -112,7 +113,13 @@
       background: #8e44ad;
     }
 
-    .username-box {
+    button:disabled {
+      opacity: 0.6;
+      cursor: not-allowed;
+    }
+
+    .username-box,
+    .topup-box {
       margin-top: 25px;
       padding: 20px;
       background: white;
@@ -120,17 +127,20 @@
       box-shadow: 0 4px 15px rgba(100,60,130,0.10);
     }
 
-    .username-box h3 {
+    .username-box h3,
+    .topup-box h3 {
       color: #8e44ad;
       margin-bottom: 8px;
     }
 
-    .username-box p {
+    .username-box p,
+    .topup-box p {
       margin-bottom: 15px;
       font-size: 14px;
     }
 
-    .username-box input {
+    .username-box input,
+    .topup-box input {
       width: 100%;
       padding: 12px;
       border: 2px solid #e5d2f0;
@@ -139,12 +149,26 @@
       font-size: 15px;
     }
 
-    .username-box input:focus {
+    .username-box input:focus,
+    .topup-box input:focus {
       border-color: #9b59b6;
     }
 
-    #username-button {
+    #username-button,
+    #topup-button {
       margin-top: 12px;
+    }
+
+    .topup-info {
+      padding: 12px;
+      margin-bottom: 15px;
+      background: #f7eaff;
+      border-radius: 12px;
+      font-size: 14px;
+    }
+
+    .hidden {
+      display: none;
     }
   </style>
 </head>
@@ -200,6 +224,43 @@
 
       </div>
 
+      <div class="topup-box">
+
+        <h3>💳 Comprar créditos</h3>
+
+        <p>
+          Los créditos tienen un valor de <strong>$1 MXN por crédito</strong>.
+        </p>
+
+        <div class="topup-info">
+          💜 Después de realizar tu pago, envía tu solicitud.
+          El administrador verificará el pago y agregará los créditos
+          manualmente a tu cuenta.
+        </div>
+
+        <input
+          type="number"
+          id="topup-amount"
+          placeholder="Cantidad de créditos"
+          min="1"
+          step="1"
+        >
+
+        <input
+          type="text"
+          id="payment-reference"
+          placeholder="Referencia del pago (opcional)"
+          maxlength="100"
+          autocomplete="off"
+          style="margin-top:10px;"
+        >
+
+        <button id="topup-button">
+          🦋 Enviar solicitud
+        </button>
+
+      </div>
+
       <button id="logout-button">Cerrar sesión</button>
 
     </section>
@@ -213,7 +274,7 @@
         Explora nuestros productos.
       </a>
 
-      <a class="action" href="#" id="topup-action">
+      <a class="action" href="#topup-box" id="topup-action">
         💳<br><br>
         <strong>Comprar créditos</strong>
         <br><br>
@@ -349,16 +410,67 @@
       alert("✨ ¡Nombre de usuario cambiado correctamente!");
     });
 
+    document.getElementById("topup-button").addEventListener("click", async () => {
+
+      const amountInput = document.getElementById("topup-amount");
+      const referenceInput = document.getElementById("payment-reference");
+      const button = document.getElementById("topup-button");
+
+      const amount = Number(amountInput.value);
+      const reference = referenceInput.value.trim();
+
+      if (!Number.isInteger(amount) || amount <= 0) {
+        alert("Escribe una cantidad válida de créditos.");
+        return;
+      }
+
+      button.disabled = true;
+      button.textContent = "Enviando...";
+
+      const { data, error } = await supabaseClient.rpc(
+        "request_topup",
+        {
+          p_amount_credits: amount,
+          p_payment_reference: reference || null
+        }
+      );
+
+      button.disabled = false;
+      button.textContent = "🦋 Enviar solicitud";
+
+      if (error) {
+        console.error(error);
+        alert(error.message || "No se pudo enviar la solicitud.");
+        return;
+      }
+
+      amountInput.value = "";
+      referenceInput.value = "";
+
+      alert(
+        "🦋 ¡Solicitud enviada correctamente!\\n\\n" +
+        "Solicitud: " + data + "\\n" +
+        "Créditos solicitados: " + amount + "\\n" +
+        "Total: $" + amount + " MXN\\n\\n" +
+        "El administrador verificará tu pago."
+      );
+    });
+
+    document.getElementById("topup-action").addEventListener("click", (event) => {
+
+      event.preventDefault();
+
+      document.querySelector(".topup-box").scrollIntoView({
+        behavior: "smooth",
+        block: "center"
+      });
+    });
+
     document.getElementById("logout-button").addEventListener("click", async () => {
 
       await supabaseClient.auth.signOut();
 
       window.location.href = "login.html";
-    });
-
-    document.getElementById("topup-action").addEventListener("click", (event) => {
-      event.preventDefault();
-      alert("La sección de compra de créditos estará disponible próximamente.");
     });
 
     document.getElementById("history-action").addEventListener("click", (event) => {
