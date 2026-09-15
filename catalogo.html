@@ -211,6 +211,7 @@
         🦋 Butterfly Shop · Catálogo digital
     </footer>
 
+    <!-- Supabase -->
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <script src="supabase-config.js"></script>
 
@@ -221,8 +222,15 @@
         let allProducts = [];
         let currentCategory = "Todos";
 
+
+        // ================================
+        // CARGAR PRODUCTOS
+        // ================================
+
         async function cargarProductos() {
+
             try {
+
                 const { data: products, error } = await supabaseClient
                     .from("products")
                     .select(`
@@ -231,99 +239,168 @@
                         description,
                         price_credits,
                         category,
-                        active
+                        active,
+                        created_at
                     `)
                     .eq("active", true)
                     .order("created_at", { ascending: false });
+
 
                 if (error) {
                     throw error;
                 }
 
+
                 allProducts = products || [];
 
+
                 if (allProducts.length === 0) {
+
                     productsContainer.innerHTML = `
                         <div class="empty">
                             🦋 No hay productos disponibles por el momento.
                         </div>
                     `;
+
                     return;
                 }
 
+
                 crearCategorias();
+
                 await mostrarProductos();
 
+
             } catch (error) {
+
                 console.error("Error cargando productos:", error);
 
                 productsContainer.innerHTML = `
                     <div class="error">
                         ❌ No pudimos cargar el catálogo.
-                        <br>
-                        Intenta nuevamente más tarde.
+                        <br><br>
+                        ${escaparHTML(error.message || "Error desconocido")}
                     </div>
                 `;
             }
         }
 
+
+
+        // ================================
+        // CREAR CATEGORÍAS
+        // ================================
+
         function crearCategorias() {
+
             const categorias = [
                 ...new Set(
                     allProducts
                         .map(product => product.category)
-                        .filter(category => category && category.trim() !== "")
+                        .filter(
+                            category =>
+                                category &&
+                                category.trim() !== ""
+                        )
                 )
             ];
 
+
             categoriesContainer.innerHTML = `
-                <button class="category active" data-category="Todos">
+                <button
+                    class="category active"
+                    data-category="Todos"
+                >
                     ✨ Todos
                 </button>
             `;
 
+
             categorias.forEach(category => {
-                const button = document.createElement("button");
+
+                const button =
+                    document.createElement("button");
 
                 button.className = "category";
+
                 button.dataset.category = category;
-                button.textContent = `💎 ${category}`;
+
+                button.textContent =
+                    `💎 ${category}`;
 
                 categoriesContainer.appendChild(button);
             });
 
-            document.querySelectorAll(".category").forEach(button => {
-                button.addEventListener("click", () => {
-                    currentCategory = button.dataset.category;
 
-                    document.querySelectorAll(".category").forEach(btn => {
-                        btn.classList.remove("active");
-                    });
+            document
+                .querySelectorAll(".category")
+                .forEach(button => {
 
-                    button.classList.add("active");
+                    button.addEventListener(
+                        "click",
+                        async () => {
 
-                    mostrarProductos();
+                            currentCategory =
+                                button.dataset.category;
+
+
+                            document
+                                .querySelectorAll(".category")
+                                .forEach(btn => {
+
+                                    btn.classList.remove(
+                                        "active"
+                                    );
+
+                                });
+
+
+                            button.classList.add("active");
+
+
+                            await mostrarProductos();
+
+                        }
+                    );
+
                 });
-            });
+
         }
 
+
+
+        // ================================
+        // MOSTRAR PRODUCTOS
+        // ================================
+
         async function mostrarProductos() {
+
             let productosMostrar = allProducts;
 
+
             if (currentCategory !== "Todos") {
-                productosMostrar = allProducts.filter(
-                    product => product.category === currentCategory
-                );
+
+                productosMostrar =
+                    allProducts.filter(
+                        product =>
+                            product.category ===
+                            currentCategory
+                    );
+
             }
 
+
             if (productosMostrar.length === 0) {
+
                 productsContainer.innerHTML = `
                     <div class="empty">
                         🦋 No hay productos en esta categoría.
                     </div>
                 `;
+
                 return;
             }
+
 
             productsContainer.innerHTML = `
                 <div class="loading">
@@ -331,40 +408,87 @@
                 </div>
             `;
 
-            const productIds = productosMostrar.map(product => product.id);
 
-            const { data: inventory, error } = await supabaseClient
-                .from("inventory")
-                .select("product_id")
-                .in("product_id", productIds)
-                .eq("status", "available");
-
-            if (error) {
-                console.error("Error comprobando inventario:", error);
-            }
+            // =================================
+            // CONSULTAR STOCK DE FORMA SEGURA
+            // =================================
 
             const stockMap = {};
 
-            (inventory || []).forEach(item => {
-                stockMap[item.product_id] =
-                    (stockMap[item.product_id] || 0) + 1;
-            });
+
+            for (const product of productosMostrar) {
+
+                const { data: stock, error } =
+                    await supabaseClient
+                        .rpc(
+                            "get_product_stock",
+                            {
+                                p_product_id:
+                                    product.id
+                            }
+                        );
+
+
+                if (error) {
+
+                    console.error(
+                        "Error comprobando inventario:",
+                        product.name,
+                        error
+                    );
+
+
+                    stockMap[product.id] = 0;
+
+                } else {
+
+                    stockMap[product.id] =
+                        Number(stock || 0);
+
+                }
+
+            }
+
+
+
+            // =================================
+            // CREAR TARJETAS
+            // =================================
 
             productsContainer.innerHTML = "";
 
-            productosMostrar.forEach(product => {
-                const stock = stockMap[product.id] || 0;
-                const disponible = stock > 0;
 
-                const card = document.createElement("div");
+            productosMostrar.forEach(product => {
+
+                const stock =
+                    stockMap[product.id] || 0;
+
+
+                const disponible =
+                    stock > 0;
+
+
+                const card =
+                    document.createElement("div");
+
                 card.className = "product";
 
+
                 card.innerHTML = `
+
                     <div class="product-icon">
-                        ${obtenerIcono(product.category)}
+                        ${obtenerIcono(
+                            product.category
+                        )}
                     </div>
 
-                    <h2>${escaparHTML(product.name)}</h2>
+
+                    <h2>
+                        ${escaparHTML(
+                            product.name
+                        )}
+                    </h2>
+
 
                     <p>
                         ${escaparHTML(
@@ -373,57 +497,135 @@
                         )}
                     </p>
 
+
                     <div class="price">
                         💎 ${product.price_credits} créditos
                     </div>
 
-                    <div class="stock ${disponible ? "available" : "unavailable"}">
+
+                    <div
+                        class="stock ${
+                            disponible
+                                ? "available"
+                                : "unavailable"
+                        }"
+                    >
+
                         ${
                             disponible
-                                ? `🟢 Disponible`
-                                : `🔴 Agotado`
+                                ? "🟢 Disponible"
+                                : "🔴 Agotado"
                         }
+
                     </div>
+
 
                     ${
                         disponible
+
                             ? `
-                                <a href="login.html" class="buy">
+
+                                <a
+                                    href="login.html"
+                                    class="buy"
+                                >
                                     Comprar
                                 </a>
+
                               `
+
                             : `
-                                <span class="buy disabled">
+
+                                <span
+                                    class="buy disabled"
+                                >
                                     Agotado
                                 </span>
+
                               `
                     }
+
                 `;
 
+
                 productsContainer.appendChild(card);
+
             });
+
         }
 
+
+
+        // ================================
+        // ICONOS POR CATEGORÍA
+        // ================================
+
         function obtenerIcono(category) {
-            if (!category) return "🎁";
 
-            const categoria = category.toLowerCase();
+            if (!category) {
+                return "🎁";
+            }
 
-            if (categoria.includes("plataforma")) return "📺";
-            if (categoria.includes("diseño")) return "🎨";
-            if (categoria.includes("curso")) return "📚";
-            if (categoria.includes("video")) return "🎬";
+
+            const categoria =
+                category.toLowerCase();
+
+
+            if (
+                categoria.includes("plataforma")
+            ) {
+                return "📺";
+            }
+
+
+            if (
+                categoria.includes("diseño")
+            ) {
+                return "🎨";
+            }
+
+
+            if (
+                categoria.includes("curso")
+            ) {
+                return "📚";
+            }
+
+
+            if (
+                categoria.includes("video")
+            ) {
+                return "🎬";
+            }
+
 
             return "🎁";
         }
 
+
+
+        // ================================
+        // PROTECCIÓN HTML
+        // ================================
+
         function escaparHTML(texto) {
-            const div = document.createElement("div");
+
+            const div =
+                document.createElement("div");
+
             div.textContent = texto;
+
             return div.innerHTML;
         }
 
+
+
+        // ================================
+        // INICIAR CATÁLOGO
+        // ================================
+
         cargarProductos();
+
     </script>
 
 </body>
