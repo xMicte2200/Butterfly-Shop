@@ -200,6 +200,13 @@
       font-size: 13px;
     }
 
+    .loading {
+      text-align: center;
+      padding: 60px 20px;
+      color: #743d91;
+      font-size: 18px;
+    }
+
     @media (max-width: 600px) {
       .header-content {
         flex-direction: column;
@@ -216,131 +223,299 @@
 
 <body>
 
-  <header>
-    <div class="header-content">
-      <div class="logo">🦋 Butterfly Shop</div>
-      <div class="admin-tag">👑 Panel de Administración</div>
-    </div>
-  </header>
+  <div id="loading" class="loading">
+    🦋 Verificando acceso...
+  </div>
 
-  <main class="container">
+  <div id="admin-content" style="display:none;">
 
-    <div class="welcome">
-      <h1>¡Bienvenida, administradora! 🦋</h1>
-      <p>Desde aquí podrás controlar y administrar Butterfly Shop.</p>
-    </div>
+    <header>
+      <div class="header-content">
+        <div class="logo">🦋 Butterfly Shop</div>
 
-    <div class="stats">
-
-      <div class="stat">
-        <div class="stat-icon">👥</div>
-        <h3>0</h3>
-        <p>Usuarios registrados</p>
-      </div>
-
-      <div class="stat">
-        <div class="stat-icon">💎</div>
-        <h3>0</h3>
-        <p>Créditos vendidos</p>
-      </div>
-
-      <div class="stat">
-        <div class="stat-icon">🛍️</div>
-        <h3>0</h3>
-        <p>Ventas realizadas</p>
-      </div>
-
-      <div class="stat">
-        <div class="stat-icon">⚠️</div>
-        <h3>0</h3>
-        <p>Reportes pendientes</p>
-      </div>
-
-    </div>
-
-    <h2 class="section-title">⚙️ Gestión de la tienda</h2>
-
-    <div class="admin-grid">
-
-      <div class="admin-card">
-        <div class="icon">👥</div>
-        <h3>Usuarios</h3>
-        <p>Consulta usuarios registrados y administra sus cuentas.</p>
-        <a href="#" class="btn">Gestionar usuarios</a>
-      </div>
-
-      <div class="admin-card">
-        <div class="icon">💎</div>
-        <h3>Créditos</h3>
-        <p>Consulta balances y administra las recargas de créditos.</p>
-        <a href="#" class="btn">Gestionar créditos</a>
-      </div>
-
-      <div class="admin-card">
-        <div class="icon">🛍️</div>
-        <h3>Productos</h3>
-        <p>Crea, modifica, activa o desactiva productos de la tienda.</p>
-        <a href="#" class="btn">Gestionar productos</a>
-      </div>
-
-      <div class="admin-card">
-        <div class="icon">📦</div>
-        <h3>Inventario</h3>
-        <p>Administra los elementos disponibles para entrega digital.</p>
-        <a href="#" class="btn">Gestionar inventario</a>
-      </div>
-
-      <div class="admin-card">
-        <div class="icon">💰</div>
-        <h3>Ventas</h3>
-        <p>Consulta las compras realizadas y su estado de entrega.</p>
-        <a href="#" class="btn">Ver ventas</a>
-      </div>
-
-      <div class="admin-card">
-        <div class="icon">🔄</div>
-        <h3>Recargas</h3>
-        <p>Revisa solicitudes de recarga y acredita créditos a usuarios.</p>
-        <a href="#" class="btn">Ver recargas</a>
-      </div>
-
-      <div class="admin-card">
-        <div class="icon">⚠️</div>
-        <h3>Reportes</h3>
-        <p>Revisa problemas reportados por los clientes y dales seguimiento.</p>
-        <a href="reportar.html" class="btn">Ver reportes</a>
-      </div>
-
-      <div class="admin-card">
-        <div class="icon">📊</div>
-        <h3>Estadísticas</h3>
-        <p>Consulta el rendimiento general de Butterfly Shop.</p>
-        <a href="#" class="btn">Ver estadísticas</a>
-      </div>
-
-    </div>
-
-    <h2 class="section-title">🕐 Actividad reciente</h2>
-
-    <div class="activity">
-
-      <div class="activity-item">
-        <div>
-          <div class="activity-name">No hay actividad todavía</div>
-          <div class="activity-info">
-            Aquí aparecerán las compras, recargas y reportes recientes.
-          </div>
+        <div class="admin-tag">
+          👑 Panel de Administración
         </div>
-        <span class="status">Esperando datos</span>
+      </div>
+    </header>
+
+    <main class="container">
+
+      <div class="welcome">
+        <h1 id="welcome-title">
+          ¡Bienvenida, administradora! 🦋
+        </h1>
+
+        <p>
+          Desde aquí podrás controlar y administrar Butterfly Shop.
+        </p>
       </div>
 
-    </div>
+      <div class="stats">
 
-  </main>
+        <div class="stat">
+          <div class="stat-icon">👥</div>
+          <h3>0</h3>
+          <p>Usuarios registrados</p>
+        </div>
 
-  <footer>
-    🦋 Butterfly Shop · Panel administrativo
-  </footer>
+        <div class="stat">
+          <div class="stat-icon">💎</div>
+          <h3>0</h3>
+          <p>Créditos vendidos</p>
+        </div>
+
+        <div class="stat">
+          <div class="stat-icon">🛍️</div>
+          <h3>0</h3>
+          <p>Ventas realizadas</p>
+        </div>
+
+        <div class="stat">
+          <div class="stat-icon">⚠️</div>
+          <h3>0</h3>
+          <p>Reportes pendientes</p>
+        </div>
+
+      </div>
+
+      <h2 class="section-title">
+        ⚙️ Gestión de la tienda
+      </h2>
+
+      <div class="admin-grid">
+
+        <div class="admin-card">
+          <div class="icon">👥</div>
+          <h3>Usuarios</h3>
+          <p>
+            Consulta usuarios registrados y administra sus cuentas.
+          </p>
+          <a href="#" class="btn">
+            Gestionar usuarios
+          </a>
+        </div>
+
+        <div class="admin-card">
+          <div class="icon">💎</div>
+          <h3>Créditos</h3>
+          <p>
+            Consulta balances y administra las recargas de créditos.
+          </p>
+          <a href="#" class="btn">
+            Gestionar créditos
+          </a>
+        </div>
+
+        <div class="admin-card">
+          <div class="icon">🛍️</div>
+          <h3>Productos</h3>
+          <p>
+            Crea, modifica, activa o desactiva productos de la tienda.
+          </p>
+          <a href="#" class="btn">
+            Gestionar productos
+          </a>
+        </div>
+
+        <div class="admin-card">
+          <div class="icon">📦</div>
+          <h3>Inventario</h3>
+          <p>
+            Administra los elementos disponibles para entrega digital.
+          </p>
+          <a href="#" class="btn">
+            Gestionar inventario
+          </a>
+        </div>
+
+        <div class="admin-card">
+          <div class="icon">💰</div>
+          <h3>Ventas</h3>
+          <p>
+            Consulta las compras realizadas y su estado de entrega.
+          </p>
+          <a href="#" class="btn">
+            Ver ventas
+          </a>
+        </div>
+
+        <div class="admin-card">
+          <div class="icon">🔄</div>
+          <h3>Recargas</h3>
+          <p>
+            Revisa solicitudes de recarga y acredita créditos a usuarios.
+          </p>
+          <a href="#" class="btn">
+            Ver recargas
+          </a>
+        </div>
+
+        <div class="admin-card">
+          <div class="icon">⚠️</div>
+          <h3>Reportes</h3>
+          <p>
+            Revisa problemas reportados por los clientes y dales seguimiento.
+          </p>
+          <a href="reportar.html" class="btn">
+            Ver reportes
+          </a>
+        </div>
+
+        <div class="admin-card">
+          <div class="icon">📊</div>
+          <h3>Estadísticas</h3>
+          <p>
+            Consulta el rendimiento general de Butterfly Shop.
+          </p>
+          <a href="#" class="btn">
+            Ver estadísticas
+          </a>
+        </div>
+
+      </div>
+
+      <h2 class="section-title">
+        🕐 Actividad reciente
+      </h2>
+
+      <div class="activity">
+
+        <div class="activity-item">
+
+          <div>
+            <div class="activity-name">
+              No hay actividad todavía
+            </div>
+
+            <div class="activity-info">
+              Aquí aparecerán las compras, recargas y reportes recientes.
+            </div>
+          </div>
+
+          <span class="status">
+            Esperando datos
+          </span>
+
+        </div>
+
+      </div>
+
+    </main>
+
+    <footer>
+      🦋 Butterfly Shop · Panel administrativo
+    </footer>
+
+  </div>
+
+
+  <!-- SUPABASE -->
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="supabase-config.js"></script>
+
+  <script>
+
+    const { createClient } = supabase;
+
+    const supabaseClient = createClient(
+      SUPABASE_URL,
+      SUPABASE_ANON_KEY
+    );
+
+
+    async function verificarAdministrador() {
+
+      const loading = document.getElementById("loading");
+      const adminContent = document.getElementById("admin-content");
+
+      try {
+
+        const {
+          data: { user },
+          error: userError
+        } = await supabaseClient.auth.getUser();
+
+
+        /* NO HAY SESIÓN */
+
+        if (userError || !user) {
+
+          window.location.href = "login.html";
+          return;
+
+        }
+
+
+        /* BUSCAR PERFIL */
+
+        const {
+          data: profile,
+          error: profileError
+        } = await supabaseClient
+          .from("profiles")
+          .select("username, email, role")
+          .eq("id", user.id)
+          .single();
+
+
+        if (profileError || !profile) {
+
+          alert("No se pudo verificar tu cuenta.");
+
+          window.location.href = "panel.html";
+          return;
+
+        }
+
+
+        /* COMPROBAR ROL */
+
+        if (profile.role !== "admin") {
+
+          alert("No tienes permisos de administrador. 🦋");
+
+          window.location.href = "panel.html";
+          return;
+
+        }
+
+
+        /* MOSTRAR NOMBRE */
+
+        const nombre =
+          profile.username ||
+          profile.email ||
+          user.email ||
+          "administradora";
+
+
+        document.getElementById("welcome-title").textContent =
+          "¡Bienvenida, " + nombre + "! 🦋";
+
+
+        /* MOSTRAR PANEL */
+
+        loading.style.display = "none";
+        adminContent.style.display = "block";
+
+      } catch (error) {
+
+        console.error(error);
+
+        alert("Ocurrió un error al verificar el acceso.");
+
+        window.location.href = "panel.html";
+
+      }
+
+    }
+
+
+    verificarAdministrador();
+
+  </script>
 
 </body>
 </html>
