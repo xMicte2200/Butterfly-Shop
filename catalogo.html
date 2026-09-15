@@ -71,6 +71,13 @@
             padding: 10px 18px;
             border-radius: 25px;
             cursor: pointer;
+            transition: 0.2s;
+        }
+
+        .category:hover,
+        .category.active {
+            background: #8050b4;
+            color: white;
         }
 
         .products {
@@ -122,9 +129,16 @@
         }
 
         .stock {
-            color: #4d9b70;
             font-size: 13px;
             margin-bottom: 18px;
+        }
+
+        .stock.available {
+            color: #4d9b70;
+        }
+
+        .stock.unavailable {
+            color: #b96b7c;
         }
 
         .buy {
@@ -135,6 +149,24 @@
             padding: 12px 25px;
             border-radius: 25px;
             font-weight: 600;
+        }
+
+        .buy.disabled {
+            background: #cfc4d8;
+            pointer-events: none;
+        }
+
+        .loading,
+        .empty,
+        .error {
+            grid-column: 1 / -1;
+            text-align: center;
+            padding: 40px 20px;
+            color: #8c789f;
+        }
+
+        .error {
+            color: #a75c76;
         }
 
         footer {
@@ -163,47 +195,236 @@
         <p>Explora nuestros productos digitales disponibles.</p>
     </section>
 
-    <div class="categories">
-        <button class="category">✨ Todos</button>
-        <button class="category">💎 Plataformas</button>
-        <button class="category">🎨 Diseños</button>
-        <button class="category">📚 Cursos</button>
+    <div class="categories" id="categories">
+        <button class="category active" data-category="Todos">
+            ✨ Todos
+        </button>
     </div>
 
-    <section class="products">
-
-        <div class="product">
-            <div class="product-icon">📺</div>
-            <h2>Producto digital 01</h2>
-            <p>Descripción del producto y sus características.</p>
-            <div class="price">💎 5 créditos</div>
-            <div class="stock">🟢 Disponible</div>
-            <a href="login.html" class="buy">Comprar</a>
+    <section class="products" id="products">
+        <div class="loading">
+            🦋 Cargando productos...
         </div>
-
-        <div class="product">
-            <div class="product-icon">🎬</div>
-            <h2>Producto digital 02</h2>
-            <p>Descripción del producto y sus características.</p>
-            <div class="price">💎 10 créditos</div>
-            <div class="stock">🟢 Disponible</div>
-            <a href="login.html" class="buy">Comprar</a>
-        </div>
-
-        <div class="product">
-            <div class="product-icon">🎁</div>
-            <h2>Producto digital 03</h2>
-            <p>Descripción del producto y sus características.</p>
-            <div class="price">💎 15 créditos</div>
-            <div class="stock">🟢 Disponible</div>
-            <a href="login.html" class="buy">Comprar</a>
-        </div>
-
     </section>
 
     <footer>
         🦋 Butterfly Shop · Catálogo digital
     </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="supabase-config.js"></script>
+
+    <script>
+        const productsContainer = document.getElementById("products");
+        const categoriesContainer = document.getElementById("categories");
+
+        let allProducts = [];
+        let currentCategory = "Todos";
+
+        async function cargarProductos() {
+            try {
+                const { data: products, error } = await supabaseClient
+                    .from("products")
+                    .select(`
+                        id,
+                        name,
+                        description,
+                        price_credits,
+                        category,
+                        active
+                    `)
+                    .eq("active", true)
+                    .order("created_at", { ascending: false });
+
+                if (error) {
+                    throw error;
+                }
+
+                allProducts = products || [];
+
+                if (allProducts.length === 0) {
+                    productsContainer.innerHTML = `
+                        <div class="empty">
+                            🦋 No hay productos disponibles por el momento.
+                        </div>
+                    `;
+                    return;
+                }
+
+                crearCategorias();
+                await mostrarProductos();
+
+            } catch (error) {
+                console.error("Error cargando productos:", error);
+
+                productsContainer.innerHTML = `
+                    <div class="error">
+                        ❌ No pudimos cargar el catálogo.
+                        <br>
+                        Intenta nuevamente más tarde.
+                    </div>
+                `;
+            }
+        }
+
+        function crearCategorias() {
+            const categorias = [
+                ...new Set(
+                    allProducts
+                        .map(product => product.category)
+                        .filter(category => category && category.trim() !== "")
+                )
+            ];
+
+            categoriesContainer.innerHTML = `
+                <button class="category active" data-category="Todos">
+                    ✨ Todos
+                </button>
+            `;
+
+            categorias.forEach(category => {
+                const button = document.createElement("button");
+
+                button.className = "category";
+                button.dataset.category = category;
+                button.textContent = `💎 ${category}`;
+
+                categoriesContainer.appendChild(button);
+            });
+
+            document.querySelectorAll(".category").forEach(button => {
+                button.addEventListener("click", () => {
+                    currentCategory = button.dataset.category;
+
+                    document.querySelectorAll(".category").forEach(btn => {
+                        btn.classList.remove("active");
+                    });
+
+                    button.classList.add("active");
+
+                    mostrarProductos();
+                });
+            });
+        }
+
+        async function mostrarProductos() {
+            let productosMostrar = allProducts;
+
+            if (currentCategory !== "Todos") {
+                productosMostrar = allProducts.filter(
+                    product => product.category === currentCategory
+                );
+            }
+
+            if (productosMostrar.length === 0) {
+                productsContainer.innerHTML = `
+                    <div class="empty">
+                        🦋 No hay productos en esta categoría.
+                    </div>
+                `;
+                return;
+            }
+
+            productsContainer.innerHTML = `
+                <div class="loading">
+                    🦋 Revisando disponibilidad...
+                </div>
+            `;
+
+            const productIds = productosMostrar.map(product => product.id);
+
+            const { data: inventory, error } = await supabaseClient
+                .from("inventory")
+                .select("product_id")
+                .in("product_id", productIds)
+                .eq("status", "available");
+
+            if (error) {
+                console.error("Error comprobando inventario:", error);
+            }
+
+            const stockMap = {};
+
+            (inventory || []).forEach(item => {
+                stockMap[item.product_id] =
+                    (stockMap[item.product_id] || 0) + 1;
+            });
+
+            productsContainer.innerHTML = "";
+
+            productosMostrar.forEach(product => {
+                const stock = stockMap[product.id] || 0;
+                const disponible = stock > 0;
+
+                const card = document.createElement("div");
+                card.className = "product";
+
+                card.innerHTML = `
+                    <div class="product-icon">
+                        ${obtenerIcono(product.category)}
+                    </div>
+
+                    <h2>${escaparHTML(product.name)}</h2>
+
+                    <p>
+                        ${escaparHTML(
+                            product.description ||
+                            "Producto digital disponible en Butterfly Shop."
+                        )}
+                    </p>
+
+                    <div class="price">
+                        💎 ${product.price_credits} créditos
+                    </div>
+
+                    <div class="stock ${disponible ? "available" : "unavailable"}">
+                        ${
+                            disponible
+                                ? `🟢 Disponible`
+                                : `🔴 Agotado`
+                        }
+                    </div>
+
+                    ${
+                        disponible
+                            ? `
+                                <a href="login.html" class="buy">
+                                    Comprar
+                                </a>
+                              `
+                            : `
+                                <span class="buy disabled">
+                                    Agotado
+                                </span>
+                              `
+                    }
+                `;
+
+                productsContainer.appendChild(card);
+            });
+        }
+
+        function obtenerIcono(category) {
+            if (!category) return "🎁";
+
+            const categoria = category.toLowerCase();
+
+            if (categoria.includes("plataforma")) return "📺";
+            if (categoria.includes("diseño")) return "🎨";
+            if (categoria.includes("curso")) return "📚";
+            if (categoria.includes("video")) return "🎬";
+
+            return "🎁";
+        }
+
+        function escaparHTML(texto) {
+            const div = document.createElement("div");
+            div.textContent = texto;
+            return div.innerHTML;
+        }
+
+        cargarProductos();
+    </script>
 
 </body>
 </html>
