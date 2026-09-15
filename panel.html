@@ -3,193 +3,113 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Panel Cliente | Butterfly Shop</title>
+  <title>Panel | Butterfly Shop</title>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="supabase-config.js"></script>
 
   <style>
     * {
       box-sizing: border-box;
       margin: 0;
       padding: 0;
-      font-family: Arial, sans-serif;
     }
 
     body {
+      font-family: Arial, sans-serif;
       min-height: 100vh;
-      background: linear-gradient(135deg, #f9edff, #eadbff, #ffe7f3);
-      color: #4d3657;
+      background: linear-gradient(135deg, #f7eaff, #ead7ff, #fce4f4);
+      color: #4b315c;
     }
 
     header {
-      background: rgba(255,255,255,0.95);
+      background: rgba(255,255,255,0.8);
       padding: 18px 25px;
       display: flex;
       justify-content: space-between;
       align-items: center;
-      box-shadow: 0 3px 15px rgba(100,60,120,0.12);
+      box-shadow: 0 3px 15px rgba(100,60,130,0.15);
     }
 
-    .logo {
-      color: #914fba;
-      font-size: 23px;
-      font-weight: bold;
+    header h1 {
+      color: #9b59b6;
     }
 
-    .menu a {
-      text-decoration: none;
-      color: #704582;
+    nav a {
       margin-left: 15px;
-      font-size: 14px;
+      text-decoration: none;
+      color: #7d3c98;
+      font-weight: bold;
     }
 
     .admin-link {
       display: none;
-      font-weight: bold;
-      color: #9b4fc1 !important;
     }
 
     .container {
-      max-width: 1100px;
+      max-width: 1000px;
       margin: 35px auto;
-      padding: 0 20px;
+      padding: 20px;
     }
 
     .welcome {
-      margin-bottom: 25px;
-    }
-
-    .welcome h1 {
-      color: #8146a4;
-      font-size: 28px;
-      margin-bottom: 7px;
-    }
-
-    .welcome p {
-      color: #777;
-    }
-
-    .balance {
-      background: linear-gradient(135deg, #9e55c5, #d477b2);
-      color: white;
-      padding: 25px;
-      border-radius: 22px;
-      margin-bottom: 25px;
-      box-shadow: 0 8px 25px rgba(130,70,160,0.22);
-    }
-
-    .balance small {
-      opacity: 0.9;
-    }
-
-    .credits {
-      font-size: 38px;
-      font-weight: bold;
-      margin: 7px 0 15px;
-    }
-
-    .balance button {
-      border: none;
-      padding: 10px 18px;
-      border-radius: 12px;
-      background: white;
-      color: #8d4caf;
-      font-weight: bold;
-      cursor: pointer;
-    }
-
-    .cards {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-      gap: 18px;
-      margin-bottom: 30px;
-    }
-
-    .card {
-      background: rgba(255,255,255,0.95);
-      padding: 23px;
+      background: rgba(255,255,255,0.8);
       border-radius: 20px;
-      box-shadow: 0 5px 18px rgba(100,60,120,0.1);
+      padding: 25px;
+      margin-bottom: 25px;
+      box-shadow: 0 5px 20px rgba(100,60,130,0.12);
     }
 
-    .card .icon {
-      font-size: 28px;
+    .welcome h2 {
+      color: #8e44ad;
       margin-bottom: 10px;
     }
 
-    .card h3 {
-      color: #7e479a;
-      margin-bottom: 6px;
-    }
-
-    .card p {
-      color: #777;
-      font-size: 14px;
-      line-height: 1.5;
-    }
-
-    .section {
-      background: rgba(255,255,255,0.95);
-      padding: 25px;
-      border-radius: 20px;
-      margin-bottom: 22px;
-      box-shadow: 0 5px 18px rgba(100,60,120,0.1);
-    }
-
-    .section h2 {
-      color: #8146a4;
-      margin-bottom: 15px;
-      font-size: 20px;
-    }
-
-    .empty {
-      text-align: center;
-      padding: 25px;
-      color: #999;
-      border: 2px dashed #ead8f3;
-      border-radius: 15px;
+    .credits {
+      margin-top: 15px;
+      font-size: 22px;
+      font-weight: bold;
+      color: #b03a9b;
     }
 
     .actions {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 10px;
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 18px;
     }
 
     .action {
+      background: white;
+      padding: 25px;
+      border-radius: 18px;
       text-decoration: none;
-      background: #f4e5fb;
-      color: #8146a4;
-      padding: 12px 16px;
-      border-radius: 12px;
-      font-weight: bold;
-      font-size: 14px;
+      color: #633974;
+      text-align: center;
+      box-shadow: 0 4px 15px rgba(100,60,130,0.12);
+      transition: 0.2s;
+    }
+
+    .action:hover {
+      transform: translateY(-3px);
     }
 
     .admin-action {
       display: none;
-      background: linear-gradient(135deg, #ead5ff, #ffd9ee);
-      border: 1px solid #d8b5ed;
     }
 
-    footer {
-      text-align: center;
-      padding: 25px;
-      color: #8b7194;
-      font-size: 13px;
+    button {
+      margin-top: 25px;
+      padding: 12px 22px;
+      border: none;
+      border-radius: 12px;
+      background: #9b59b6;
+      color: white;
+      font-weight: bold;
+      cursor: pointer;
     }
 
-    @media (max-width: 600px) {
-      header {
-        flex-direction: column;
-        gap: 12px;
-      }
-
-      .menu a {
-        margin: 0 6px;
-      }
-
-      .welcome h1 {
-        font-size: 24px;
-      }
+    button:hover {
+      background: #8e44ad;
     }
   </style>
 </head>
@@ -197,137 +117,80 @@
 <body>
 
   <header>
-    <div class="logo">🦋 Butterfly Shop</div>
+    <h1>🦋 Butterfly Shop</h1>
 
-    <nav class="menu">
+    <nav>
       <a href="index.html">Inicio</a>
       <a href="catalogo.html">Catálogo</a>
+      <a href="panel.html">Mi panel</a>
 
-      <!-- Solo aparece para administradores -->
       <a href="admin.html" id="admin-menu" class="admin-link">
         🛠️ Administración
       </a>
-
-      <a href="#" id="logout-link">Cerrar sesión</a>
     </nav>
   </header>
 
   <main class="container">
 
-    <div class="welcome">
-      <h1 id="welcome-title">¡Hola, bienvenida/o! 🦋</h1>
-      <p>Este es tu panel personal de Butterfly Shop.</p>
-    </div>
+    <section class="welcome">
+      <h2>¡Hola, <span id="username">Usuario</span>! 🦋</h2>
 
-    <div class="balance">
-      <small>💎 Saldo disponible</small>
+      <p>Bienvenido a tu panel de Butterfly Shop.</p>
 
-      <div class="credits" id="credits">
-        Cargando...
+      <div class="credits">
+        💜 Créditos: <span id="credits">0</span>
       </div>
 
-      <button id="topup-button">
-        💜 Solicitar recarga
-      </button>
-    </div>
-
-    <div class="cards">
-
-      <div class="card">
-        <div class="icon">🛍️</div>
-        <h3>Mis compras</h3>
-        <p>
-          Consulta tus productos adquiridos y sus detalles.
-        </p>
-      </div>
-
-      <div class="card">
-        <div class="icon">💎</div>
-        <h3>Mis créditos</h3>
-        <p>
-          Revisa tu saldo y posteriormente tu historial de movimientos.
-        </p>
-      </div>
-
-      <div class="card">
-        <div class="icon">📦</div>
-        <h3>Mis productos</h3>
-        <p>
-          Accede a los productos digitales disponibles para tu cuenta.
-        </p>
-      </div>
-
-      <div class="card">
-        <div class="icon">⚠️</div>
-        <h3>Reportar problema</h3>
-        <p>
-          Informa cualquier inconveniente relacionado con una compra.
-        </p>
-      </div>
-
-    </div>
-
-    <section class="section">
-      <h2>🛒 Acciones rápidas</h2>
-
-      <div class="actions">
-
-        <a class="action" href="catalogo.html">
-          🛍️ Ver catálogo
-        </a>
-
-        <a class="action" href="#" id="credits-history">
-          💎 Historial de créditos
-        </a>
-
-        <a class="action" href="#" id="purchases-link">
-          📋 Mis compras
-        </a>
-
-        <a class="action" href="reportar.html">
-          ⚠️ Crear reporte
-        </a>
-
-        <!-- Solo aparece para administradores -->
-        <a class="action admin-action" href="admin.html" id="admin-action">
-          🛠️ Panel de administración
-        </a>
-
-      </div>
+      <button id="logout-button">Cerrar sesión</button>
     </section>
 
-    <section class="section">
+    <section class="actions">
 
-      <h2>📦 Últimas compras</h2>
-
-      <div class="empty" id="purchases-empty">
-        🦋 Aún no tienes compras realizadas.
+      <a class="action" href="catalogo.html">
+        🛍️<br><br>
+        <strong>Ver catálogo</strong>
         <br><br>
-        Cuando realices una compra, aparecerá aquí.
-      </div>
+        Explora nuestros productos.
+      </a>
 
-    </section>
+      <a class="action" href="#" id="topup-action">
+        💳<br><br>
+        <strong>Comprar créditos</strong>
+        <br><br>
+        Solicita una recarga.
+      </a>
 
-    <section class="section">
+      <a class="action" href="#" id="history-action">
+        📋<br><br>
+        <strong>Historial</strong>
+        <br><br>
+        Consulta tus movimientos.
+      </a>
 
-      <h2>📢 Avisos</h2>
+      <a class="action" href="#" id="purchases-action">
+        🛒<br><br>
+        <strong>Mis compras</strong>
+        <br><br>
+        Revisa tus productos adquiridos.
+      </a>
 
-      <div class="empty">
-        ✨ No tienes avisos nuevos.
-      </div>
+      <a class="action" href="reportar.html">
+        ⚠️<br><br>
+        <strong>Reportar problema</strong>
+        <br><br>
+        Envía un reporte sobre una compra.
+      </a>
+
+      <a class="action admin-action" href="admin.html" id="admin-action">
+        🛠️<br><br>
+        <strong>Panel de administración</strong>
+        <br><br>
+        Gestiona Butterfly Shop.
+      </a>
 
     </section>
 
   </main>
-
-  <footer>
-    🦋 Butterfly Shop · Tu espacio digital 💜
-  </footer>
-
-
-  <!-- SUPABASE -->
-  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-  <script src="supabase-config.js"></script>
 
   <script>
     const { createClient } = supabase;
@@ -358,101 +221,47 @@
 
       if (profileError) {
         console.error(profileError);
-
-        document.getElementById("credits").textContent =
-          "No disponible";
-
+        alert("No se pudo cargar tu perfil.");
         return;
       }
 
-      /* NOMBRE DEL USUARIO */
-
-      const nombre =
-        profile.username ||
-        user.email ||
-        "bienvenida/o";
-
-      document.getElementById("welcome-title").textContent =
-        "¡Hola, " + nombre + "! 🦋";
-
-
-      /* CRÉDITOS */
+      document.getElementById("username").textContent =
+        profile.username || "Usuario";
 
       document.getElementById("credits").textContent =
-        (profile.credits || 0) + " créditos";
-
-
-      /* ADMINISTRADOR */
+        profile.credits ?? 0;
 
       if (profile.role === "admin") {
 
-        document.getElementById("admin-menu").style.display =
-          "inline";
+        document.getElementById("admin-menu").style.display = "inline-block";
 
-        document.getElementById("admin-action").style.display =
-          "inline-block";
-
+        document.getElementById("admin-action").style.display = "block";
       }
-
     }
 
+    document.getElementById("logout-button").addEventListener("click", async () => {
 
-    /* CERRAR SESIÓN */
+      await supabaseClient.auth.signOut();
 
-    document.getElementById("logout-link")
-      .addEventListener("click", async function(event) {
+      window.location.href = "login.html";
+    });
 
-        event.preventDefault();
+    document.getElementById("topup-action").addEventListener("click", (event) => {
+      event.preventDefault();
+      alert("La sección de compra de créditos estará disponible próximamente.");
+    });
 
-        await supabaseClient.auth.signOut();
+    document.getElementById("history-action").addEventListener("click", (event) => {
+      event.preventDefault();
+      alert("El historial estará disponible próximamente.");
+    });
 
-        window.location.href = "login.html";
-
-      });
-
-
-    /* SOLICITAR RECARGA */
-
-    document.getElementById("topup-button")
-      .addEventListener("click", function() {
-
-        alert(
-          "La sección para solicitar créditos estará disponible próximamente. 💜"
-        );
-
-      });
-
-
-    /* ENLACES TEMPORALES */
-
-    document.getElementById("credits-history")
-      .addEventListener("click", function(event) {
-
-        event.preventDefault();
-
-        alert(
-          "El historial de créditos estará disponible próximamente. 💎"
-        );
-
-      });
-
-
-    document.getElementById("purchases-link")
-      .addEventListener("click", function(event) {
-
-        event.preventDefault();
-
-        alert(
-          "La sección de compras estará disponible próximamente. 🛍️"
-        );
-
-      });
-
-
-    /* CARGAR PANEL */
+    document.getElementById("purchases-action").addEventListener("click", (event) => {
+      event.preventDefault();
+      alert("La sección de compras estará disponible próximamente.");
+    });
 
     cargarPanel();
-
   </script>
 
 </body>
