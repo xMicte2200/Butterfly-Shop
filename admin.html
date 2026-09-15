@@ -150,50 +150,7 @@
       opacity: 0.9;
     }
 
-    .activity {
-      background: white;
-      border: 1px solid #eadcff;
-      border-radius: 18px;
-      padding: 20px;
-      box-shadow: 0 5px 18px #8d5ca515;
-      margin-bottom: 30px;
-    }
-
-    .activity-item {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      gap: 15px;
-      padding: 15px 0;
-      border-bottom: 1px solid #eee5f7;
-    }
-
-    .activity-item:last-child {
-      border-bottom: none;
-    }
-
-    .activity-name {
-      font-weight: bold;
-      color: #5d3970;
-    }
-
-    .activity-info {
-      color: #8a7b91;
-      font-size: 13px;
-      margin-top: 4px;
-    }
-
-    .status {
-      padding: 6px 10px;
-      border-radius: 20px;
-      font-size: 12px;
-      font-weight: bold;
-      background: #f0e6ff;
-      color: #7546a1;
-      white-space: nowrap;
-    }
-
-    /* RECARGAS */
+    /* SOLICITUDES DE RECARGA */
 
     .topups-box {
       background: white;
@@ -252,6 +209,49 @@
       padding: 20px 5px;
     }
 
+    .activity {
+      background: white;
+      border: 1px solid #eadcff;
+      border-radius: 18px;
+      padding: 20px;
+      box-shadow: 0 5px 18px #8d5ca515;
+      margin-bottom: 30px;
+    }
+
+    .activity-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 15px;
+      padding: 15px 0;
+      border-bottom: 1px solid #eee5f7;
+    }
+
+    .activity-item:last-child {
+      border-bottom: none;
+    }
+
+    .activity-name {
+      font-weight: bold;
+      color: #5d3970;
+    }
+
+    .activity-info {
+      color: #8a7b91;
+      font-size: 13px;
+      margin-top: 4px;
+    }
+
+    .status {
+      padding: 6px 10px;
+      border-radius: 20px;
+      font-size: 12px;
+      font-weight: bold;
+      background: #f0e6ff;
+      color: #7546a1;
+      white-space: nowrap;
+    }
+
     footer {
       text-align: center;
       padding: 25px;
@@ -267,6 +267,7 @@
     }
 
     @media (max-width: 600px) {
+
       .header-content {
         flex-direction: column;
         text-align: center;
@@ -276,6 +277,7 @@
         align-items: flex-start;
         flex-direction: column;
       }
+
     }
   </style>
 </head>
@@ -286,21 +288,30 @@
     🦋 Verificando acceso...
   </div>
 
+
   <div id="admin-content" style="display:none;">
 
     <header>
+
       <div class="header-content">
-        <div class="logo">🦋 Butterfly Shop</div>
+
+        <div class="logo">
+          🦋 Butterfly Shop
+        </div>
 
         <div class="admin-tag">
           👑 Panel de Administración
         </div>
+
       </div>
+
     </header>
+
 
     <main class="container">
 
       <div class="welcome">
+
         <h1 id="welcome-title">
           ¡Bienvenida, administradora! 🦋
         </h1>
@@ -308,158 +319,301 @@
         <p>
           Desde aquí podrás controlar y administrar Butterfly Shop.
         </p>
+
       </div>
+
+
+      <!-- ESTADÍSTICAS -->
 
       <div class="stats">
 
         <div class="stat">
-          <div class="stat-icon">👥</div>
-          <h3>0</h3>
-          <p>Usuarios registrados</p>
+
+          <div class="stat-icon">
+            👥
+          </div>
+
+          <h3>
+            0
+          </h3>
+
+          <p>
+            Usuarios registrados
+          </p>
+
         </div>
 
-        <div class="stat">
-          <div class="stat-icon">💎</div>
-          <h3>0</h3>
-          <p>Créditos vendidos</p>
-        </div>
 
         <div class="stat">
-          <div class="stat-icon">🛍️</div>
-          <h3>0</h3>
-          <p>Ventas realizadas</p>
+
+          <div class="stat-icon">
+            💎
+          </div>
+
+          <h3>
+            0
+          </h3>
+
+          <p>
+            Créditos vendidos
+          </p>
+
         </div>
 
+
         <div class="stat">
-          <div class="stat-icon">⚠️</div>
-          <h3>0</h3>
-          <p>Reportes pendientes</p>
+
+          <div class="stat-icon">
+            🛍️
+          </div>
+
+          <h3>
+            0
+          </h3>
+
+          <p>
+            Ventas realizadas
+          </p>
+
+        </div>
+
+
+        <div class="stat">
+
+          <div class="stat-icon">
+            ⚠️
+          </div>
+
+          <h3>
+            0
+          </h3>
+
+          <p>
+            Reportes pendientes
+          </p>
+
         </div>
 
       </div>
 
+
       <!-- SOLICITUDES DE RECARGA -->
 
-      <h2 class="section-title">
+      <h2
+        class="section-title"
+        id="solicitudes-recarga"
+      >
         💳 Solicitudes de recarga
       </h2>
+
 
       <div class="topups-box">
 
         <div id="topups-container">
+
           <div class="empty-message">
             🦋 Cargando solicitudes...
           </div>
+
         </div>
 
       </div>
 
+
+      <!-- GESTIÓN -->
 
       <h2 class="section-title">
         ⚙️ Gestión de la tienda
       </h2>
 
+
       <div class="admin-grid">
 
+
         <div class="admin-card">
-          <div class="icon">👥</div>
-          <h3>Usuarios</h3>
+
+          <div class="icon">
+            👥
+          </div>
+
+          <h3>
+            Usuarios
+          </h3>
+
           <p>
             Consulta usuarios registrados y administra sus cuentas.
           </p>
+
           <a href="#" class="btn">
             Gestionar usuarios
           </a>
+
         </div>
 
+
         <div class="admin-card">
-          <div class="icon">💎</div>
-          <h3>Créditos</h3>
+
+          <div class="icon">
+            💎
+          </div>
+
+          <h3>
+            Créditos
+          </h3>
+
           <p>
             Consulta balances y administra las recargas de créditos.
           </p>
-          <a href="#" class="btn">
+
+          <a href="#solicitudes-recarga" class="btn">
             Gestionar créditos
           </a>
+
         </div>
 
+
         <div class="admin-card">
-          <div class="icon">🛍️</div>
-          <h3>Productos</h3>
+
+          <div class="icon">
+            🛍️
+          </div>
+
+          <h3>
+            Productos
+          </h3>
+
           <p>
             Crea, modifica, activa o desactiva productos de la tienda.
           </p>
+
           <a href="#" class="btn">
             Gestionar productos
           </a>
+
         </div>
 
+
         <div class="admin-card">
-          <div class="icon">📦</div>
-          <h3>Inventario</h3>
+
+          <div class="icon">
+            📦
+          </div>
+
+          <h3>
+            Inventario
+          </h3>
+
           <p>
             Administra los elementos disponibles para entrega digital.
           </p>
+
           <a href="#" class="btn">
             Gestionar inventario
           </a>
+
         </div>
 
+
         <div class="admin-card">
-          <div class="icon">💰</div>
-          <h3>Ventas</h3>
+
+          <div class="icon">
+            💰
+          </div>
+
+          <h3>
+            Ventas
+          </h3>
+
           <p>
             Consulta las compras realizadas y su estado de entrega.
           </p>
+
           <a href="#" class="btn">
             Ver ventas
           </a>
+
         </div>
 
+
         <div class="admin-card">
-          <div class="icon">🔄</div>
-          <h3>Recargas</h3>
+
+          <div class="icon">
+            🔄
+          </div>
+
+          <h3>
+            Recargas
+          </h3>
+
           <p>
             Revisa solicitudes de recarga y acredita créditos a usuarios.
           </p>
+
           <a href="#solicitudes-recarga" class="btn">
             Ver recargas
           </a>
+
         </div>
 
+
         <div class="admin-card">
-          <div class="icon">⚠️</div>
-          <h3>Reportes</h3>
+
+          <div class="icon">
+            ⚠️
+          </div>
+
+          <h3>
+            Reportes
+          </h3>
+
           <p>
             Revisa problemas reportados por los clientes y dales seguimiento.
           </p>
+
           <a href="reportar.html" class="btn">
             Ver reportes
           </a>
+
         </div>
 
+
         <div class="admin-card">
-          <div class="icon">📊</div>
-          <h3>Estadísticas</h3>
+
+          <div class="icon">
+            📊
+          </div>
+
+          <h3>
+            Estadísticas
+          </h3>
+
           <p>
             Consulta el rendimiento general de Butterfly Shop.
           </p>
+
           <a href="#" class="btn">
             Ver estadísticas
           </a>
+
         </div>
 
+
       </div>
+
+
+      <!-- ACTIVIDAD -->
 
       <h2 class="section-title">
         🕐 Actividad reciente
       </h2>
+
 
       <div class="activity">
 
         <div class="activity-item">
 
           <div>
+
             <div class="activity-name">
               No hay actividad todavía
             </div>
@@ -467,7 +621,9 @@
             <div class="activity-info">
               Aquí aparecerán las compras, recargas y reportes recientes.
             </div>
+
           </div>
+
 
           <span class="status">
             Esperando datos
@@ -477,7 +633,9 @@
 
       </div>
 
+
     </main>
+
 
     <footer>
       🦋 Butterfly Shop · Panel administrativo
@@ -489,11 +647,14 @@
   <!-- SUPABASE -->
 
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
   <script src="supabase-config.js"></script>
+
 
   <script>
 
     const { createClient } = supabase;
+
 
     const supabaseClient = createClient(
       SUPABASE_URL,
@@ -501,10 +662,18 @@
     );
 
 
+    /* =========================
+       VERIFICAR ADMINISTRADOR
+    ========================= */
+
     async function verificarAdministrador() {
 
-      const loading = document.getElementById("loading");
-      const adminContent = document.getElementById("admin-content");
+      const loading =
+        document.getElementById("loading");
+
+      const adminContent =
+        document.getElementById("admin-content");
+
 
       try {
 
@@ -514,13 +683,18 @@
         } = await supabaseClient.auth.getUser();
 
 
+        /* NO HAY SESIÓN */
+
         if (userError || !user) {
 
           window.location.href = "login.html";
+
           return;
 
         }
 
+
+        /* BUSCAR PERFIL */
 
         const {
           data: profile,
@@ -534,23 +708,33 @@
 
         if (profileError || !profile) {
 
-          alert("No se pudo verificar tu cuenta.");
+          alert(
+            "No se pudo verificar tu cuenta."
+          );
 
           window.location.href = "panel.html";
+
           return;
 
         }
 
+
+        /* COMPROBAR ROL */
 
         if (profile.role !== "admin") {
 
-          alert("No tienes permisos de administrador. 🦋");
+          alert(
+            "No tienes permisos de administrador. 🦋"
+          );
 
           window.location.href = "panel.html";
+
           return;
 
         }
 
+
+        /* MOSTRAR NOMBRE */
 
         const nombre =
           profile.username ||
@@ -559,20 +743,35 @@
           "administradora";
 
 
-        document.getElementById("welcome-title").textContent =
-          "¡Bienvenida, " + nombre + "! 🦋";
+        document.getElementById(
+          "welcome-title"
+        ).textContent =
+          "¡Bienvenida, " +
+          nombre +
+          "! 🦋";
 
+
+        /* MOSTRAR PANEL */
 
         loading.style.display = "none";
+
         adminContent.style.display = "block";
 
+
+        /* CARGAR RECARGAS */
+
         cargarRecargas();
+
 
       } catch (error) {
 
         console.error(error);
 
-        alert("Ocurrió un error al verificar el acceso.");
+
+        alert(
+          "Ocurrió un error al verificar el acceso."
+        );
+
 
         window.location.href = "panel.html";
 
@@ -581,10 +780,17 @@
     }
 
 
+    /* =========================
+       CARGAR SOLICITUDES
+    ========================= */
+
     async function cargarRecargas() {
 
       const container =
-        document.getElementById("topups-container");
+        document.getElementById(
+          "topups-container"
+        );
+
 
       try {
 
@@ -609,9 +815,13 @@
 
 
         if (error) {
+
           throw error;
+
         }
 
+
+        /* NO HAY SOLICITUDES */
 
         if (!data || data.length === 0) {
 
@@ -626,94 +836,163 @@
         }
 
 
-        const userIds =
-          [...new Set(data.map(item => item.user_id))];
+        /* OBTENER IDS */
 
+        const userIds =
+          [
+            ...new Set(
+              data.map(
+                item => item.user_id
+              )
+            )
+          ];
+
+
+        /* BUSCAR USUARIOS */
 
         const {
           data: profiles,
           error: profilesError
         } = await supabaseClient
           .from("profiles")
-          .select("id, username, email")
-          .in("id", userIds);
+          .select(
+            "id, username, email"
+          )
+          .in(
+            "id",
+            userIds
+          );
 
 
         if (profilesError) {
+
           throw profilesError;
+
         }
 
 
+        /* CREAR MAPA */
+
         const profileMap = {};
 
+
         profiles.forEach(profile => {
-          profileMap[profile.id] = profile;
+
+          profileMap[
+            profile.id
+          ] = profile;
+
         });
 
 
-        container.innerHTML = data.map(item => {
+        /* MOSTRAR SOLICITUDES */
 
-          const profile =
-            profileMap[item.user_id] || {};
+        container.innerHTML =
+          data.map(item => {
 
-
-          const fecha =
-            new Date(item.created_at).toLocaleString(
-              "es-MX",
-              {
-                dateStyle: "medium",
-                timeStyle: "short"
-              }
-            );
+            const profile =
+              profileMap[
+                item.user_id
+              ] || {};
 
 
-          return `
-            <div class="topup-item">
+            const fecha =
+              new Date(
+                item.created_at
+              ).toLocaleString(
+                "es-MX",
+                {
+                  dateStyle: "medium",
+                  timeStyle: "short"
+                }
+              );
 
-              <div class="topup-user">
-                👤 ${profile.username || "Usuario"}
+
+            return `
+
+              <div class="topup-item">
+
+                <div class="topup-user">
+                  👤 ${
+                    profile.username ||
+                    "Usuario"
+                  }
+                </div>
+
+
+                <div class="topup-info">
+
+                  💎 Créditos solicitados:
+                  <strong>
+                    ${item.amount_credits}
+                  </strong>
+
+                  <br>
+
+
+                  💰 Total:
+                  <strong>
+                    $${item.amount_credits} MXN
+                  </strong>
+
+                  <br>
+
+
+                  💳 Método:
+                  ${
+                    item.payment_method ||
+                    "No especificado"
+                  }
+
+                  <br>
+
+
+                  🧾 Referencia:
+                  ${
+                    item.payment_reference ||
+                    "Sin referencia"
+                  }
+
+                  <br>
+
+
+                  🕐 Fecha:
+                  ${fecha}
+
+                </div>
+
+
+                <button
+                  class="approve-btn"
+                  onclick="
+                    aprobarRecarga(
+                      '${item.id}'
+                    )
+                  "
+                >
+                  ✅ Aprobar y agregar créditos
+                </button>
+
               </div>
 
-              <div class="topup-info">
+            `;
 
-                💎 Créditos solicitados:
-                <strong>${item.amount_credits}</strong><br>
-
-                💰 Total:
-                <strong>$${item.amount_credits} MXN</strong><br>
-
-                💳 Método:
-                ${item.payment_method || "No especificado"}<br>
-
-                🧾 Referencia:
-                ${item.payment_reference || "Sin referencia"}<br>
-
-                🕐 Fecha:
-                ${fecha}
-
-              </div>
-
-              <button
-                class="approve-btn"
-                onclick="aprobarRecarga('${item.id}')"
-              >
-                ✅ Aprobar y agregar créditos
-              </button>
-
-            </div>
-          `;
-
-        }).join("");
+          }).join("");
 
 
       } catch (error) {
 
         console.error(error);
 
+
         container.innerHTML = `
+
           <div class="empty-message">
+
             ❌ No se pudieron cargar las solicitudes.
+
           </div>
+
         `;
 
       }
@@ -721,7 +1000,13 @@
     }
 
 
-    async function aprobarRecarga(topupId) {
+    /* =========================
+       APROBAR RECARGA
+    ========================= */
+
+    async function aprobarRecarga(
+      topupId
+    ) {
 
       const confirmar =
         confirm(
@@ -731,7 +1016,9 @@
 
 
       if (!confirmar) {
+
         return;
+
       }
 
 
@@ -749,16 +1036,22 @@
 
 
         if (error) {
+
           throw error;
+
         }
 
 
         alert(
           "✅ Recarga aprobada correctamente.\n\n" +
           "Los créditos fueron agregados al usuario.\n\n" +
-          "Nuevo saldo: " + data + " créditos."
+          "Nuevo saldo: " +
+          data +
+          " créditos."
         );
 
+
+        /* ACTUALIZAR LISTA */
 
         cargarRecargas();
 
@@ -766,6 +1059,7 @@
       } catch (error) {
 
         console.error(error);
+
 
         alert(
           "❌ No se pudo aprobar la recarga.\n\n" +
@@ -776,6 +1070,8 @@
 
     }
 
+
+    /* INICIAR */
 
     verificarAdministrador();
 
