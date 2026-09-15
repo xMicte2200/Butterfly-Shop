@@ -1,0 +1,303 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Panel Cliente | Butterfly Shop</title>
+
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: Arial, sans-serif;
+    }
+
+    body {
+      min-height: 100vh;
+      background: linear-gradient(135deg, #f9edff, #eadbff, #ffe7f3);
+      color: #4d3657;
+    }
+
+    header {
+      background: rgba(255,255,255,0.95);
+      padding: 18px 25px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      box-shadow: 0 3px 15px rgba(100,60,120,0.12);
+    }
+
+    .logo {
+      color: #914fba;
+      font-size: 23px;
+      font-weight: bold;
+    }
+
+    .menu a {
+      text-decoration: none;
+      color: #704582;
+      margin-left: 15px;
+      font-size: 14px;
+    }
+
+    .container {
+      max-width: 1100px;
+      margin: 35px auto;
+      padding: 0 20px;
+    }
+
+    .welcome {
+      margin-bottom: 25px;
+    }
+
+    .welcome h1 {
+      color: #8146a4;
+      font-size: 28px;
+      margin-bottom: 7px;
+    }
+
+    .welcome p {
+      color: #777;
+    }
+
+    .balance {
+      background: linear-gradient(135deg, #9e55c5, #d477b2);
+      color: white;
+      padding: 25px;
+      border-radius: 22px;
+      margin-bottom: 25px;
+      box-shadow: 0 8px 25px rgba(130,70,160,0.22);
+    }
+
+    .balance small {
+      opacity: 0.9;
+    }
+
+    .credits {
+      font-size: 38px;
+      font-weight: bold;
+      margin: 7px 0 15px;
+    }
+
+    .balance button {
+      border: none;
+      padding: 10px 18px;
+      border-radius: 12px;
+      background: white;
+      color: #8d4caf;
+      font-weight: bold;
+      cursor: pointer;
+    }
+
+    .cards {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 18px;
+      margin-bottom: 30px;
+    }
+
+    .card {
+      background: rgba(255,255,255,0.95);
+      padding: 23px;
+      border-radius: 20px;
+      box-shadow: 0 5px 18px rgba(100,60,120,0.1);
+    }
+
+    .card .icon {
+      font-size: 28px;
+      margin-bottom: 10px;
+    }
+
+    .card h3 {
+      color: #7e479a;
+      margin-bottom: 6px;
+    }
+
+    .card p {
+      color: #777;
+      font-size: 14px;
+      line-height: 1.5;
+    }
+
+    .section {
+      background: rgba(255,255,255,0.95);
+      padding: 25px;
+      border-radius: 20px;
+      margin-bottom: 22px;
+      box-shadow: 0 5px 18px rgba(100,60,120,0.1);
+    }
+
+    .section h2 {
+      color: #8146a4;
+      margin-bottom: 15px;
+      font-size: 20px;
+    }
+
+    .empty {
+      text-align: center;
+      padding: 25px;
+      color: #999;
+      border: 2px dashed #ead8f3;
+      border-radius: 15px;
+    }
+
+    .actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+
+    .action {
+      text-decoration: none;
+      background: #f4e5fb;
+      color: #8146a4;
+      padding: 12px 16px;
+      border-radius: 12px;
+      font-weight: bold;
+      font-size: 14px;
+    }
+
+    footer {
+      text-align: center;
+      padding: 25px;
+      color: #8b7194;
+      font-size: 13px;
+    }
+
+    @media (max-width: 600px) {
+      header {
+        flex-direction: column;
+        gap: 12px;
+      }
+
+      .menu a {
+        margin: 0 6px;
+      }
+
+      .welcome h1 {
+        font-size: 24px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <header>
+    <div class="logo">🦋 Butterfly Shop</div>
+
+    <nav class="menu">
+      <a href="index.html">Inicio</a>
+      <a href="catalogo.html">Catálogo</a>
+      <a href="login.html">Cerrar sesión</a>
+    </nav>
+  </header>
+
+  <main class="container">
+
+    <div class="welcome">
+      <h1>¡Hola, bienvenida/o! 🦋</h1>
+      <p>Este es tu panel personal de Butterfly Shop.</p>
+    </div>
+
+    <div class="balance">
+      <small>💎 Saldo disponible</small>
+
+      <div class="credits">
+        0 créditos
+      </div>
+
+      <button>
+        💜 Solicitar recarga
+      </button>
+    </div>
+
+    <div class="cards">
+
+      <div class="card">
+        <div class="icon">🛍️</div>
+        <h3>Mis compras</h3>
+        <p>
+          Consulta tus productos adquiridos y sus detalles.
+        </p>
+      </div>
+
+      <div class="card">
+        <div class="icon">💎</div>
+        <h3>Mis créditos</h3>
+        <p>
+          Revisa tu saldo y posteriormente tu historial de movimientos.
+        </p>
+      </div>
+
+      <div class="card">
+        <div class="icon">📦</div>
+        <h3>Mis productos</h3>
+        <p>
+          Accede a los productos digitales disponibles para tu cuenta.
+        </p>
+      </div>
+
+      <div class="card">
+        <div class="icon">⚠️</div>
+        <h3>Reportar problema</h3>
+        <p>
+          Informa cualquier inconveniente relacionado con una compra.
+        </p>
+      </div>
+
+    </div>
+
+    <section class="section">
+      <h2>🛒 Acciones rápidas</h2>
+
+      <div class="actions">
+        <a class="action" href="catalogo.html">
+          🛍️ Ver catálogo
+        </a>
+
+        <a class="action" href="#">
+          💎 Historial de créditos
+        </a>
+
+        <a class="action" href="#">
+          📋 Mis compras
+        </a>
+
+        <a class="action" href="#">
+          ⚠️ Crear reporte
+        </a>
+      </div>
+    </section>
+
+    <section class="section">
+
+      <h2>📦 Últimas compras</h2>
+
+      <div class="empty">
+        🦋 Aún no tienes compras realizadas.
+        <br><br>
+        Cuando realices una compra, aparecerá aquí.
+      </div>
+
+    </section>
+
+    <section class="section">
+
+      <h2>📢 Avisos</h2>
+
+      <div class="empty">
+        ✨ No tienes avisos nuevos.
+      </div>
+
+    </section>
+
+  </main>
+
+  <footer>
+    🦋 Butterfly Shop · Tu espacio digital 💜
+  </footer>
+
+</body>
+</html>
