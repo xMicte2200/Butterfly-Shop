@@ -149,11 +149,14 @@
             padding: 12px 25px;
             border-radius: 25px;
             font-weight: 600;
+            border: none;
+            cursor: pointer;
         }
 
         .buy.disabled {
             background: #cfc4d8;
             pointer-events: none;
+            cursor: not-allowed;
         }
 
         .loading,
@@ -211,13 +214,16 @@
         🦋 Butterfly Shop · Catálogo digital
     </footer>
 
-    <!-- Supabase -->
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <script src="supabase-config.js"></script>
 
     <script>
-        const productsContainer = document.getElementById("products");
-        const categoriesContainer = document.getElementById("categories");
+
+        const productsContainer =
+            document.getElementById("products");
+
+        const categoriesContainer =
+            document.getElementById("categories");
 
         let allProducts = [];
         let currentCategory = "Todos";
@@ -231,28 +237,28 @@
 
             try {
 
-                const { data: products, error } = await supabaseClient
-                    .from("products")
-                    .select(`
-                        id,
-                        name,
-                        description,
-                        price_credits,
-                        category,
-                        active,
-                        created_at
-                    `)
-                    .eq("active", true)
-                    .order("created_at", { ascending: false });
-
+                const { data: products, error } =
+                    await supabaseClient
+                        .from("products")
+                        .select(`
+                            id,
+                            name,
+                            description,
+                            price_credits,
+                            category,
+                            active,
+                            created_at
+                        `)
+                        .eq("active", true)
+                        .order("created_at", {
+                            ascending: false
+                        });
 
                 if (error) {
                     throw error;
                 }
 
-
                 allProducts = products || [];
-
 
                 if (allProducts.length === 0) {
 
@@ -265,26 +271,29 @@
                     return;
                 }
 
-
                 crearCategorias();
 
                 await mostrarProductos();
 
-
             } catch (error) {
 
-                console.error("Error cargando productos:", error);
+                console.error(
+                    "Error cargando productos:",
+                    error
+                );
 
                 productsContainer.innerHTML = `
                     <div class="error">
                         ❌ No pudimos cargar el catálogo.
                         <br><br>
-                        ${escaparHTML(error.message || "Error desconocido")}
+                        ${escaparHTML(
+                            error.message ||
+                            "Error desconocido"
+                        )}
                     </div>
                 `;
             }
         }
-
 
 
         // ================================
@@ -305,7 +314,6 @@
                 )
             ];
 
-
             categoriesContainer.innerHTML = `
                 <button
                     class="category active"
@@ -314,7 +322,6 @@
                     ✨ Todos
                 </button>
             `;
-
 
             categorias.forEach(category => {
 
@@ -328,9 +335,9 @@
                 button.textContent =
                     `💎 ${category}`;
 
-                categoriesContainer.appendChild(button);
+                categoriesContainer
+                    .appendChild(button);
             });
-
 
             document
                 .querySelectorAll(".category")
@@ -343,20 +350,17 @@
                             currentCategory =
                                 button.dataset.category;
 
-
                             document
-                                .querySelectorAll(".category")
+                                .querySelectorAll(
+                                    ".category"
+                                )
                                 .forEach(btn => {
-
-                                    btn.classList.remove(
-                                        "active"
-                                    );
-
+                                    btn.classList
+                                        .remove("active");
                                 });
 
-
-                            button.classList.add("active");
-
+                            button.classList
+                                .add("active");
 
                             await mostrarProductos();
 
@@ -364,9 +368,7 @@
                     );
 
                 });
-
         }
-
 
 
         // ================================
@@ -377,7 +379,6 @@
 
             let productosMostrar = allProducts;
 
-
             if (currentCategory !== "Todos") {
 
                 productosMostrar =
@@ -386,9 +387,7 @@
                             product.category ===
                             currentCategory
                     );
-
             }
-
 
             if (productosMostrar.length === 0) {
 
@@ -401,33 +400,23 @@
                 return;
             }
 
-
             productsContainer.innerHTML = `
                 <div class="loading">
                     🦋 Revisando disponibilidad...
                 </div>
             `;
 
-
-            // =================================
-            // CONSULTAR STOCK DE FORMA SEGURA
-            // =================================
-
             const stockMap = {};
-
 
             for (const product of productosMostrar) {
 
                 const { data: stock, error } =
-                    await supabaseClient
-                        .rpc(
-                            "get_product_stock",
-                            {
-                                p_product_id:
-                                    product.id
-                            }
-                        );
-
+                    await supabaseClient.rpc(
+                        "get_product_stock",
+                        {
+                            p_product_id: product.id
+                        }
+                    );
 
                 if (error) {
 
@@ -437,42 +426,29 @@
                         error
                     );
 
-
                     stockMap[product.id] = 0;
 
                 } else {
 
                     stockMap[product.id] =
                         Number(stock || 0);
-
                 }
-
             }
 
-
-
-            // =================================
-            // CREAR TARJETAS
-            // =================================
-
             productsContainer.innerHTML = "";
-
 
             productosMostrar.forEach(product => {
 
                 const stock =
                     stockMap[product.id] || 0;
 
-
                 const disponible =
                     stock > 0;
-
 
                 const card =
                     document.createElement("div");
 
                 card.className = "product";
-
 
                 card.innerHTML = `
 
@@ -482,13 +458,11 @@
                         )}
                     </div>
 
-
                     <h2>
                         ${escaparHTML(
                             product.name
                         )}
                     </h2>
-
 
                     <p>
                         ${escaparHTML(
@@ -497,63 +471,147 @@
                         )}
                     </p>
 
-
                     <div class="price">
                         💎 ${product.price_credits} créditos
                     </div>
 
-
-                    <div
-                        class="stock ${
-                            disponible
-                                ? "available"
-                                : "unavailable"
-                        }"
-                    >
-
+                    <div class="stock ${
+                        disponible
+                            ? "available"
+                            : "unavailable"
+                    }">
                         ${
                             disponible
                                 ? "🟢 Disponible"
                                 : "🔴 Agotado"
                         }
-
                     </div>
-
 
                     ${
                         disponible
 
                             ? `
-
-                                <a
-                                    href="login.html"
+                                <button
                                     class="buy"
+                                    type="button"
+                                    onclick="comprarProducto('${product.id}')"
                                 >
-                                    Comprar
-                                </a>
-
+                                    🛒 Comprar
+                                </button>
                               `
 
                             : `
-
                                 <span
                                     class="buy disabled"
                                 >
                                     Agotado
                                 </span>
-
                               `
                     }
-
                 `;
 
-
-                productsContainer.appendChild(card);
+                productsContainer
+                    .appendChild(card);
 
             });
-
         }
 
+
+        // ================================
+        // COMPRAR PRODUCTO
+        // ================================
+
+        async function comprarProducto(productId) {
+
+            try {
+
+                const {
+                    data: {
+                        session
+                    }
+                } = await supabaseClient.auth.getSession();
+
+                if (!session) {
+
+                    alert(
+                        "🦋 Debes iniciar sesión para comprar este producto."
+                    );
+
+                    window.location.href =
+                        "login.html";
+
+                    return;
+                }
+
+
+                const confirmar =
+                    confirm(
+                        "🦋 ¿Quieres comprar este producto con tus créditos?"
+                    );
+
+                if (!confirmar) {
+                    return;
+                }
+
+
+                const { data, error } =
+                    await supabaseClient.rpc(
+                        "buy_product",
+                        {
+                            p_product_id: productId
+                        }
+                    );
+
+
+                if (error) {
+                    throw error;
+                }
+
+
+                const compra =
+                    Array.isArray(data)
+                        ? data[0]
+                        : data;
+
+
+                if (!compra) {
+
+                    throw new Error(
+                        "No se recibió la información de la compra."
+                    );
+                }
+
+
+                alert(
+                    "🦋 ¡Compra realizada correctamente!\n\n" +
+                    "Producto: " +
+                    (compra.product_id || "Producto") +
+                    "\n" +
+                    "Costo: " +
+                    (compra.price_credits || "") +
+                    " créditos\n\n" +
+                    "Tu contenido digital:\n" +
+                    (compra.delivery_data ||
+                        "Contenido entregado correctamente.")
+                );
+
+
+                await cargarProductos();
+
+            } catch (error) {
+
+                console.error(
+                    "Error realizando compra:",
+                    error
+                );
+
+                alert(
+                    "❌ No se pudo completar la compra.\n\n" +
+                    (error.message ||
+                        "Error desconocido")
+                );
+            }
+        }
 
 
         // ================================
@@ -566,10 +624,8 @@
                 return "🎁";
             }
 
-
             const categoria =
                 category.toLowerCase();
-
 
             if (
                 categoria.includes("plataforma")
@@ -577,13 +633,11 @@
                 return "📺";
             }
 
-
             if (
                 categoria.includes("diseño")
             ) {
                 return "🎨";
             }
-
 
             if (
                 categoria.includes("curso")
@@ -591,17 +645,14 @@
                 return "📚";
             }
 
-
             if (
                 categoria.includes("video")
             ) {
                 return "🎬";
             }
 
-
             return "🎁";
         }
-
 
 
         // ================================
@@ -617,7 +668,6 @@
 
             return div.innerHTML;
         }
-
 
 
         // ================================
