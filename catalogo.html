@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Catálogo | Butterfly Shop</title>
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', sans-serif;
+        }
+
+        body {
+            background: linear-gradient(135deg, #f8edff, #eee1ff, #fff5fb);
+            color: #4b356b;
+            min-height: 100vh;
+        }
+
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px 7%;
+            background: rgba(255,255,255,0.8);
+            border-bottom: 1px solid #ead8ff;
+        }
+
+        .logo {
+            font-size: 23px;
+            font-weight: bold;
+            color: #8c5bc4;
+        }
+
+        nav a {
+            text-decoration: none;
+            color: #6e4b91;
+            margin-left: 18px;
+            font-size: 14px;
+        }
+
+        .title {
+            text-align: center;
+            padding: 55px 20px 25px;
+        }
+
+        .title h1 {
+            color: #7544a8;
+            font-size: 38px;
+            margin-bottom: 12px;
+        }
+
+        .title p {
+            color: #8c789f;
+        }
+
+        .categories {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 10px;
+            padding: 15px 20px 35px;
+        }
+
+        .category {
+            background: white;
+            border: 1px solid #e3cff8;
+            color: #8050b4;
+            padding: 10px 18px;
+            border-radius: 25px;
+            cursor: pointer;
+        }
+
+        .products {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+            gap: 24px;
+            max-width: 1100px;
+            margin: auto;
+            padding: 20px;
+        }
+
+        .product {
+            background: rgba(255,255,255,0.9);
+            border: 1px solid #ead8ff;
+            border-radius: 24px;
+            padding: 25px;
+            text-align: center;
+            box-shadow: 0 8px 25px rgba(130,90,170,0.07);
+            transition: 0.3s;
+        }
+
+        .product:hover {
+            transform: translateY(-5px);
+        }
+
+        .product-icon {
+            font-size: 48px;
+            margin-bottom: 15px;
+        }
+
+        .product h2 {
+            color: #7544a8;
+            font-size: 20px;
+            margin-bottom: 10px;
+        }
+
+        .product p {
+            color: #8c789f;
+            font-size: 14px;
+            line-height: 1.5;
+            margin-bottom: 15px;
+        }
+
+        .price {
+            font-size: 22px;
+            font-weight: bold;
+            color: #8c5bc4;
+            margin-bottom: 8px;
+        }
+
+        .stock {
+            color: #4d9b70;
+            font-size: 13px;
+            margin-bottom: 18px;
+        }
+
+        .buy {
+            display: inline-block;
+            background: linear-gradient(135deg, #a978df, #8050b4);
+            color: white;
+            text-decoration: none;
+            padding: 12px 25px;
+            border-radius: 25px;
+            font-weight: 600;
+        }
+
+        footer {
+            text-align: center;
+            padding: 45px 20px;
+            color: #9b83b3;
+            font-size: 13px;
+        }
+    </style>
+</head>
+
+<body>
+
+    <header>
+        <div class="logo">🦋 Butterfly Shop</div>
+
+        <nav>
+            <a href="index.html">Inicio</a>
+            <a href="catalogo.html">Catálogo</a>
+            <a href="login.html">Mi cuenta</a>
+        </nav>
+    </header>
+
+    <section class="title">
+        <h1>🛍️ Nuestro catálogo</h1>
+        <p>Explora nuestros productos digitales disponibles.</p>
+    </section>
+
+    <div class="categories">
+        <button class="category">✨ Todos</button>
+        <button class="category">💎 Plataformas</button>
+        <button class="category">🎨 Diseños</button>
+        <button class="category">📚 Cursos</button>
+    </div>
+
+    <section class="products">
+
+        <div class="product">
+            <div class="product-icon">📺</div>
+            <h2>Producto digital 01</h2>
+            <p>Descripción del producto y sus características.</p>
+            <div class="price">💎 5 créditos</div>
+            <div class="stock">🟢 Disponible</div>
+            <a href="login.html" class="buy">Comprar</a>
+        </div>
+
+        <div class="product">
+            <div class="product-icon">🎬</div>
+            <h2>Producto digital 02</h2>
+            <p>Descripción del producto y sus características.</p>
+            <div class="price">💎 10 créditos</div>
+            <div class="stock">🟢 Disponible</div>
+            <a href="login.html" class="buy">Comprar</a>
+        </div>
+
+        <div class="product">
+            <div class="product-icon">🎁</div>
+            <h2>Producto digital 03</h2>
+            <p>Descripción del producto y sus características.</p>
+            <div class="price">💎 15 créditos</div>
+            <div class="stock">🟢 Disponible</div>
+            <a href="login.html" class="buy">Comprar</a>
+        </div>
+
+    </section>
+
+    <footer>
+        🦋 Butterfly Shop · Catálogo digital
+    </footer>
+
+</body>
+</html>
