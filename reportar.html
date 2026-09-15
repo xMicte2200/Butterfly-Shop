@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Reportar problema | Butterfly Shop</title>
+
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: Arial, sans-serif;
+    }
+
+    body {
+      min-height: 100vh;
+      background: linear-gradient(135deg, #f9edff, #eadbff, #ffe7f3);
+      padding: 25px 15px;
+      color: #4d3657;
+    }
+
+    .container {
+      max-width: 650px;
+      margin: 25px auto;
+    }
+
+    .back {
+      display: inline-block;
+      color: #8146a4;
+      text-decoration: none;
+      margin-bottom: 18px;
+      font-size: 14px;
+    }
+
+    .box {
+      background: rgba(255, 255, 255, 0.96);
+      padding: 30px;
+      border-radius: 25px;
+      box-shadow: 0 8px 25px rgba(100, 60, 120, 0.13);
+    }
+
+    .icon {
+      text-align: center;
+      font-size: 42px;
+      margin-bottom: 8px;
+    }
+
+    h1 {
+      text-align: center;
+      color: #8146a4;
+      margin-bottom: 8px;
+    }
+
+    .intro {
+      text-align: center;
+      color: #777;
+      font-size: 14px;
+      line-height: 1.5;
+      margin-bottom: 28px;
+    }
+
+    .group {
+      margin-bottom: 18px;
+    }
+
+    label {
+      display: block;
+      color: #704582;
+      font-weight: bold;
+      font-size: 14px;
+      margin-bottom: 7px;
+    }
+
+    input,
+    select,
+    textarea {
+      width: 100%;
+      border: 2px solid #ead8f3;
+      border-radius: 12px;
+      padding: 13px;
+      outline: none;
+      font-size: 14px;
+      background: white;
+    }
+
+    input:focus,
+    select:focus,
+    textarea:focus {
+      border-color: #b66ed6;
+    }
+
+    textarea {
+      min-height: 130px;
+      resize: vertical;
+    }
+
+    .hint {
+      color: #999;
+      font-size: 12px;
+      margin-top: 5px;
+    }
+
+    .submit {
+      width: 100%;
+      border: none;
+      padding: 14px;
+      border-radius: 14px;
+      background: linear-gradient(90deg, #a957c8, #d878b2);
+      color: white;
+      font-size: 16px;
+      font-weight: bold;
+      cursor: pointer;
+      margin-top: 5px;
+    }
+
+    .notice {
+      background: #faf2ff;
+      border-left: 4px solid #b66ed6;
+      padding: 13px;
+      border-radius: 10px;
+      margin-bottom: 20px;
+      font-size: 13px;
+      color: #765982;
+      line-height: 1.5;
+    }
+
+    .footer {
+      text-align: center;
+      margin-top: 18px;
+      color: #95799d;
+      font-size: 12px;
+    }
+  </style>
+</head>
+
+<body>
+
+  <main class="container">
+
+    <a href="panel.html" class="back">
+      ← Volver al panel
+    </a>
+
+    <div class="box">
+
+      <div class="icon">⚠️</div>
+
+      <h1>Reportar un problema</h1>
+
+      <p class="intro">
+        Cuéntanos qué ocurrió con tu compra y revisaremos tu reporte.
+        🦋
+      </p>
+
+      <div class="notice">
+        💜 Proporciona información clara para que podamos identificar
+        rápidamente la compra y ayudarte.
+      </div>
+
+      <form>
+
+        <div class="group">
+          <label for="platform">
+            🛍️ Plataforma o producto
+          </label>
+
+          <input
+            type="text"
+            id="platform"
+            placeholder="Ej. Plataforma digital"
+            required
+          >
+        </div>
+
+        <div class="group">
+          <label for="email">
+            📧 Correo relacionado con la compra
+          </label>
+
+          <input
+            type="email"
+            id="email"
+            placeholder="correo@ejemplo.com"
+            required
+          >
+        </div>
+
+        <div class="group">
+          <label for="date">
+            📅 Fecha de compra
+          </label>
+
+          <input
+            type="date"
+            id="date"
+            required
+          >
+        </div>
+
+        <div class="group">
+          <label for="type">
+            🔎 Tipo de problema
+          </label>
+
+          <select id="type" required>
+            <option value="">Selecciona una opción</option>
+            <option>Producto no recibido</option>
+            <option>Producto con problema</option>
+            <option>Datos incorrectos</option>
+            <option>Problema de acceso</option>
+            <option>Otro</option>
+          </select>
+        </div>
+
+        <div class="group">
+          <label for="description">
+            📝 Describe el problema
+          </label>
+
+          <textarea
+            id="description"
+            placeholder="Explica qué ocurrió con tu compra..."
+            required
+          ></textarea>
+
+          <div class="hint">
+            Describe el problema con el mayor detalle posible.
+          </div>
+        </div>
+
+        <button type="submit" class="submit">
+          🦋 Enviar reporte
+        </button>
+
+      </form>
+
+    </div>
+
+    <div class="footer">
+      Butterfly Shop · Soporte al cliente 💜
+    </div>
+
+  </main>
+
+</body>
+</html>
