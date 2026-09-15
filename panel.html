@@ -1,544 +1,524 @@
-<!DOCTYPE html>
-<html lang="es">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Panel | Butterfly Shop</title>
-
-  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-  <script src="supabase-config.js"></script>
-
-  <style>
-    * {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-    }
-
-    body {
-      font-family: Arial, sans-serif;
-      min-height: 100vh;
-      background: linear-gradient(135deg, #f7eaff, #ead7ff, #fce4f4);
-      color: #4b315c;
-    }
-
-    header {
-      background: rgba(255,255,255,0.8);
-      padding: 18px 25px;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      box-shadow: 0 3px 15px rgba(100,60,130,0.15);
-    }
-
-    header h1 {
-      color: #9b59b6;
-    }
-
-    nav a {
-      margin-left: 15px;
-      text-decoration: none;
-      color: #7d3c98;
-      font-weight: bold;
-    }
-
-    .admin-link {
-      display: none;
-    }
-
-    .container {
-      max-width: 1000px;
-      margin: 35px auto;
-      padding: 20px;
-    }
-
-    .welcome {
-      background: rgba(255,255,255,0.8);
-      border-radius: 20px;
-      padding: 25px;
-      margin-bottom: 25px;
-      box-shadow: 0 5px 20px rgba(100,60,130,0.12);
-    }
-
-    .welcome h2 {
-      color: #8e44ad;
-      margin-bottom: 10px;
-    }
-
-    .credits {
-      margin-top: 15px;
-      font-size: 22px;
-      font-weight: bold;
-      color: #b03a9b;
-    }
-
-    .actions {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-      gap: 18px;
-    }
-
-    .action {
-      background: white;
-      padding: 25px;
-      border-radius: 18px;
-      text-decoration: none;
-      color: #633974;
-      text-align: center;
-      box-shadow: 0 4px 15px rgba(100,60,130,0.12);
-      transition: 0.2s;
-      cursor: pointer;
-    }
-
-    .action:hover {
-      transform: translateY(-3px);
-    }
-
-    .admin-action {
-      display: none;
-    }
-
-    button {
-      margin-top: 25px;
-      padding: 12px 22px;
-      border: none;
-      border-radius: 12px;
-      background: #9b59b6;
-      color: white;
-      font-weight: bold;
-      cursor: pointer;
-    }
-
-    button:hover {
-      background: #8e44ad;
-    }
-
-    button:disabled {
-      opacity: 0.6;
-      cursor: not-allowed;
-    }
-
-    .username-box,
-    .topup-box {
-      margin-top: 25px;
-      padding: 20px;
-      background: white;
-      border-radius: 18px;
-      box-shadow: 0 4px 15px rgba(100,60,130,0.10);
-    }
-
-    .username-box h3,
-    .topup-box h3 {
-      color: #8e44ad;
-      margin-bottom: 8px;
-    }
-
-    .username-box p,
-    .topup-box p {
-      margin-bottom: 15px;
-      font-size: 14px;
-    }
-
-    .username-box input,
-    .topup-box input {
-      width: 100%;
-      padding: 12px;
-      border: 2px solid #e5d2f0;
-      border-radius: 10px;
-      outline: none;
-      font-size: 15px;
-    }
-
-    .username-box input:focus,
-    .topup-box input:focus {
-      border-color: #9b59b6;
-    }
-
-    #username-button,
-    #topup-button {
-      margin-top: 12px;
-    }
-
-    .topup-info {
-      padding: 12px;
-      margin-bottom: 15px;
-      background: #f7eaff;
-      border-radius: 12px;
-      font-size: 14px;
-    }
-  </style>
-</head>
-
-<body>
-
-  <header>
-    <h1>🦋 Butterfly Shop</h1>
-
-    <nav>
-      <a href="index.html">Inicio</a>
-      <a href="catalogo.html">Catálogo</a>
-      <a href="panel.html">Mi panel</a>
-
-      <a href="admin.html" id="admin-menu" class="admin-link">
-        🛠️ Administración
-      </a>
-    </nav>
-  </header>
-
-  <main class="container">
-
-    <section class="welcome">
-
-      <h2>¡Hola, <span id="username">Usuario</span>! 🦋</h2>
-
-      <p>Bienvenido a tu panel de Butterfly Shop.</p>
-
-      <div class="credits">
-        💜 Créditos: <span id="credits">0</span>
-      </div>
-
-      <div class="username-box">
-
-        <h3>👤 Cambiar nombre de usuario</h3>
-
-        <p>
-          Puedes cambiar tu nombre de usuario cuando quieras.
-          Debe tener entre 3 y 30 caracteres.
-        </p>
-
-        <input
-          type="text"
-          id="new-username"
-          placeholder="Nuevo nombre de usuario"
-          maxlength="30"
-          autocomplete="off"
-        >
-
-        <button id="username-button">
-          ✨ Guardar nuevo usuario
-        </button>
-
-      </div>
-
-      <div class="topup-box">
-
-        <h3>💳 Comprar créditos</h3>
-
-        <p>
-          Los créditos tienen un valor de <strong>$1 MXN por crédito</strong>.
-        </p>
-
-        <div class="topup-info">
-          💜 Después de realizar tu pago, envía tu solicitud.
-          El administrador verificará el pago y agregará los créditos
-          manualmente a tu cuenta.
-        </div>
-
-        <input
-          type="number"
-          id="topup-amount"
-          placeholder="Cantidad de créditos"
-          min="1"
-          step="1"
-        >
-
-        <input
-          type="text"
-          id="payment-reference"
-          placeholder="Referencia del pago (opcional)"
-          maxlength="100"
-          autocomplete="off"
-          style="margin-top:10px;"
-        >
-
-        <button id="topup-button">
-          🦋 Enviar solicitud
-        </button>
-
-      </div>
-
-      <button id="logout-button">Cerrar sesión</button>
-
-    </section>
-
-    <section class="actions">
-
-      <a class="action" href="catalogo.html">
-        🛍️<br><br>
-        <strong>Ver catálogo</strong>
-        <br><br>
-        Explora nuestros productos.
-      </a>
-
-      <a class="action" href="#topup-box" id="topup-action">
-        💳<br><br>
-        <strong>Comprar créditos</strong>
-        <br><br>
-        Solicita una recarga.
-      </a>
-
-      <a class="action" href="#" id="history-action">
-        📋<br><br>
-        <strong>Historial</strong>
-        <br><br>
-        Consulta tus movimientos.
-      </a>
-
-      <a class="action" href="#" id="purchases-action">
-        🛒<br><br>
-        <strong>Mis compras</strong>
-        <br><br>
-        Revisa tus productos adquiridos.
-      </a>
-
-      <a class="action" href="reportar.html">
-        ⚠️<br><br>
-        <strong>Reportar problema</strong>
-        <br><br>
-        Envía un reporte sobre una compra.
-      </a>
-
-      <a class="action admin-action" href="admin.html" id="admin-action">
-        🛠️<br><br>
-        <strong>Panel de administración</strong>
-        <br><br>
-        Gestiona Butterfly Shop.
-      </a>
-
-    </section>
-
-  </main>
-
-  <script>
-
-    async function cargarPanel() {
-
-      const {
-        data: { user },
-        error: userError
-      } = await supabaseClient.auth.getUser();
-
-      if (userError || !user) {
-        window.location.href = "login.html";
-        return;
-      }
-
-      const {
-        data: profile,
-        error: profileError
-      } = await supabaseClient
-        .from("profiles")
-        .select("username, email, credits, role")
-        .eq("id", user.id)
-        .single();
-
-      if (profileError) {
-        console.error("Error cargando perfil:", profileError);
-        alert("No se pudo cargar tu perfil.");
-        return;
-      }
-
-      document.getElementById("username").textContent =
-        profile.username || "Usuario";
-
-      document.getElementById("credits").textContent =
-        profile.credits ?? 0;
-
-      document.getElementById("new-username").value =
-        profile.username || "";
-
-      if (profile.role === "admin") {
-
-        document.getElementById("admin-menu").style.display =
-          "inline-block";
-
-        document.getElementById("admin-action").style.display =
-          "block";
-      }
-    }
-
-
-    document.getElementById("username-button")
-      .addEventListener("click", async () => {
-
-        const input =
-          document.getElementById("new-username");
-
-        const button =
-          document.getElementById("username-button");
-
-        const newUsername =
-          input.value.trim();
-
-        if (!newUsername) {
-          alert("Escribe un nombre de usuario.");
-          return;
-        }
-
-        if (newUsername.length < 3) {
-          alert(
-            "El nombre de usuario debe tener al menos 3 caracteres."
-          );
-          return;
-        }
-
-        if (newUsername.length > 30) {
-          alert(
-            "El nombre de usuario no puede superar 30 caracteres."
-          );
-          return;
-        }
-
-        button.disabled = true;
-        button.textContent = "Guardando...";
-
-        const {
-          data,
-          error
-        } = await supabaseClient.rpc(
-          "change_username",
-          {
-            p_new_username: newUsername
-          }
-        );
-
-        button.disabled = false;
-        button.textContent =
-          "✨ Guardar nuevo usuario";
-
-        if (error) {
-          console.error(error);
-          alert(
-            error.message ||
-            "No se pudo cambiar el nombre de usuario."
-          );
-          return;
-        }
-
-        document.getElementById("username").textContent =
-          data;
-
-        input.value = data;
-
-        alert(
-          "✨ ¡Nombre de usuario cambiado correctamente!"
-        );
-      });
-
-
-    document.getElementById("topup-button")
-      .addEventListener("click", async () => {
-
-        const amountInput =
-          document.getElementById("topup-amount");
-
-        const referenceInput =
-          document.getElementById("payment-reference");
-
-        const button =
-          document.getElementById("topup-button");
-
-        const amount =
-          Number(amountInput.value);
-
-        const reference =
-          referenceInput.value.trim();
-
-        if (!Number.isInteger(amount) || amount <= 0) {
-          alert(
-            "Escribe una cantidad válida de créditos."
-          );
-          return;
-        }
-
-        button.disabled = true;
-        button.textContent = "Enviando...";
-
-        const {
-          data,
-          error
-        } = await supabaseClient.rpc(
-          "request_topup",
-          {
-            p_amount_credits: amount,
-            p_payment_reference:
-              reference || null
-          }
-        );
-
-        button.disabled = false;
-        button.textContent =
-          "🦋 Enviar solicitud";
-
-        if (error) {
-          console.error(error);
-          alert(
-            error.message ||
-            "No se pudo enviar la solicitud."
-          );
-          return;
-        }
-
-        amountInput.value = "";
-        referenceInput.value = "";
-
-        alert(
-          "🦋 ¡Solicitud enviada correctamente!\n\n" +
-          "Solicitud: " + data + "\n" +
-          "Créditos solicitados: " + amount + "\n" +
-          "Total: $" + amount + " MXN\n\n" +
-          "El administrador verificará tu pago."
-        );
-      });
-
-
-    document.getElementById("topup-action")
-      .addEventListener("click", (event) => {
-
-        event.preventDefault();
-
-        document.querySelector(".topup-box")
-          .scrollIntoView({
-            behavior: "smooth",
-            block: "center"
-          });
-      });
-
-
-    document.getElementById("logout-button")
-      .addEventListener("click", async () => {
-
-        await supabaseClient.auth.signOut();
-
-        window.location.href = "login.html";
-      });
-
-
-    document.getElementById("history-action")
-      .addEventListener("click", (event) => {
-
-        event.preventDefault();
-
-        alert(
-          "El historial estará disponible próximamente."
-        );
-      });
-
-
-    document.getElementById("purchases-action")
-      .addEventListener("click", (event) => {
-
-        event.preventDefault();
-
-        alert(
-          "La sección de compras estará disponible próximamente."
-        );
-      });
-
-
-    cargarPanel();
-
-  </script>
-
-</body>
+<!DOCTYPE html>  <html lang="es">  
+<head>  
+  <meta charset="UTF-8">  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">  
+  <title>Panel | Butterfly Shop</title>    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>    <script src="supabase-config.js"></script>    <style>  
+    * {  
+      box-sizing: border-box;  
+      margin: 0;  
+      padding: 0;  
+    }  
+  
+    body {  
+      font-family: Arial, sans-serif;  
+      min-height: 100vh;  
+      background: linear-gradient(135deg, #f7eaff, #ead7ff, #fce4f4);  
+      color: #4b315c;  
+    }  
+  
+    header {  
+      background: rgba(255,255,255,0.8);  
+      padding: 18px 25px;  
+      display: flex;  
+      justify-content: space-between;  
+      align-items: center;  
+      box-shadow: 0 3px 15px rgba(100,60,130,0.15);  
+    }  
+  
+    header h1 {  
+      color: #9b59b6;  
+    }  
+  
+    nav a {  
+      margin-left: 15px;  
+      text-decoration: none;  
+      color: #7d3c98;  
+      font-weight: bold;  
+    }  
+  
+    .admin-link {  
+      display: none;  
+    }  
+  
+    .container {  
+      max-width: 1000px;  
+      margin: 35px auto;  
+      padding: 20px;  
+    }  
+  
+    .welcome {  
+      background: rgba(255,255,255,0.8);  
+      border-radius: 20px;  
+      padding: 25px;  
+      margin-bottom: 25px;  
+      box-shadow: 0 5px 20px rgba(100,60,130,0.12);  
+    }  
+  
+    .welcome h2 {  
+      color: #8e44ad;  
+      margin-bottom: 10px;  
+    }  
+  
+    .credits {  
+      margin-top: 15px;  
+      font-size: 22px;  
+      font-weight: bold;  
+      color: #b03a9b;  
+    }  
+  
+    .actions {  
+      display: grid;  
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));  
+      gap: 18px;  
+    }  
+  
+    .action {  
+      background: white;  
+      padding: 25px;  
+      border-radius: 18px;  
+      text-decoration: none;  
+      color: #633974;  
+      text-align: center;  
+      box-shadow: 0 4px 15px rgba(100,60,130,0.12);  
+      transition: 0.2s;  
+      cursor: pointer;  
+    }  
+  
+    .action:hover {  
+      transform: translateY(-3px);  
+    }  
+  
+    .admin-action {  
+      display: none;  
+    }  
+  
+    button {  
+      margin-top: 25px;  
+      padding: 12px 22px;  
+      border: none;  
+      border-radius: 12px;  
+      background: #9b59b6;  
+      color: white;  
+      font-weight: bold;  
+      cursor: pointer;  
+    }  
+  
+    button:hover {  
+      background: #8e44ad;  
+    }  
+  
+    button:disabled {  
+      opacity: 0.6;  
+      cursor: not-allowed;  
+    }  
+  
+    .username-box,  
+    .topup-box {  
+      margin-top: 25px;  
+      padding: 20px;  
+      background: white;  
+      border-radius: 18px;  
+      box-shadow: 0 4px 15px rgba(100,60,130,0.10);  
+    }  
+  
+    .username-box h3,  
+    .topup-box h3 {  
+      color: #8e44ad;  
+      margin-bottom: 8px;  
+    }  
+  
+    .username-box p,  
+    .topup-box p {  
+      margin-bottom: 15px;  
+      font-size: 14px;  
+    }  
+  
+    .username-box input,  
+    .topup-box input {  
+      width: 100%;  
+      padding: 12px;  
+      border: 2px solid #e5d2f0;  
+      border-radius: 10px;  
+      outline: none;  
+      font-size: 15px;  
+    }  
+  
+    .username-box input:focus,  
+    .topup-box input:focus {  
+      border-color: #9b59b6;  
+    }  
+  
+    #username-button,  
+    #topup-button {  
+      margin-top: 12px;  
+    }  
+  
+    .topup-info {  
+      padding: 12px;  
+      margin-bottom: 15px;  
+      background: #f7eaff;  
+      border-radius: 12px;  
+      font-size: 14px;  
+    }  
+  </style>  </head>  <body>    <header>  
+    <h1>🦋 Butterfly Shop</h1>  <nav>  
+  <a href="index.html">Inicio</a>  
+  <a href="catalogo.html">Catálogo</a>  
+  <a href="panel.html">Mi panel</a>  
+
+  <a href="admin.html" id="admin-menu" class="admin-link">  
+    🛠️ Administración  
+  </a>  
+</nav>
+
+  </header>    <main class="container">  <section class="welcome">  
+
+  <h2>¡Hola, <span id="username">Usuario</span>! 🦋</h2>  
+
+  <p>Bienvenido a tu panel de Butterfly Shop.</p>  
+
+  <div class="credits">  
+    💜 Créditos: <span id="credits">0</span>  
+  </div>  
+
+  <div class="username-box">  
+
+    <h3>👤 Cambiar nombre de usuario</h3>  
+
+    <p>  
+      Puedes cambiar tu nombre de usuario cuando quieras.  
+      Debe tener entre 3 y 30 caracteres.  
+    </p>  
+
+    <input  
+      type="text"  
+      id="new-username"  
+      placeholder="Nuevo nombre de usuario"  
+      maxlength="30"  
+      autocomplete="off"  
+    >  
+
+    <button id="username-button">  
+      ✨ Guardar nuevo usuario  
+    </button>  
+
+  </div>  
+
+  <div class="topup-box">  
+
+    <h3>💳 Comprar créditos</h3>  
+
+    <p>  
+      Los créditos tienen un valor de <strong>$1 MXN por crédito</strong>.  
+    </p>  
+
+    <div class="topup-info">  
+      💜 Después de realizar tu pago, envía tu solicitud.  
+      El administrador verificará el pago y agregará los créditos  
+      manualmente a tu cuenta.  
+    </div>  
+
+    <input  
+      type="number"  
+      id="topup-amount"  
+      placeholder="Cantidad de créditos"  
+      min="1"  
+      step="1"  
+    >  
+
+    <input  
+      type="text"  
+      id="payment-reference"  
+      placeholder="Referencia del pago (opcional)"  
+      maxlength="100"  
+      autocomplete="off"  
+      style="margin-top:10px;"  
+    >  
+
+    <button id="topup-button">  
+      🦋 Enviar solicitud  
+    </button>  
+
+  </div>  
+
+  <button id="logout-button">Cerrar sesión</button>  
+
+</section>  
+
+<section class="actions">  
+
+  <a class="action" href="catalogo.html">  
+    🛍️<br><br>  
+    <strong>Ver catálogo</strong>  
+    <br><br>  
+    Explora nuestros productos.  
+  </a>  
+
+  <a class="action" href="#topup-box" id="topup-action">  
+    💳<br><br>  
+    <strong>Comprar créditos</strong>  
+    <br><br>  
+    Solicita una recarga.  
+  </a>  
+
+  <a class="action" href="#" id="history-action">  
+    📋<br><br>  
+    <strong>Historial</strong>  
+    <br><br>  
+    Consulta tus movimientos.  
+  </a>  
+
+  <a class="action" href="#" id="purchases-action">  
+    🛒<br><br>  
+    <strong>Mis compras</strong>  
+    <br><br>  
+    Revisa tus productos adquiridos.  
+  </a>  
+
+  <a class="action" href="reportar.html">  
+    ⚠️<br><br>  
+    <strong>Reportar problema</strong>  
+    <br><br>  
+    Envía un reporte sobre una compra.  
+  </a>  
+
+  <a class="action admin-action" href="admin.html" id="admin-action">  
+    🛠️<br><br>  
+    <strong>Panel de administración</strong>  
+    <br><br>  
+    Gestiona Butterfly Shop.  
+  </a>  
+
+</section>
+
+  </main>    <script>  
+  
+    async function cargarPanel() {  
+  
+      const {  
+        data: { user },  
+        error: userError  
+      } = await supabaseClient.auth.getUser();  
+  
+      if (userError || !user) {  
+        window.location.href = "login.html";  
+        return;  
+      }  
+  
+      const {  
+        data: profile,  
+        error: profileError  
+      } = await supabaseClient  
+        .from("profiles")  
+        .select("username, email, credits, role")  
+        .eq("id", user.id)  
+        .single();  
+  
+      if (profileError) {  
+        console.error("Error cargando perfil:", profileError);  
+        alert("No se pudo cargar tu perfil.");  
+        return;  
+      }  
+  
+      document.getElementById("username").textContent =  
+        profile.username || "Usuario";  
+  
+      document.getElementById("credits").textContent =  
+        profile.credits ?? 0;  
+  
+      document.getElementById("new-username").value =  
+        profile.username || "";  
+  
+      if (profile.role === "admin") {  
+  
+        document.getElementById("admin-menu").style.display =  
+          "inline-block";  
+  
+        document.getElementById("admin-action").style.display =  
+          "block";  
+      }  
+    }  
+  
+  
+    document.getElementById("username-button")  
+      .addEventListener("click", async () => {  
+  
+        const input =  
+          document.getElementById("new-username");  
+  
+        const button =  
+          document.getElementById("username-button");  
+  
+        const newUsername =  
+          input.value.trim();  
+  
+        if (!newUsername) {  
+          alert("Escribe un nombre de usuario.");  
+          return;  
+        }  
+  
+        if (newUsername.length < 3) {  
+          alert(  
+            "El nombre de usuario debe tener al menos 3 caracteres."  
+          );  
+          return;  
+        }  
+  
+        if (newUsername.length > 30) {  
+          alert(  
+            "El nombre de usuario no puede superar 30 caracteres."  
+          );  
+          return;  
+        }  
+  
+        button.disabled = true;  
+        button.textContent = "Guardando...";  
+  
+        const {  
+          data,  
+          error  
+        } = await supabaseClient.rpc(  
+          "change_username",  
+          {  
+            p_new_username: newUsername  
+          }  
+        );  
+  
+        button.disabled = false;  
+        button.textContent =  
+          "✨ Guardar nuevo usuario";  
+  
+        if (error) {  
+          console.error(error);  
+          alert(  
+            error.message ||  
+            "No se pudo cambiar el nombre de usuario."  
+          );  
+          return;  
+        }  
+  
+        document.getElementById("username").textContent =  
+          data;  
+  
+        input.value = data;  
+  
+        alert(  
+          "✨ ¡Nombre de usuario cambiado correctamente!"  
+        );  
+      });  
+  
+  
+    document.getElementById("topup-button")  
+      .addEventListener("click", async () => {  
+  
+        const amountInput =  
+          document.getElementById("topup-amount");  
+  
+        const referenceInput =  
+          document.getElementById("payment-reference");  
+  
+        const button =  
+          document.getElementById("topup-button");  
+  
+        const amount =  
+          Number(amountInput.value);  
+  
+        const reference =  
+          referenceInput.value.trim();  
+  
+        if (!Number.isInteger(amount) || amount <= 0) {  
+          alert(  
+            "Escribe una cantidad válida de créditos."  
+          );  
+          return;  
+        }  
+  
+        button.disabled = true;  
+        button.textContent = "Enviando...";  
+  
+        const {  
+          data,  
+          error  
+        } = await supabaseClient.rpc(  
+          "request_topup",  
+          {  
+            p_amount_credits: amount,  
+            p_payment_reference:  
+              reference || null  
+          }  
+        );  
+  
+        button.disabled = false;  
+        button.textContent =  
+          "🦋 Enviar solicitud";  
+  
+        if (error) {  
+          console.error(error);  
+          alert(  
+            error.message ||  
+            "No se pudo enviar la solicitud."  
+          );  
+          return;  
+        }  
+  
+        amountInput.value = "";  
+        referenceInput.value = "";  
+  
+        alert(  
+          "🦋 ¡Solicitud enviada correctamente!\n\n" +  
+          "Solicitud: " + data + "\n" +  
+          "Créditos solicitados: " + amount + "\n" +  
+          "Total: $" + amount + " MXN\n\n" +  
+          "El administrador verificará tu pago."  
+        );  
+      });  
+  
+  
+    document.getElementById("topup-action")  
+      .addEventListener("click", (event) => {  
+  
+        event.preventDefault();  
+  
+        document.querySelector(".topup-box")  
+          .scrollIntoView({  
+            behavior: "smooth",  
+            block: "center"  
+          });  
+      });  
+  
+  
+    document.getElementById("logout-button")  
+      .addEventListener("click", async () => {  
+  
+        await supabaseClient.auth.signOut();  
+  
+        window.location.href = "login.html";  
+      });  
+  
+  
+    document.getElementById("history-action")  
+      .addEventListener("click", (event) => {  
+  
+        event.preventDefault();  
+  
+        alert(  
+          "El historial estará disponible próximamente."  
+        );  
+      });  
+  
+  
+    document.getElementById("purchases-action")  
+      .addEventListener("click", (event) => {  
+  
+        event.preventDefault();  
+  
+        alert(  
+          "La sección de compras estará disponible próximamente."  
+        );  
+      });  
+  
+  
+    cargarPanel();  
+  
+  </script>  </body>  
 </html>
