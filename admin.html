@@ -1,11 +1,8 @@
-<!DOCTYPE html>
-<html lang="es">
+<!DOCTYPE html><html lang="es">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Butterfly Shop | Administración</title>
-
-  <style>
+  <title>Butterfly Shop | Administración</title>  <style>
     * {
       box-sizing: border-box;
       margin: 0;
@@ -150,8 +147,6 @@
       opacity: 0.9;
     }
 
-    /* SOLICITUDES DE RECARGA */
-
     .topups-box {
       background: white;
       border: 1px solid #eadcff;
@@ -267,7 +262,6 @@
     }
 
     @media (max-width: 600px) {
-
       .header-content {
         flex-direction: column;
         text-align: center;
@@ -277,390 +271,204 @@
         align-items: flex-start;
         flex-direction: column;
       }
-
     }
-  </style>
-</head>
-
-<body>
-
-  <div id="loading" class="loading">
+  </style></head><body>  <div id="loading" class="loading">
     🦋 Verificando acceso...
+  </div>  <div id="admin-content" style="display:none;"><header>
+  <div class="header-content">
+    <div class="logo">
+      🦋 Butterfly Shop
+    </div>
+
+    <div class="admin-tag">
+      👑 Panel de Administración
+    </div>
+  </div>
+</header>
+
+<main class="container">
+
+  <div class="welcome">
+    <h1 id="welcome-title">
+      ¡Bienvenida, administradora! 🦋
+    </h1>
+
+    <p>
+      Desde aquí podrás controlar y administrar Butterfly Shop.
+    </p>
   </div>
 
-
-  <div id="admin-content" style="display:none;">
-
-    <header>
-
-      <div class="header-content">
-
-        <div class="logo">
-          🦋 Butterfly Shop
-        </div>
-
-        <div class="admin-tag">
-          👑 Panel de Administración
-        </div>
-
-      </div>
-
-    </header>
-
-
-    <main class="container">
-
-      <div class="welcome">
-
-        <h1 id="welcome-title">
-          ¡Bienvenida, administradora! 🦋
-        </h1>
-
-        <p>
-          Desde aquí podrás controlar y administrar Butterfly Shop.
-        </p>
-
-      </div>
-
-
-      <!-- ESTADÍSTICAS -->
-
-      <div class="stats">
-
-        <div class="stat">
-
-          <div class="stat-icon">
-            👥
-          </div>
-
-          <h3>
-            0
-          </h3>
-
-          <p>
-            Usuarios registrados
-          </p>
-
-        </div>
-
-
-        <div class="stat">
-
-          <div class="stat-icon">
-            💎
-          </div>
-
-          <h3>
-            0
-          </h3>
-
-          <p>
-            Créditos vendidos
-          </p>
-
-        </div>
-
-
-        <div class="stat">
-
-          <div class="stat-icon">
-            🛍️
-          </div>
-
-          <h3>
-            0
-          </h3>
-
-          <p>
-            Ventas realizadas
-          </p>
-
-        </div>
-
-
-        <div class="stat">
-
-          <div class="stat-icon">
-            ⚠️
-          </div>
-
-          <h3>
-            0
-          </h3>
-
-          <p>
-            Reportes pendientes
-          </p>
-
-        </div>
-
-      </div>
-
-
-      <!-- SOLICITUDES DE RECARGA -->
-
-      <h2
-        class="section-title"
-        id="solicitudes-recarga"
-      >
-        💳 Solicitudes de recarga
-      </h2>
-
-
-      <div class="topups-box">
-
-        <div id="topups-container">
-
-          <div class="empty-message">
-            🦋 Cargando solicitudes...
-          </div>
-
-        </div>
-
-      </div>
-
-
-      <!-- GESTIÓN -->
-
-      <h2 class="section-title">
-        ⚙️ Gestión de la tienda
-      </h2>
-
-
-      <div class="admin-grid">
-
-
-        <div class="admin-card">
-
-          <div class="icon">
-            👥
-          </div>
-
-          <h3>
-            Usuarios
-          </h3>
-
-          <p>
-            Consulta usuarios registrados y administra sus cuentas.
-          </p>
-
-          <a href="#" class="btn">
-            Gestionar usuarios
-          </a>
-
-        </div>
-
-
-        <div class="admin-card">
-
-          <div class="icon">
-            💎
-          </div>
-
-          <h3>
-            Créditos
-          </h3>
-
-          <p>
-            Consulta balances y administra las recargas de créditos.
-          </p>
-
-          <a href="#solicitudes-recarga" class="btn">
-            Gestionar créditos
-          </a>
-
-        </div>
-
-
-        <div class="admin-card">
-
-          <div class="icon">
-            🛍️
-          </div>
-
-          <h3>
-            Productos
-          </h3>
-
-          <p>
-            Crea, modifica, activa o desactiva productos de la tienda.
-          </p>
-
-          <a href="#" class="btn">
-            Gestionar productos
-          </a>
-
-        </div>
-
-
-        <div class="admin-card">
-
-          <div class="icon">
-            📦
-          </div>
-
-          <h3>
-            Inventario
-          </h3>
-
-          <p>
-            Administra los elementos disponibles para entrega digital.
-          </p>
-
-          <a href="#" class="btn">
-            Gestionar inventario
-          </a>
-
-        </div>
-
-
-        <div class="admin-card">
-
-          <div class="icon">
-            💰
-          </div>
-
-          <h3>
-            Ventas
-          </h3>
-
-          <p>
-            Consulta las compras realizadas y su estado de entrega.
-          </p>
-
-          <a href="#" class="btn">
-            Ver ventas
-          </a>
-
-        </div>
-
-
-        <div class="admin-card">
-
-          <div class="icon">
-            🔄
-          </div>
-
-          <h3>
-            Recargas
-          </h3>
-
-          <p>
-            Revisa solicitudes de recarga y acredita créditos a usuarios.
-          </p>
-
-          <a href="#solicitudes-recarga" class="btn">
-            Ver recargas
-          </a>
-
-        </div>
-
-
-        <div class="admin-card">
-
-          <div class="icon">
-            ⚠️
-          </div>
-
-          <h3>
-            Reportes
-          </h3>
-
-          <p>
-            Revisa problemas reportados por los clientes y dales seguimiento.
-          </p>
-
-          <a href="reportar.html" class="btn">
-            Ver reportes
-          </a>
-
-        </div>
-
-
-        <div class="admin-card">
-
-          <div class="icon">
-            📊
-          </div>
-
-          <h3>
-            Estadísticas
-          </h3>
-
-          <p>
-            Consulta el rendimiento general de Butterfly Shop.
-          </p>
-
-          <a href="#" class="btn">
-            Ver estadísticas
-          </a>
-
-        </div>
-
-
-      </div>
-
-
-      <!-- ACTIVIDAD -->
-
-      <h2 class="section-title">
-        🕐 Actividad reciente
-      </h2>
-
-
-      <div class="activity">
-
-        <div class="activity-item">
-
-          <div>
-
-            <div class="activity-name">
-              No hay actividad todavía
-            </div>
-
-            <div class="activity-info">
-              Aquí aparecerán las compras, recargas y reportes recientes.
-            </div>
-
-          </div>
-
-
-          <span class="status">
-            Esperando datos
-          </span>
-
-        </div>
-
-      </div>
-
-
-    </main>
-
-
-    <footer>
-      🦋 Butterfly Shop · Panel administrativo
-    </footer>
+  <div class="stats">
+
+    <div class="stat">
+      <div class="stat-icon">👥</div>
+      <h3>0</h3>
+      <p>Usuarios registrados</p>
+    </div>
+
+    <div class="stat">
+      <div class="stat-icon">💎</div>
+      <h3>0</h3>
+      <p>Créditos vendidos</p>
+    </div>
+
+    <div class="stat">
+      <div class="stat-icon">🛍️</div>
+      <h3>0</h3>
+      <p>Ventas realizadas</p>
+    </div>
+
+    <div class="stat">
+      <div class="stat-icon">⚠️</div>
+      <h3>0</h3>
+      <p>Reportes pendientes</p>
+    </div>
 
   </div>
 
+  <h2 class="section-title" id="solicitudes-recarga">
+    💳 Solicitudes de recarga
+  </h2>
 
-  <!-- SUPABASE -->
+  <div class="topups-box">
 
-  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <div id="topups-container">
+      <div class="empty-message">
+        🦋 Cargando solicitudes...
+      </div>
+    </div>
 
-  <script src="supabase-config.js"></script>
+  </div>
 
+  <h2 class="section-title">
+    ⚙️ Gestión de la tienda
+  </h2>
 
-  <script>
+  <div class="admin-grid">
 
-    const { createClient } = supabase;
+    <div class="admin-card">
+      <div class="icon">👥</div>
+      <h3>Usuarios</h3>
+      <p>
+        Consulta usuarios registrados y administra sus cuentas.
+      </p>
+      <a href="#" class="btn">
+        Gestionar usuarios
+      </a>
+    </div>
 
+    <div class="admin-card">
+      <div class="icon">💎</div>
+      <h3>Créditos</h3>
+      <p>
+        Consulta balances y administra las recargas de créditos.
+      </p>
+      <a href="#solicitudes-recarga" class="btn">
+        Gestionar créditos
+      </a>
+    </div>
 
-    const supabaseClient = createClient(
-      SUPABASE_URL,
-      SUPABASE_ANON_KEY
-    );
+    <div class="admin-card">
+      <div class="icon">🛍️</div>
+      <h3>Productos</h3>
+      <p>
+        Crea, modifica, activa o desactiva productos de la tienda.
+      </p>
+      <a href="#" class="btn">
+        Gestionar productos
+      </a>
+    </div>
 
+    <div class="admin-card">
+      <div class="icon">📦</div>
+      <h3>Inventario</h3>
+      <p>
+        Administra los elementos disponibles para entrega digital.
+      </p>
+      <a href="#" class="btn">
+        Gestionar inventario
+      </a>
+    </div>
+
+    <div class="admin-card">
+      <div class="icon">💰</div>
+      <h3>Ventas</h3>
+      <p>
+        Consulta las compras realizadas y su estado de entrega.
+      </p>
+      <a href="#" class="btn">
+        Ver ventas
+      </a>
+    </div>
+
+    <div class="admin-card">
+      <div class="icon">🔄</div>
+      <h3>Recargas</h3>
+      <p>
+        Revisa solicitudes de recarga y acredita créditos a usuarios.
+      </p>
+      <a href="#solicitudes-recarga" class="btn">
+        Ver recargas
+      </a>
+    </div>
+
+    <div class="admin-card">
+      <div class="icon">⚠️</div>
+      <h3>Reportes</h3>
+      <p>
+        Revisa problemas reportados por los clientes y dales seguimiento.
+      </p>
+      <a href="reportar.html" class="btn">
+        Ver reportes
+      </a>
+    </div>
+
+    <div class="admin-card">
+      <div class="icon">📊</div>
+      <h3>Estadísticas</h3>
+      <p>
+        Consulta el rendimiento general de Butterfly Shop.
+      </p>
+      <a href="#" class="btn">
+        Ver estadísticas
+      </a>
+    </div>
+
+  </div>
+
+  <h2 class="section-title">
+    🕐 Actividad reciente
+  </h2>
+
+  <div class="activity">
+
+    <div class="activity-item">
+
+      <div>
+        <div class="activity-name">
+          No hay actividad todavía
+        </div>
+
+        <div class="activity-info">
+          Aquí aparecerán las compras, recargas y reportes recientes.
+        </div>
+      </div>
+
+      <span class="status">
+        Esperando datos
+      </span>
+
+    </div>
+
+  </div>
+
+</main>
+
+<footer>
+  🦋 Butterfly Shop · Panel administrativo
+</footer>
+
+  </div>  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>  <script src="supabase-config.js"></script>  <script>
 
     /* =========================
        VERIFICAR ADMINISTRADOR
@@ -674,16 +482,12 @@
       const adminContent =
         document.getElementById("admin-content");
 
-
       try {
 
         const {
           data: { user },
           error: userError
         } = await supabaseClient.auth.getUser();
-
-
-        /* NO HAY SESIÓN */
 
         if (userError || !user) {
 
@@ -693,9 +497,6 @@
 
         }
 
-
-        /* BUSCAR PERFIL */
-
         const {
           data: profile,
           error: profileError
@@ -704,7 +505,6 @@
           .select("username, email, role")
           .eq("id", user.id)
           .single();
-
 
         if (profileError || !profile) {
 
@@ -718,9 +518,6 @@
 
         }
 
-
-        /* COMPROBAR ROL */
-
         if (profile.role !== "admin") {
 
           alert(
@@ -733,15 +530,11 @@
 
         }
 
-
-        /* MOSTRAR NOMBRE */
-
         const nombre =
           profile.username ||
           profile.email ||
           user.email ||
           "administradora";
-
 
         document.getElementById(
           "welcome-title"
@@ -750,28 +543,19 @@
           nombre +
           "! 🦋";
 
-
-        /* MOSTRAR PANEL */
-
         loading.style.display = "none";
 
         adminContent.style.display = "block";
 
-
-        /* CARGAR RECARGAS */
-
         cargarRecargas();
-
 
       } catch (error) {
 
         console.error(error);
 
-
         alert(
           "Ocurrió un error al verificar el acceso."
         );
-
 
         window.location.href = "panel.html";
 
@@ -790,7 +574,6 @@
         document.getElementById(
           "topups-container"
         );
-
 
       try {
 
@@ -813,15 +596,9 @@
             ascending: false
           });
 
-
         if (error) {
-
           throw error;
-
         }
-
-
-        /* NO HAY SOLICITUDES */
 
         if (!data || data.length === 0) {
 
@@ -835,9 +612,6 @@
 
         }
 
-
-        /* OBTENER IDS */
-
         const userIds =
           [
             ...new Set(
@@ -846,9 +620,6 @@
               )
             )
           ];
-
-
-        /* BUSCAR USUARIOS */
 
         const {
           data: profiles,
@@ -863,18 +634,11 @@
             userIds
           );
 
-
         if (profilesError) {
-
           throw profilesError;
-
         }
 
-
-        /* CREAR MAPA */
-
         const profileMap = {};
-
 
         profiles.forEach(profile => {
 
@@ -884,9 +648,6 @@
 
         });
 
-
-        /* MOSTRAR SOLICITUDES */
-
         container.innerHTML =
           data.map(item => {
 
@@ -894,7 +655,6 @@
               profileMap[
                 item.user_id
               ] || {};
-
 
             const fecha =
               new Date(
@@ -907,7 +667,6 @@
                 }
               );
 
-
             return `
 
               <div class="topup-item">
@@ -919,7 +678,6 @@
                   }
                 </div>
 
-
                 <div class="topup-info">
 
                   💎 Créditos solicitados:
@@ -929,14 +687,12 @@
 
                   <br>
 
-
                   💰 Total:
                   <strong>
                     $${item.amount_credits} MXN
                   </strong>
 
                   <br>
-
 
                   💳 Método:
                   ${
@@ -946,7 +702,6 @@
 
                   <br>
 
-
                   🧾 Referencia:
                   ${
                     item.payment_reference ||
@@ -955,12 +710,10 @@
 
                   <br>
 
-
                   🕐 Fecha:
                   ${fecha}
 
                 </div>
-
 
                 <button
                   class="approve-btn"
@@ -979,11 +732,9 @@
 
           }).join("");
 
-
       } catch (error) {
 
         console.error(error);
-
 
         container.innerHTML = `
 
@@ -1014,13 +765,9 @@
           "Al aprobarla, los créditos se agregarán automáticamente al usuario."
         );
 
-
       if (!confirmar) {
-
         return;
-
       }
-
 
       try {
 
@@ -1034,13 +781,9 @@
           }
         );
 
-
         if (error) {
-
           throw error;
-
         }
-
 
         alert(
           "✅ Recarga aprobada correctamente.\n\n" +
@@ -1050,16 +793,11 @@
           " créditos."
         );
 
-
-        /* ACTUALIZAR LISTA */
-
         cargarRecargas();
-
 
       } catch (error) {
 
         console.error(error);
-
 
         alert(
           "❌ No se pudo aprobar la recarga.\n\n" +
@@ -1075,7 +813,5 @@
 
     verificarAdministrador();
 
-  </script>
-
-</body>
+  </script></body>
 </html>
