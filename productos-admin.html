@@ -181,6 +181,53 @@
       font-weight: bold;
     }
 
+    .inventory-info {
+      margin-top: 15px;
+      padding: 12px;
+      border-radius: 12px;
+      background: #f7efff;
+      border: 1px solid #e5d4f1;
+    }
+
+    .inventory-info strong {
+      color: #743d91;
+    }
+
+    .inventory-available {
+      color: #267446;
+      font-weight: bold;
+    }
+
+    .inventory-sold {
+      color: #a33f3f;
+      font-weight: bold;
+    }
+
+    .product-actions {
+      display: flex;
+      gap: 8px;
+      margin-top: 14px;
+    }
+
+    .product-actions button {
+      flex: 1;
+    }
+
+    .inventory-btn {
+      border: none;
+      cursor: pointer;
+      background: #eadcff;
+      color: #66377f;
+      padding: 10px;
+      border-radius: 11px;
+      font-weight: bold;
+      font-size: 13px;
+    }
+
+    .inventory-btn:hover {
+      background: #dfcdf5;
+    }
+
     .empty-message {
       text-align: center;
       color: #8a7b91;
@@ -249,6 +296,10 @@
       border-radius: 20px;
       padding: 25px;
       box-shadow: 0 10px 40px #00000033;
+    }
+
+    .modal-content-large {
+      max-width: 800px;
     }
 
     .modal-header {
@@ -396,6 +447,141 @@
       border: 1px solid #efc7c7;
     }
 
+    .accounts-list {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .account-card {
+      border: 1px solid #eadcff;
+      background: #fcf9ff;
+      border-radius: 14px;
+      padding: 15px;
+    }
+
+    .account-card.sold {
+      background: #fff7f7;
+      border-color: #f0d0d0;
+    }
+
+    .account-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 12px;
+    }
+
+    .account-status {
+      padding: 5px 9px;
+      border-radius: 8px;
+      font-size: 12px;
+      font-weight: bold;
+    }
+
+    .account-status.available {
+      background: #e5f7eb;
+      color: #267446;
+    }
+
+    .account-status.sold {
+      background: #fde5e5;
+      color: #a33f3f;
+    }
+
+    .account-data {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 9px;
+      font-size: 13px;
+    }
+
+    .account-data div {
+      background: white;
+      border: 1px solid #eadcff;
+      border-radius: 9px;
+      padding: 9px;
+      word-break: break-word;
+    }
+
+    .account-data strong {
+      display: block;
+      color: #743d91;
+      margin-bottom: 4px;
+      font-size: 12px;
+    }
+
+    .account-actions {
+      display: flex;
+      gap: 8px;
+      margin-top: 12px;
+    }
+
+    .account-actions button {
+      flex: 1;
+      border: none;
+      cursor: pointer;
+      padding: 9px;
+      border-radius: 9px;
+      font-weight: bold;
+      font-size: 12px;
+    }
+
+    .delete-account-btn {
+      background: #fde5e5;
+      color: #a33f3f;
+    }
+
+    .refresh-btn {
+      background: #eee5f7;
+      color: #66377f;
+    }
+
+    .inventory-summary {
+      margin-bottom: 18px;
+      padding: 15px;
+      border-radius: 13px;
+      background: #f8f1ff;
+      border: 1px solid #dec9ef;
+    }
+
+    .inventory-summary h3 {
+      color: #743d91;
+      margin-bottom: 8px;
+    }
+
+    .summary-numbers {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    .summary-number {
+      flex: 1;
+      min-width: 120px;
+      background: white;
+      border: 1px solid #eadcff;
+      border-radius: 10px;
+      padding: 10px;
+      text-align: center;
+    }
+
+    .summary-number strong {
+      display: block;
+      font-size: 20px;
+      color: #743d91;
+    }
+
+    .summary-number span {
+      font-size: 12px;
+      color: #77677f;
+    }
+
+    .password-field {
+      font-family: monospace;
+    }
+
     @media (max-width: 600px) {
 
       .header-content {
@@ -418,6 +604,19 @@
 
       .modal-actions {
         flex-direction: column;
+      }
+
+      .product-actions {
+        flex-direction: column;
+      }
+
+      .account-data {
+        grid-template-columns: 1fr;
+      }
+
+      .account-top {
+        flex-direction: column;
+        align-items: stretch;
       }
     }
   </style>
@@ -451,7 +650,7 @@
       </h1>
 
       <p>
-        Crea, modifica, activa o desactiva los productos de Butterfly Shop.
+        Crea y administra los productos y el inventario de cuentas de Butterfly Shop.
       </p>
 
     </div>
@@ -673,6 +872,183 @@
   </div>
 
 
+  <!-- MODAL INVENTARIO -->
+
+  <div id="inventory-modal" class="modal">
+
+    <div class="modal-content modal-content-large">
+
+      <div class="modal-header">
+
+        <h2 id="inventory-title">
+          📦 Inventario
+        </h2>
+
+        <button class="close-btn" onclick="cerrarInventario()">
+          ×
+        </button>
+
+      </div>
+
+
+      <div class="inventory-summary">
+
+        <h3>
+          🦋 Resumen del inventario
+        </h3>
+
+        <div class="summary-numbers">
+
+          <div class="summary-number">
+
+            <strong id="total-accounts">
+              0
+            </strong>
+
+            <span>
+              Total
+            </span>
+
+          </div>
+
+
+          <div class="summary-number">
+
+            <strong id="available-accounts">
+              0
+            </strong>
+
+            <span>
+              Disponibles
+            </span>
+
+          </div>
+
+
+          <div class="summary-number">
+
+            <strong id="sold-accounts">
+              0
+            </strong>
+
+            <span>
+              Vendidas
+            </span>
+
+          </div>
+
+        </div>
+
+      </div>
+
+
+      <form id="account-form">
+
+        <div class="form-group">
+
+          <label for="account-email">
+            📧 Correo de la cuenta
+          </label>
+
+          <input
+            type="email"
+            id="account-email"
+            placeholder="correo@ejemplo.com"
+            required
+          >
+
+        </div>
+
+
+        <div class="form-group">
+
+          <label for="account-password">
+            🔑 Contraseña
+          </label>
+
+          <input
+            type="text"
+            id="account-password"
+            class="password-field"
+            placeholder="Contraseña de la cuenta"
+            required
+          >
+
+        </div>
+
+
+        <div class="form-group">
+
+          <label for="account-profile">
+            👤 Nombre del perfil
+          </label>
+
+          <input
+            type="text"
+            id="account-profile"
+            placeholder="Ej. Perfil 3"
+          >
+
+        </div>
+
+
+        <div class="form-group">
+
+          <label for="account-pin">
+            🔢 PIN del perfil
+          </label>
+
+          <input
+            type="text"
+            id="account-pin"
+            placeholder="Ej. 1234"
+          >
+
+        </div>
+
+
+        <div
+          id="account-status-message"
+          class="status-message"
+        ></div>
+
+
+        <div class="modal-actions">
+
+          <button
+            type="submit"
+            class="save-btn"
+            id="save-account-btn"
+          >
+            ➕ Agregar cuenta
+          </button>
+
+        </div>
+
+      </form>
+
+
+      <div
+        style="
+          margin:25px 0 15px;
+          border-top:1px solid #eadcff;
+        "
+      ></div>
+
+
+      <div id="accounts-container">
+
+        <div class="empty-message">
+          ⏳ Cargando inventario...
+        </div>
+
+      </div>
+
+    </div>
+
+  </div>
+
+
   <!-- Supabase -->
 
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
@@ -687,23 +1063,68 @@
     const modal =
       document.getElementById("product-modal");
 
+
     const form =
       document.getElementById("product-form");
+
 
     const imageInput =
       document.getElementById("product-image");
 
+
     const imagePreview =
       document.getElementById("image-preview");
+
 
     const statusMessage =
       document.getElementById("status-message");
 
+
     const saveButton =
       document.getElementById("save-product-btn");
 
+
     const diagnosticContent =
       document.getElementById("diagnostic-content");
+
+
+    const inventoryModal =
+      document.getElementById("inventory-modal");
+
+
+    const accountForm =
+      document.getElementById("account-form");
+
+
+    const accountStatusMessage =
+      document.getElementById("account-status-message");
+
+
+    const saveAccountButton =
+      document.getElementById("save-account-btn");
+
+
+    const accountsContainer =
+      document.getElementById("accounts-container");
+
+
+    let productoInventarioActual = null;
+
+
+    function escaparHtml(valor) {
+
+      if (valor === null || valor === undefined) {
+        return "";
+      }
+
+      return String(valor)
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;")
+        .replace(/'/g, "&#039;");
+
+    }
 
 
     function mostrarError(mensaje) {
@@ -728,9 +1149,32 @@
     }
 
 
+    function mostrarErrorCuenta(mensaje) {
+
+      accountStatusMessage.className =
+        "status-message status-error";
+
+      accountStatusMessage.textContent =
+        "❌ " + mensaje;
+
+    }
+
+
+    function mostrarExitoCuenta(mensaje) {
+
+      accountStatusMessage.className =
+        "status-message status-success";
+
+      accountStatusMessage.textContent =
+        mensaje;
+
+    }
+
+
     function actualizarDiagnostico(html) {
 
-      diagnosticContent.innerHTML = html;
+      diagnosticContent.innerHTML =
+        html;
 
     }
 
@@ -739,13 +1183,17 @@
 
       form.reset();
 
-      imagePreview.style.display = "none";
-      imagePreview.src = "";
+      imagePreview.style.display =
+        "none";
+
+      imagePreview.src =
+        "";
 
       statusMessage.className =
         "status-message";
 
-      statusMessage.textContent = "";
+      statusMessage.textContent =
+        "";
 
       modal.classList.add("active");
 
@@ -758,64 +1206,76 @@
 
       form.reset();
 
-      imagePreview.style.display = "none";
-      imagePreview.src = "";
+      imagePreview.style.display =
+        "none";
+
+      imagePreview.src =
+        "";
 
       statusMessage.className =
         "status-message";
 
-      statusMessage.textContent = "";
+      statusMessage.textContent =
+        "";
 
     }
 
 
-    imageInput.addEventListener("change", () => {
+    imageInput.addEventListener(
+      "change",
+      () => {
 
-      const file =
-        imageInput.files[0];
+        const file =
+          imageInput.files[0];
 
 
-      if (!file) {
+        if (!file) {
 
-        imagePreview.style.display = "none";
-        imagePreview.src = "";
+          imagePreview.style.display =
+            "none";
 
-        return;
+          imagePreview.src =
+            "";
+
+          return;
+
+        }
+
+
+        if (!file.type.startsWith("image/")) {
+
+          alert(
+            "🦋 Selecciona un archivo de imagen."
+          );
+
+          imageInput.value =
+            "";
+
+          return;
+
+        }
+
+
+        const reader =
+          new FileReader();
+
+
+        reader.onload =
+          (event) => {
+
+            imagePreview.src =
+              event.target.result;
+
+            imagePreview.style.display =
+              "block";
+
+          };
+
+
+        reader.readAsDataURL(file);
 
       }
-
-
-      if (!file.type.startsWith("image/")) {
-
-        alert(
-          "🦋 Selecciona un archivo de imagen."
-        );
-
-        imageInput.value = "";
-
-        return;
-
-      }
-
-
-      const reader =
-        new FileReader();
-
-
-      reader.onload = (event) => {
-
-        imagePreview.src =
-          event.target.result;
-
-        imagePreview.style.display =
-          "block";
-
-      };
-
-
-      reader.readAsDataURL(file);
-
-    });
+    );
 
 
     async function comprobarAdministrador() {
@@ -844,7 +1304,7 @@
           <div class="diagnostic-error">
             ❌ Error al obtener la sesión.
             <br><br>
-            ${userError.message || "Error desconocido"}
+            ${escaparHtml(userError.message || "Error desconocido")}
           </div>
         `);
 
@@ -885,12 +1345,12 @@
 
         <div class="diagnostic-line">
           🆔 <strong>ID del usuario:</strong><br>
-          ${user.id}
+          ${escaparHtml(user.id)}
         </div>
 
         <div class="diagnostic-line">
           📧 <strong>Correo:</strong><br>
-          ${user.email || "Sin correo"}
+          ${escaparHtml(user.email || "Sin correo")}
         </div>
 
         <div class="diagnostic-line">
@@ -919,19 +1379,10 @@
 
 
         actualizarDiagnostico(`
-          <div class="diagnostic-ok">
-            ✅ Usuario autenticado
-          </div>
-
-          <div class="diagnostic-line">
-            🆔 <strong>ID:</strong><br>
-            ${user.id}
-          </div>
-
           <div class="diagnostic-error">
             ❌ No se pudo consultar el perfil.
             <br><br>
-            ${profileError.message || "Error desconocido"}
+            ${escaparHtml(profileError.message || "Error desconocido")}
           </div>
         `);
 
@@ -946,15 +1397,6 @@
       if (!profile) {
 
         actualizarDiagnostico(`
-          <div class="diagnostic-ok">
-            ✅ Usuario autenticado
-          </div>
-
-          <div class="diagnostic-line">
-            🆔 <strong>ID:</strong><br>
-            ${user.id}
-          </div>
-
           <div class="diagnostic-error">
             ❌ No existe un perfil para este usuario.
           </div>
@@ -968,34 +1410,9 @@
       }
 
 
-      console.log(
-        "Perfil encontrado:",
-        profile
-      );
-
-
       if (profile.role !== "admin") {
 
         actualizarDiagnostico(`
-          <div class="diagnostic-ok">
-            ✅ Usuario autenticado
-          </div>
-
-          <div class="diagnostic-line">
-            🆔 <strong>ID del usuario:</strong><br>
-            ${user.id}
-          </div>
-
-          <div class="diagnostic-line">
-            🆔 <strong>ID del perfil:</strong><br>
-            ${profile.id}
-          </div>
-
-          <div class="diagnostic-line">
-            👑 <strong>Rol:</strong>
-            ${profile.role || "sin rol"}
-          </div>
-
           <div class="diagnostic-error">
             ❌ El usuario no tiene rol de administrador.
           </div>
@@ -1015,23 +1432,18 @@
         </div>
 
         <div class="diagnostic-line">
-          🆔 <strong>ID del usuario:</strong><br>
-          ${user.id}
-        </div>
-
-        <div class="diagnostic-line">
-          🆔 <strong>ID del perfil:</strong><br>
-          ${profile.id}
+          🆔 <strong>ID:</strong><br>
+          ${escaparHtml(user.id)}
         </div>
 
         <div class="diagnostic-line">
           📧 <strong>Correo:</strong><br>
-          ${user.email || profile.email || "Sin correo"}
+          ${escaparHtml(user.email || profile.email || "Sin correo")}
         </div>
 
         <div class="diagnostic-line">
           👑 <strong>Rol:</strong>
-          ${profile.role}
+          ${escaparHtml(profile.role)}
         </div>
 
         <div class="diagnostic-ok">
@@ -1052,7 +1464,8 @@
         event.preventDefault();
 
 
-        saveButton.disabled = true;
+        saveButton.disabled =
+          true;
 
         saveButton.textContent =
           "⏳ Creando...";
@@ -1061,7 +1474,8 @@
         statusMessage.className =
           "status-message";
 
-        statusMessage.textContent = "";
+        statusMessage.textContent =
+          "";
 
 
         try {
@@ -1071,7 +1485,7 @@
 
 
           console.log(
-            "Admin autorizado para crear producto:",
+            "Admin autorizado:",
             user.id
           );
 
@@ -1129,16 +1543,11 @@
           }
 
 
-          let imageUrl = null;
+          let imageUrl =
+            null;
 
 
           if (imageFile) {
-
-            console.log(
-              "Subiendo imagen:",
-              imageFile.name
-            );
-
 
             const extension =
               imageFile.name
@@ -1190,35 +1599,20 @@
             }
 
 
-            console.log(
-              "Imagen subida correctamente:",
-              fileName
-            );
-
-
             const {
               data: publicUrlData
             } =
               supabaseClient.storage
                 .from("product-images")
-                .getPublicUrl(fileName);
+                .getPublicUrl(
+                  fileName
+                );
 
 
             imageUrl =
               publicUrlData.publicUrl;
 
-
-            console.log(
-              "URL pública de imagen:",
-              imageUrl
-            );
-
           }
-
-
-          console.log(
-            "Intentando insertar producto..."
-          );
 
 
           const {
@@ -1244,40 +1638,8 @@
           if (insertError) {
 
             console.error(
-              "================================"
-            );
-
-            console.error(
-              "ERROR COMPLETO DEL INSERT:"
-            );
-
-            console.error(
-              "Código:",
-              insertError.code
-            );
-
-            console.error(
-              "Mensaje:",
-              insertError.message
-            );
-
-            console.error(
-              "Detalles:",
-              insertError.details
-            );
-
-            console.error(
-              "Hint:",
-              insertError.hint
-            );
-
-            console.error(
-              "Error completo:",
+              "ERROR COMPLETO DEL INSERT:",
               insertError
-            );
-
-            console.error(
-              "================================"
             );
 
 
@@ -1305,29 +1667,19 @@
           await cargarProductos();
 
 
-          setTimeout(() => {
-
-            cerrarModal();
-
-          }, 1000);
+          setTimeout(
+            () => {
+              cerrarModal();
+            },
+            1000
+          );
 
 
         } catch (error) {
 
           console.error(
-            "================================"
-          );
-
-          console.error(
-            "ERROR AL CREAR PRODUCTO:"
-          );
-
-          console.error(
+            "ERROR AL CREAR PRODUCTO:",
             error
-          );
-
-          console.error(
-            "================================"
           );
 
 
@@ -1339,7 +1691,8 @@
         }
 
 
-        saveButton.disabled = false;
+        saveButton.disabled =
+          false;
 
         saveButton.textContent =
           "💾 Crear producto";
@@ -1357,13 +1710,9 @@
 
 
       container.innerHTML = `
-
         <div class="empty-message">
-
           🦋✨ Cargando productos...
-
         </div>
-
       `;
 
 
@@ -1373,7 +1722,13 @@
       } =
         await supabaseClient
           .from("products")
-          .select("*");
+          .select("*")
+          .order(
+            "created_at",
+            {
+              ascending: false
+            }
+          );
 
 
       if (error) {
@@ -1385,17 +1740,11 @@
 
 
         container.innerHTML = `
-
           <div class="error-message">
-
             ❌ No se pudieron cargar los productos.
-
             <br><br>
-
-            ${error.message}
-
+            ${escaparHtml(error.message)}
           </div>
-
         `;
 
         return;
@@ -1406,19 +1755,12 @@
       if (!data || data.length === 0) {
 
         container.innerHTML = `
-
           <div class="empty-message">
-
             🦋✨ Aún no hay productos cargados.
-
             <br><br>
-
             Puedes crear el primero usando
-
             <strong>➕ Nuevo producto</strong>.
-
           </div>
-
         `;
 
         return;
@@ -1436,53 +1778,47 @@
 
               ${
                 producto.image_url
-
                   ? `
-
                     <img
-                      src="${producto.image_url}"
+                      src="${escaparHtml(producto.image_url)}"
                       class="product-image"
-                      alt="${producto.name ?? "Producto"}"
+                      alt="${escaparHtml(producto.name || "Producto")}"
                     >
-
                   `
-
                   : `
-
                     <div class="no-image">
                       🦋
                     </div>
-
                   `
               }
 
 
               <h3>
-                ${producto.name ?? "Sin nombre"}
+                ${escaparHtml(producto.name || "Sin nombre")}
               </h3>
 
 
               <div class="product-description">
-                ${producto.description ?? "Sin descripción"}
+                ${escaparHtml(producto.description || "Sin descripción")}
               </div>
 
 
               <div class="product-info">
 
                 <div class="price">
-                  💎 ${producto.price_credits ?? 0} créditos
+                  💎 ${escaparHtml(producto.price_credits ?? 0)} créditos
                 </div>
 
 
                 <div>
                   🏷️ Categoría:
-                  ${producto.category ?? "Sin categoría"}
+                  ${escaparHtml(producto.category || "Sin categoría")}
                 </div>
 
 
                 <div>
                   🆔 ID:
-                  ${producto.id ?? "Sin ID"}
+                  ${escaparHtml(producto.id || "Sin ID")}
                 </div>
 
 
@@ -1490,13 +1826,394 @@
 
                   ${
                     producto.active
-
                       ? `<span class="active">🟢 Activo</span>`
-
                       : `<span class="inactive">🔴 Inactivo</span>`
                   }
 
                 </div>
+
+              </div>
+
+
+              <div
+                class="inventory-info"
+                id="inventory-${producto.id}"
+              >
+
+                ⏳ Consultando inventario...
+
+              </div>
+
+
+              <div class="product-actions">
+
+                <button
+                  class="inventory-btn"
+                  onclick='abrirInventario(${JSON.stringify(producto.id)}, ${JSON.stringify(producto.name || "Producto")})'
+                >
+                  📦 Gestionar cuentas
+                </button>
+
+              </div>
+
+            </div>
+
+          `).join("")}
+
+        </div>
+
+      `;
+
+
+      await actualizarResumenInventarios(
+        data
+      );
+
+    }
+
+
+    async function actualizarResumenInventarios(
+      productos
+    ) {
+
+      for (const producto of productos) {
+
+        const {
+          data,
+          error
+        } =
+          await supabaseClient
+            .from("product_accounts")
+            .select("status")
+            .eq(
+              "product_id",
+              producto.id
+            );
+
+
+        const element =
+          document.getElementById(
+            `inventory-${producto.id}`
+          );
+
+
+        if (!element) {
+          continue;
+        }
+
+
+        if (error) {
+
+          element.innerHTML = `
+            ❌ No se pudo consultar el inventario.
+          `;
+
+          continue;
+
+        }
+
+
+        const total =
+          data.length;
+
+
+        const available =
+          data.filter(
+            cuenta =>
+              cuenta.status === "available"
+          ).length;
+
+
+        const sold =
+          data.filter(
+            cuenta =>
+              cuenta.status === "sold"
+          ).length;
+
+
+        element.innerHTML = `
+          📦 <strong>Inventario</strong><br>
+          Total: ${total}
+          <br>
+          <span class="inventory-available">
+            🟢 Disponibles: ${available}
+          </span>
+          <br>
+          <span class="inventory-sold">
+            🔴 Vendidas: ${sold}
+          </span>
+        `;
+
+      }
+
+    }
+
+
+    async function abrirInventario(
+      productId,
+      productName
+    ) {
+
+      productoInventarioActual =
+        productId;
+
+
+      document.getElementById(
+        "inventory-title"
+      ).textContent =
+        `📦 Inventario | ${productName}`;
+
+
+      accountForm.reset();
+
+
+      accountStatusMessage.className =
+        "status-message";
+
+      accountStatusMessage.textContent =
+        "";
+
+
+      inventoryModal.classList.add(
+        "active"
+      );
+
+
+      await cargarCuentasProducto(
+        productId
+      );
+
+    }
+
+
+    function cerrarInventario() {
+
+      inventoryModal.classList.remove(
+        "active"
+      );
+
+
+      productoInventarioActual =
+        null;
+
+
+      accountForm.reset();
+
+
+      accountStatusMessage.className =
+        "status-message";
+
+      accountStatusMessage.textContent =
+        "";
+
+    }
+
+
+    async function cargarCuentasProducto(
+      productId
+    ) {
+
+      accountsContainer.innerHTML = `
+        <div class="empty-message">
+          ⏳ Cargando cuentas...
+        </div>
+      `;
+
+
+      const {
+        data,
+        error
+      } =
+        await supabaseClient
+          .from("product_accounts")
+          .select("*")
+          .eq(
+            "product_id",
+            productId
+          )
+          .order(
+            "created_at",
+            {
+              ascending: false
+            }
+          );
+
+
+      if (error) {
+
+        console.error(
+          "Error cargando cuentas:",
+          error
+        );
+
+
+        accountsContainer.innerHTML = `
+          <div class="error-message">
+            ❌ No se pudo cargar el inventario.
+            <br><br>
+            ${escaparHtml(error.message)}
+          </div>
+        `;
+
+        return;
+
+      }
+
+
+      actualizarContadores(
+        data || []
+      );
+
+
+      if (!data || data.length === 0) {
+
+        accountsContainer.innerHTML = `
+          <div class="empty-message">
+            🦋✨ Este producto todavía no tiene cuentas.
+            <br><br>
+            Agrega la primera usando el formulario de arriba.
+          </div>
+        `;
+
+        return;
+
+      }
+
+
+      accountsContainer.innerHTML = `
+
+        <div class="accounts-list">
+
+          ${data.map(cuenta => `
+
+            <div
+              class="account-card ${
+                cuenta.status === "sold"
+                  ? "sold"
+                  : ""
+              }"
+            >
+
+              <div class="account-top">
+
+                <strong>
+                  🦋 Cuenta #${escaparHtml(
+                    String(cuenta.id).substring(0, 8)
+                  )}
+                </strong>
+
+                ${
+                  cuenta.status === "available"
+                    ? `
+                      <span class="account-status available">
+                        🟢 DISPONIBLE
+                      </span>
+                    `
+                    : `
+                      <span class="account-status sold">
+                        🔴 VENDIDA
+                      </span>
+                    `
+                }
+
+              </div>
+
+
+              <div class="account-data">
+
+                <div>
+
+                  <strong>
+                    📧 Correo
+                  </strong>
+
+                  ${escaparHtml(cuenta.email)}
+
+                </div>
+
+
+                <div>
+
+                  <strong>
+                    🔑 Contraseña
+                  </strong>
+
+                  <span class="password-field">
+                    ${escaparHtml(cuenta.password)}
+                  </span>
+
+                </div>
+
+
+                <div>
+
+                  <strong>
+                    👤 Perfil
+                  </strong>
+
+                  ${
+                    escaparHtml(
+                      cuenta.profile_name ||
+                      "Sin perfil"
+                    )
+                  }
+
+                </div>
+
+
+                <div>
+
+                  <strong>
+                    🔢 PIN
+                  </strong>
+
+                  ${
+                    escaparHtml(
+                      cuenta.profile_pin ||
+                      "Sin PIN"
+                    )
+                  }
+
+                </div>
+
+
+                ${
+                  cuenta.status === "sold"
+                    ? `
+                      <div>
+
+                        <strong>
+                          📅 Vendida
+                        </strong>
+
+                        ${
+                          cuenta.sold_at
+                            ? escaparHtml(
+                                new Date(
+                                  cuenta.sold_at
+                                ).toLocaleString(
+                                  "es-MX"
+                                )
+                              )
+                            : "Fecha no registrada"
+                        }
+
+                      </div>
+                    `
+                    : ""
+                }
+
+              </div>
+
+
+              <div class="account-actions">
+
+                <button
+                  class="delete-account-btn"
+                  onclick='eliminarCuenta(${JSON.stringify(cuenta.id)})'
+                >
+                  🗑️ Eliminar
+                </button>
 
               </div>
 
@@ -1511,11 +2228,309 @@
     }
 
 
+    function actualizarContadores(
+      cuentas
+    ) {
+
+      const total =
+        cuentas.length;
+
+
+      const available =
+        cuentas.filter(
+          cuenta =>
+            cuenta.status === "available"
+        ).length;
+
+
+      const sold =
+        cuentas.filter(
+          cuenta =>
+            cuenta.status === "sold"
+        ).length;
+
+
+      document.getElementById(
+        "total-accounts"
+      ).textContent =
+        total;
+
+
+      document.getElementById(
+        "available-accounts"
+      ).textContent =
+        available;
+
+
+      document.getElementById(
+        "sold-accounts"
+      ).textContent =
+        sold;
+
+    }
+
+
+    accountForm.addEventListener(
+      "submit",
+      async (event) => {
+
+        event.preventDefault();
+
+
+        if (!productoInventarioActual) {
+
+          mostrarErrorCuenta(
+            "No se seleccionó ningún producto."
+          );
+
+          return;
+
+        }
+
+
+        saveAccountButton.disabled =
+          true;
+
+        saveAccountButton.textContent =
+          "⏳ Guardando...";
+
+
+        accountStatusMessage.className =
+          "status-message";
+
+        accountStatusMessage.textContent =
+          "";
+
+
+        try {
+
+          await comprobarAdministrador();
+
+
+          const email =
+            document
+              .getElementById("account-email")
+              .value
+              .trim();
+
+
+          const password =
+            document
+              .getElementById("account-password")
+              .value
+              .trim();
+
+
+          const profileName =
+            document
+              .getElementById("account-profile")
+              .value
+              .trim();
+
+
+          const profilePin =
+            document
+              .getElementById("account-pin")
+              .value
+              .trim();
+
+
+          if (!email || !password) {
+
+            throw new Error(
+              "El correo y la contraseña son obligatorios."
+            );
+
+          }
+
+
+          const {
+            data,
+            error
+          } =
+            await supabaseClient
+              .from("product_accounts")
+              .insert([
+                {
+                  product_id:
+                    productoInventarioActual,
+
+                  email:
+                    email,
+
+                  password:
+                    password,
+
+                  profile_name:
+                    profileName || null,
+
+                  profile_pin:
+                    profilePin || null,
+
+                  status:
+                    "available"
+                }
+              ])
+              .select()
+              .single();
+
+
+          if (error) {
+
+            console.error(
+              "Error agregando cuenta:",
+              error
+            );
+
+
+            throw new Error(
+              `Código: ${error.code || "sin código"} | ` +
+              `Mensaje: ${error.message || "sin mensaje"}`
+            );
+
+          }
+
+
+          console.log(
+            "Cuenta agregada:",
+            data
+          );
+
+
+          mostrarExitoCuenta(
+            "🦋✨ ¡Cuenta agregada al inventario!"
+          );
+
+
+          accountForm.reset();
+
+
+          await cargarCuentasProducto(
+            productoInventarioActual
+          );
+
+
+          await cargarProductos();
+
+
+        } catch (error) {
+
+          console.error(
+            "ERROR AL AGREGAR CUENTA:",
+            error
+          );
+
+
+          mostrarErrorCuenta(
+            error.message ||
+            "No se pudo agregar la cuenta."
+          );
+
+        }
+
+
+        saveAccountButton.disabled =
+          false;
+
+        saveAccountButton.textContent =
+          "➕ Agregar cuenta";
+
+      }
+    );
+
+
+    async function eliminarCuenta(
+      accountId
+    ) {
+
+      const confirmar =
+        confirm(
+          "🦋 ¿Seguro que quieres eliminar esta cuenta del inventario?"
+        );
+
+
+      if (!confirmar) {
+        return;
+      }
+
+
+      try {
+
+        await comprobarAdministrador();
+
+
+        const {
+          error
+        } =
+          await supabaseClient
+            .from("product_accounts")
+            .delete()
+            .eq(
+              "id",
+              accountId
+            );
+
+
+        if (error) {
+
+          console.error(
+            "Error eliminando cuenta:",
+            error
+          );
+
+
+          throw new Error(
+            `Código: ${error.code || "sin código"} | ` +
+            `Mensaje: ${error.message || "sin mensaje"}`
+          );
+
+        }
+
+
+        alert(
+          "🦋✨ Cuenta eliminada correctamente."
+        );
+
+
+        if (productoInventarioActual) {
+
+          await cargarCuentasProducto(
+            productoInventarioActual
+          );
+
+        }
+
+
+        await cargarProductos();
+
+
+      } catch (error) {
+
+        console.error(
+          "ERROR AL ELIMINAR CUENTA:",
+          error
+        );
+
+
+        alert(
+          "❌ " +
+          (
+            error.message ||
+            "No se pudo eliminar la cuenta."
+          )
+        );
+
+      }
+
+    }
+
+
     async function iniciarPagina() {
 
       try {
 
         await comprobarAdministrador();
+
 
         console.log(
           "🦋 Acceso de administrador confirmado."
@@ -1538,7 +2553,7 @@
 
           <div class="error-message">
 
-            ❌ ${error.message}
+            ❌ ${escaparHtml(error.message)}
 
             <br><br>
 
@@ -1559,6 +2574,29 @@
       }
 
     }
+
+
+    window.addEventListener(
+      "click",
+      (event) => {
+
+        if (event.target === modal) {
+
+          cerrarModal();
+
+        }
+
+
+        if (
+          event.target === inventoryModal
+        ) {
+
+          cerrarInventario();
+
+        }
+
+      }
+    );
 
 
     iniciarPagina();
