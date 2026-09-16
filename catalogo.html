@@ -153,6 +153,10 @@
             cursor: pointer;
         }
 
+        .buy:hover {
+            transform: translateY(-2px);
+        }
+
         .buy.disabled {
             background: #cfc4d8;
             pointer-events: none;
@@ -177,6 +181,88 @@
             padding: 45px 20px;
             color: #9b83b3;
             font-size: 13px;
+        }
+
+        /* ================================
+           MODAL DE COMPRA
+        ================================ */
+
+        .modal-overlay {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: rgba(50, 30, 70, 0.55);
+            backdrop-filter: blur(5px);
+            z-index: 9999;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .modal-overlay.show {
+            display: flex;
+        }
+
+        .purchase-modal {
+            width: min(500px, 100%);
+            max-height: 90vh;
+            overflow-y: auto;
+            background: white;
+            border-radius: 25px;
+            padding: 28px;
+            box-shadow: 0 20px 60px rgba(50, 30, 70, 0.25);
+            text-align: left;
+        }
+
+        .purchase-modal h2 {
+            text-align: center;
+            color: #7544a8;
+            margin-bottom: 8px;
+        }
+
+        .purchase-modal .success-text {
+            text-align: center;
+            color: #5f8f72;
+            font-size: 14px;
+            margin-bottom: 22px;
+        }
+
+        .credential-box {
+            background: #faf6ff;
+            border: 1px solid #e3cff8;
+            border-radius: 16px;
+            padding: 15px;
+            margin-bottom: 12px;
+        }
+
+        .credential-label {
+            display: block;
+            color: #8c5bc4;
+            font-size: 12px;
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+
+        .credential-value {
+            color: #4b356b;
+            font-size: 15px;
+            word-break: break-word;
+        }
+
+        .modal-close {
+            width: 100%;
+            margin-top: 10px;
+            padding: 12px;
+            border: none;
+            border-radius: 22px;
+            background: #8050b4;
+            color: white;
+            font-weight: 600;
+            cursor: pointer;
+        }
+
+        .modal-close:hover {
+            background: #7544a8;
         }
     </style>
 </head>
@@ -214,6 +300,35 @@
         🦋 Butterfly Shop · Catálogo digital
     </footer>
 
+    <!-- ================================
+         MODAL RESULTADO DE COMPRA
+    ================================= -->
+
+    <div class="modal-overlay" id="purchaseModal">
+
+        <div class="purchase-modal">
+
+            <h2>🦋 ¡Compra realizada!</h2>
+
+            <div class="success-text">
+                Tu producto fue entregado correctamente.
+            </div>
+
+            <div id="purchaseDetails"></div>
+
+            <button
+                class="modal-close"
+                type="button"
+                onclick="cerrarModalCompra()"
+            >
+                💗 Cerrar
+            </button>
+
+        </div>
+
+    </div>
+
+
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <script src="supabase-config.js"></script>
 
@@ -225,7 +340,14 @@
         const categoriesContainer =
             document.getElementById("categories");
 
+        const purchaseModal =
+            document.getElementById("purchaseModal");
+
+        const purchaseDetails =
+            document.getElementById("purchaseDetails");
+
         let allProducts = [];
+
         let currentCategory = "Todos";
 
 
@@ -568,35 +690,155 @@
                 }
 
 
+                /*
+                 * buy_product() devuelve un JSON
+                 * con las credenciales de la cuenta
+                 * asignada.
+                 */
+
                 const compra =
                     Array.isArray(data)
                         ? data[0]
                         : data;
 
 
-                if (!compra) {
+                if (!compra || !compra.success) {
 
                     throw new Error(
-                        "No se recibió la información de la compra."
+                        "No se recibió correctamente la información de la compra."
                     );
                 }
 
 
-                alert(
-                    "🦋 ¡Compra realizada correctamente!\n\n" +
-                    "Producto: " +
-                    (compra.product_id || "Producto") +
-                    "\n" +
-                    "Costo: " +
-                    (compra.price_credits || "") +
-                    " créditos\n\n" +
-                    "Tu contenido digital:\n" +
-                    (compra.delivery_data ||
-                        "Contenido entregado correctamente.")
-                );
+                // ================================
+                // MOSTRAR ENTREGA
+                // ================================
 
+                purchaseDetails.innerHTML = `
+
+                    <div class="credential-box">
+                        <span class="credential-label">
+                            🛍️ Producto
+                        </span>
+
+                        <div class="credential-value">
+                            ${escaparHTML(
+                                compra.product_name ||
+                                "Producto"
+                            )}
+                        </div>
+                    </div>
+
+
+                    <div class="credential-box">
+                        <span class="credential-label">
+                            💎 Costo
+                        </span>
+
+                        <div class="credential-value">
+                            ${escaparHTML(
+                                String(
+                                    compra.price_credits ??
+                                    ""
+                                )
+                            )}
+                            créditos
+                        </div>
+                    </div>
+
+
+                    <div class="credential-box">
+                        <span class="credential-label">
+                            📧 Correo
+                        </span>
+
+                        <div class="credential-value">
+                            ${escaparHTML(
+                                compra.email ||
+                                "No disponible"
+                            )}
+                        </div>
+                    </div>
+
+
+                    <div class="credential-box">
+                        <span class="credential-label">
+                            🔑 Contraseña
+                        </span>
+
+                        <div class="credential-value">
+                            ${escaparHTML(
+                                compra.password ||
+                                "No disponible"
+                            )}
+                        </div>
+                    </div>
+
+
+                    ${
+                        compra.profile_name
+                            ? `
+                                <div class="credential-box">
+                                    <span class="credential-label">
+                                        👤 Perfil
+                                    </span>
+
+                                    <div class="credential-value">
+                                        ${escaparHTML(
+                                            compra.profile_name
+                                        )}
+                                    </div>
+                                </div>
+                              `
+                            : ""
+                    }
+
+
+                    ${
+                        compra.profile_pin
+                            ? `
+                                <div class="credential-box">
+                                    <span class="credential-label">
+                                        🔢 PIN
+                                    </span>
+
+                                    <div class="credential-value">
+                                        ${escaparHTML(
+                                            compra.profile_pin
+                                        )}
+                                    </div>
+                                </div>
+                              `
+                            : ""
+                    }
+
+
+                    <div class="credential-box">
+                        <span class="credential-label">
+                            🧾 ID de compra
+                        </span>
+
+                        <div class="credential-value">
+                            ${escaparHTML(
+                                compra.purchase_id ||
+                                "No disponible"
+                            )}
+                        </div>
+                    </div>
+
+                `;
+
+
+                purchaseModal.classList.add("show");
+
+
+                /*
+                 * Recargar catálogo para actualizar
+                 * automáticamente el stock.
+                 */
 
                 await cargarProductos();
+
 
             } catch (error) {
 
@@ -605,13 +847,56 @@
                     error
                 );
 
+                let mensaje =
+                    error.message ||
+                    "Error desconocido.";
+
+                /*
+                 * Supabase/PostgreSQL puede devolver
+                 * errores RPC con el mensaje dentro
+                 * de diferentes propiedades.
+                 */
+
+                if (
+                    error.details &&
+                    typeof error.details === "string"
+                ) {
+                    mensaje =
+                        error.details;
+                }
+
                 alert(
                     "❌ No se pudo completar la compra.\n\n" +
-                    (error.message ||
-                        "Error desconocido")
+                    mensaje
                 );
             }
         }
+
+
+        // ================================
+        // CERRAR MODAL
+        // ================================
+
+        function cerrarModalCompra() {
+
+            purchaseModal.classList
+                .remove("show");
+        }
+
+
+        purchaseModal.addEventListener(
+            "click",
+            event => {
+
+                if (
+                    event.target ===
+                    purchaseModal
+                ) {
+                    cerrarModalCompra();
+                }
+
+            }
+        );
 
 
         // ================================
@@ -664,7 +949,10 @@
             const div =
                 document.createElement("div");
 
-            div.textContent = texto;
+            div.textContent =
+                texto == null
+                    ? ""
+                    : String(texto);
 
             return div.innerHTML;
         }
