@@ -1,13 +1,6 @@
-<!DOCTYPE html>
-<html lang="es">
-
-<head>
+<!DOCTYPE html><html lang="es"><head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-  <title>Butterfly Shop | Productos</title>
-
-  <style>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">  <title>Butterfly Shop | Productos</title>  <style>
     * {
       box-sizing: border-box;
       margin: 0;
@@ -49,6 +42,10 @@
       border-radius: 12px;
       font-weight: bold;
       font-size: 14px;
+    }
+
+    .back-btn:hover {
+      background: #ffffff55;
     }
 
     .container {
@@ -127,41 +124,66 @@
         width: 100%;
       }
     }
-  </style>
-</head>
+  </style></head><body>  <header><div class="header-content">
 
-<body>
+  <div class="logo">
+    🦋 Butterfly Shop
+  </div>
 
-  <header>
+  <a href="admin.html" class="back-btn">
+    ← Volver al panel
+  </a>
 
-    <div class="header-content">
+</div>
 
-      <div class="logo">
-        🦋 Butterfly Shop
-      </div>
+  </header>  <main class="container"><div class="welcome">
 
-      <a href="admin.html" class="back-btn">
-        ← Volver al panel
-      </a>
+  <h1>
+    🛍️ Gestionar productos
+  </h1>
 
+  <p>
+    Crea, modifica, activa o desactiva los productos de Butterfly Shop.
+  </p>
+
+</div>
+
+
+<div class="products-box">
+
+  <div class="products-header">
+
+    <h2>
+      🦋 Productos de la tienda
+    </h2>
+
+    <button class="btn" onclick="crearProducto()">
+      ➕ Nuevo producto
+    </button>
+
+  </div>
+
+
+  <div id="products-container">
+
+    <div class="empty-message">
+      🦋✨ Aún no hay productos cargados.
+      <br>
+      Los productos aparecerán aquí cuando los conectemos con Supabase.
     </div>
 
-  </header>
+  </div>
 
+</div>
 
-  <main class="container">
+  </main>  <!-- Supabase -->  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>  <!-- Configuración de Supabase -->  <script src="supabase-config.js"></script>  <script>
 
-    <div class="welcome">
+    function crearProducto() {
 
-      <h1>
-        🛍️ Gestionar productos
-      </h1>
+      alert(
+        "La creación de productos la conectaremos en el siguiente paso. 🦋💗"
+      );
 
-      <p>
-        Crea, modifica, activa o desactiva los productos de Butterfly Shop.
-      </p>
+    }
 
-    </div>
-
-
-    <div class="products-box">
+  </script></body></html>
