@@ -196,8 +196,6 @@
       border-radius: 12px;
     }
 
-    /* MODAL */
-
     .modal {
       display: none;
       position: fixed;
@@ -351,6 +349,8 @@
       text-align: center;
       display: none;
       font-size: 14px;
+      line-height: 1.5;
+      word-break: break-word;
     }
 
     .status-success {
@@ -637,28 +637,55 @@
   <script>
 
     const modal = document.getElementById("product-modal");
-
     const form = document.getElementById("product-form");
-
     const imageInput = document.getElementById("product-image");
-
     const imagePreview = document.getElementById("image-preview");
-
     const statusMessage = document.getElementById("status-message");
-
     const saveButton = document.getElementById("save-product-btn");
 
+
+    /*
+      ============================================================
+      MOSTRAR MENSAJE
+      ============================================================
+    */
+
+    function mostrarError(mensaje) {
+
+      statusMessage.className =
+        "status-message status-error";
+
+      statusMessage.textContent =
+        "❌ " + mensaje;
+
+    }
+
+
+    function mostrarExito(mensaje) {
+
+      statusMessage.className =
+        "status-message status-success";
+
+      statusMessage.textContent =
+        mensaje;
+
+    }
+
+
+    /*
+      ============================================================
+      ABRIR / CERRAR MODAL
+      ============================================================
+    */
 
     function crearProducto() {
 
       form.reset();
 
       imagePreview.style.display = "none";
-
       imagePreview.src = "";
 
       statusMessage.className = "status-message";
-
       statusMessage.textContent = "";
 
       modal.classList.add("active");
@@ -673,17 +700,19 @@
       form.reset();
 
       imagePreview.style.display = "none";
-
       imagePreview.src = "";
 
       statusMessage.className = "status-message";
-
       statusMessage.textContent = "";
 
     }
 
 
-    /* Vista previa de imagen */
+    /*
+      ============================================================
+      VISTA PREVIA DE IMAGEN
+      ============================================================
+    */
 
     imageInput.addEventListener("change", () => {
 
@@ -692,7 +721,6 @@
       if (!file) {
 
         imagePreview.style.display = "none";
-
         imagePreview.src = "";
 
         return;
@@ -726,43 +754,198 @@
     });
 
 
-    /* Crear producto */
+    /*
+      ============================================================
+      COMPROBAR SESIÓN Y ADMIN
+      ============================================================
+    */
+
+    async function comprobarAdministrador() {
+
+      const {
+        data: { user },
+        error: userError
+      } = await supabaseClient.auth.getUser();
+
+
+      if (userError) {
+
+        console.error(
+          "Error obteniendo usuario:",
+          userError
+        );
+
+        throw new Error(
+          "No se pudo comprobar la sesión de administrador."
+        );
+
+      }
+
+
+      if (!user) {
+
+        throw new Error(
+          "No hay una sesión iniciada. Vuelve a iniciar sesión."
+        );
+
+      }
+
+
+      console.log("Usuario autenticado:", user.id);
+
+
+      const {
+        data: profile,
+        error: profileError
+      } = await supabaseClient
+        .from("profiles")
+        .select("id, role")
+        .eq("id", user.id)
+        .maybeSingle();
+
+
+      if (profileError) {
+
+        console.error(
+          "Error obteniendo perfil:",
+          profileError
+        );
+
+        throw new Error(
+          "No se pudo comprobar el perfil del administrador."
+        );
+
+      }
+
+
+      if (!profile) {
+
+        throw new Error(
+          "Tu usuario no tiene un perfil registrado."
+        );
+
+      }
+
+
+      console.log(
+        "Perfil encontrado:",
+        profile
+      );
+
+
+      if (profile.role !== "admin") {
+
+        throw new Error(
+          "Tu cuenta no tiene permisos de administrador."
+        );
+
+      }
+
+
+      return user;
+
+    }
+
+
+    /*
+      ============================================================
+      CREAR PRODUCTO
+      ============================================================
+    */
 
     form.addEventListener("submit", async (event) => {
 
       event.preventDefault();
 
+
       saveButton.disabled = true;
 
-      saveButton.textContent = "⏳ Creando...";
+      saveButton.textContent =
+        "⏳ Creando...";
 
-      statusMessage.className = "status-message";
 
-      statusMessage.textContent = "";
+      statusMessage.className =
+        "status-message";
+
+      statusMessage.textContent =
+        "";
 
 
       try {
 
+        /*
+          --------------------------------------------------------
+          1. COMPROBAR QUE HAY ADMIN AUTENTICADO
+          --------------------------------------------------------
+        */
+
+        const user =
+          await comprobarAdministrador();
+
+
+        console.log(
+          "Admin autorizado para crear producto:",
+          user.id
+        );
+
+
+        /*
+          --------------------------------------------------------
+          2. OBTENER DATOS DEL FORMULARIO
+          --------------------------------------------------------
+        */
+
         const name =
-          document.getElementById("product-name").value.trim();
+          document
+            .getElementById("product-name")
+            .value
+            .trim();
+
 
         const description =
-          document.getElementById("product-description").value.trim();
+          document
+            .getElementById("product-description")
+            .value
+            .trim();
+
 
         const price =
-          Number(document.getElementById("product-price").value);
+          Number(
+            document
+              .getElementById("product-price")
+              .value
+          );
+
 
         const category =
-          document.getElementById("product-category").value.trim();
+          document
+            .getElementById("product-category")
+            .value
+            .trim();
+
 
         const active =
-          document.getElementById("product-active").value === "true";
+          document
+            .getElementById("product-active")
+            .value === "true";
 
 
-        const imageFile = imageInput.files[0];
+        const imageFile =
+          imageInput.files[0];
 
 
-        if (!name || !description || !price || !category) {
+        /*
+          --------------------------------------------------------
+          3. VALIDAR DATOS
+          --------------------------------------------------------
+        */
+
+        if (
+          !name ||
+          !description ||
+          !price ||
+          !category
+        ) {
 
           throw new Error(
             "Completa todos los campos del producto."
@@ -771,15 +954,29 @@
         }
 
 
+        /*
+          --------------------------------------------------------
+          4. SUBIR IMAGEN
+          --------------------------------------------------------
+        */
+
         let imageUrl = null;
 
 
-        /* Subir imagen si se seleccionó una */
-
         if (imageFile) {
 
+          console.log(
+            "Subiendo imagen:",
+            imageFile.name
+          );
+
+
           const extension =
-            imageFile.name.split(".").pop().toLowerCase();
+            imageFile.name
+              .split(".")
+              .pop()
+              .toLowerCase();
+
 
           const safeName =
             name
@@ -787,40 +984,84 @@
               .replace(/[^a-z0-9]+/g, "-")
               .replace(/^-|-$/g, "");
 
+
           const fileName =
             `${Date.now()}-${safeName}.${extension}`;
 
 
-          const { error: uploadError } =
+          const {
+            error: uploadError
+          } =
             await supabaseClient.storage
               .from("product-images")
-              .upload(fileName, imageFile, {
-                cacheControl: "3600",
-                upsert: false
-              });
+              .upload(
+                fileName,
+                imageFile,
+                {
+                  cacheControl: "3600",
+                  upsert: false
+                }
+              );
 
 
           if (uploadError) {
 
-            throw uploadError;
+            console.error(
+              "ERROR AL SUBIR IMAGEN:",
+              uploadError
+            );
+
+
+            throw new Error(
+              `Error al subir la imagen. ` +
+              `Código: ${uploadError.statusCode || "sin código"} | ` +
+              `Mensaje: ${uploadError.message || "sin mensaje"}`
+            );
 
           }
 
 
-          const { data: publicUrlData } =
+          console.log(
+            "Imagen subida correctamente:",
+            fileName
+          );
+
+
+          const {
+            data: publicUrlData
+          } =
             supabaseClient.storage
               .from("product-images")
               .getPublicUrl(fileName);
 
 
-          imageUrl = publicUrlData.publicUrl;
+          imageUrl =
+            publicUrlData.publicUrl;
+
+
+          console.log(
+            "URL pública de imagen:",
+            imageUrl
+          );
 
         }
 
 
-        /* Crear producto en la tabla */
+        /*
+          --------------------------------------------------------
+          5. INSERTAR PRODUCTO EN SUPABASE
+          --------------------------------------------------------
+        */
 
-        const { error: insertError } =
+        console.log(
+          "Intentando insertar producto..."
+        );
+
+
+        const {
+          data: insertedProduct,
+          error: insertError
+        } =
           await supabaseClient
             .from("products")
             .insert([
@@ -832,21 +1073,82 @@
                 active: active,
                 image_url: imageUrl
               }
-            ]);
+            ])
+            .select()
+            .single();
 
+
+        /*
+          --------------------------------------------------------
+          6. MOSTRAR ERROR COMPLETO DE SUPABASE
+          --------------------------------------------------------
+        */
 
         if (insertError) {
 
-          throw insertError;
+          console.error(
+            "================================"
+          );
+
+          console.error(
+            "ERROR COMPLETO DEL INSERT:"
+          );
+
+          console.error(
+            "Código:",
+            insertError.code
+          );
+
+          console.error(
+            "Mensaje:",
+            insertError.message
+          );
+
+          console.error(
+            "Detalles:",
+            insertError.details
+          );
+
+          console.error(
+            "Hint:",
+            insertError.hint
+          );
+
+          console.error(
+            "Error completo:",
+            insertError
+          );
+
+          console.error(
+            "================================"
+          );
+
+
+          throw new Error(
+            `Código: ${insertError.code || "sin código"} | ` +
+            `Mensaje: ${insertError.message || "sin mensaje"} | ` +
+            `Detalles: ${insertError.details || "sin detalles"} | ` +
+            `Hint: ${insertError.hint || "sin hint"}`
+          );
 
         }
 
 
-        statusMessage.className =
-          "status-message status-success";
+        console.log(
+          "Producto creado:",
+          insertedProduct
+        );
 
-        statusMessage.textContent =
-          "🦋✨ ¡Producto creado correctamente!";
+
+        /*
+          --------------------------------------------------------
+          7. ÉXITO
+          --------------------------------------------------------
+        */
+
+        mostrarExito(
+          "🦋✨ ¡Producto creado correctamente!"
+        );
 
 
         await cargarProductos();
@@ -862,16 +1164,26 @@
       } catch (error) {
 
         console.error(
-          "Error al crear producto:",
+          "================================"
+        );
+
+        console.error(
+          "ERROR AL CREAR PRODUCTO:"
+        );
+
+        console.error(
           error
         );
 
+        console.error(
+          "================================"
+        );
 
-        statusMessage.className =
-          "status-message status-error";
 
-        statusMessage.textContent =
-          "❌ " + (error.message || "No se pudo crear el producto.");
+        mostrarError(
+          error.message ||
+          "No se pudo crear el producto."
+        );
 
       }
 
@@ -884,12 +1196,18 @@
     });
 
 
-    /* Cargar productos */
+    /*
+      ============================================================
+      CARGAR PRODUCTOS
+      ============================================================
+    */
 
     async function cargarProductos() {
 
       const container =
-        document.getElementById("products-container");
+        document.getElementById(
+          "products-container"
+        );
 
 
       container.innerHTML = `
@@ -903,7 +1221,10 @@
       `;
 
 
-      const { data, error } =
+      const {
+        data,
+        error
+      } =
         await supabaseClient
           .from("products")
           .select("*");
@@ -991,43 +1312,31 @@
 
 
               <h3>
-
                 ${producto.name ?? "Sin nombre"}
-
               </h3>
 
 
               <div class="product-description">
-
                 ${producto.descripción ?? "Sin descripción"}
-
               </div>
 
 
               <div class="product-info">
 
                 <div class="price">
-
                   💎 ${producto.price_credits ?? 0} créditos
-
                 </div>
 
 
                 <div>
-
                   🏷️ Categoría:
-
                   ${producto.categoria ?? "Sin categoría"}
-
                 </div>
 
 
                 <div>
-
                   🆔 ID:
-
                   ${producto.id ?? "Sin ID"}
-
                 </div>
 
 
@@ -1039,7 +1348,6 @@
                       ? `<span class="active">🟢 Activo</span>`
 
                       : `<span class="inactive">🔴 Inactivo</span>`
-
                   }
 
                 </div>
@@ -1057,9 +1365,68 @@
     }
 
 
-    /* Cargar al abrir la página */
+    /*
+      ============================================================
+      COMPROBAR ACCESO AL ABRIR LA PÁGINA
+      ============================================================
+    */
 
-    cargarProductos();
+    async function iniciarPagina() {
+
+      try {
+
+        await comprobarAdministrador();
+
+        console.log(
+          "🦋 Acceso de administrador confirmado."
+        );
+
+        await cargarProductos();
+
+      } catch (error) {
+
+        console.error(
+          "Error de acceso:",
+          error
+        );
+
+
+        document.getElementById(
+          "products-container"
+        ).innerHTML = `
+
+          <div class="error-message">
+
+            ❌ ${error.message}
+
+            <br><br>
+
+            <a
+              href="admin.html"
+              style="
+                color:#743d91;
+                font-weight:bold;
+              "
+            >
+              ← Volver al panel
+            </a>
+
+          </div>
+
+        `;
+
+      }
+
+    }
+
+
+    /*
+      ============================================================
+      INICIAR
+      ============================================================
+    */
+
+    iniciarPagina();
 
   </script>
 
