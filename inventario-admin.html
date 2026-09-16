@@ -1,0 +1,523 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>Inventario | Butterfly Shop</title>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="supabase-config.js"></script>
+
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background: linear-gradient(135deg, #f8efff, #fff5fb);
+      color: #4b315c;
+    }
+
+    header {
+      background: linear-gradient(135deg, #c9a4ff, #f3a6d8);
+      padding: 25px 20px;
+      text-align: center;
+      color: white;
+      box-shadow: 0 4px 15px rgba(120, 70, 150, 0.15);
+    }
+
+    header h1 {
+      margin: 0;
+      font-size: 28px;
+    }
+
+    header p {
+      margin: 8px 0 0;
+      opacity: 0.95;
+    }
+
+    .contenedor {
+      width: min(1200px, 94%);
+      margin: 25px auto;
+    }
+
+    .acciones {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      margin-bottom: 20px;
+    }
+
+    button,
+    .boton {
+      border: none;
+      border-radius: 12px;
+      padding: 12px 18px;
+      font-weight: bold;
+      cursor: pointer;
+      text-decoration: none;
+      display: inline-block;
+      transition: 0.2s;
+    }
+
+    .btn-volver {
+      background: #ead8ff;
+      color: #603d78;
+    }
+
+    .btn-recargar {
+      background: #d99be5;
+      color: white;
+    }
+
+    button:hover,
+    .boton:hover {
+      transform: translateY(-2px);
+      opacity: 0.9;
+    }
+
+    .estadisticas {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+      gap: 15px;
+      margin-bottom: 25px;
+    }
+
+    .estadistica {
+      background: white;
+      border-radius: 18px;
+      padding: 20px;
+      text-align: center;
+      box-shadow: 0 5px 18px rgba(100, 60, 120, 0.1);
+    }
+
+    .estadistica .numero {
+      font-size: 28px;
+      font-weight: bold;
+      color: #9a65bd;
+      margin-bottom: 5px;
+    }
+
+    .estadistica .texto {
+      font-size: 14px;
+      color: #80658d;
+    }
+
+    .panel {
+      background: white;
+      border-radius: 20px;
+      padding: 20px;
+      box-shadow: 0 5px 18px rgba(100, 60, 120, 0.1);
+      overflow-x: auto;
+    }
+
+    .panel h2 {
+      margin-top: 0;
+      color: #704587;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      min-width: 850px;
+    }
+
+    th,
+    td {
+      padding: 13px 10px;
+      border-bottom: 1px solid #eee2f4;
+      text-align: left;
+      font-size: 14px;
+    }
+
+    th {
+      background: #f6ebff;
+      color: #684078;
+    }
+
+    tr:hover td {
+      background: #fff8fd;
+    }
+
+    .estado {
+      display: inline-block;
+      padding: 6px 10px;
+      border-radius: 20px;
+      font-size: 12px;
+      font-weight: bold;
+    }
+
+    .disponible {
+      background: #e2f8e8;
+      color: #278047;
+    }
+
+    .vendida {
+      background: #ffe1e8;
+      color: #a53c5b;
+    }
+
+    .sin-datos {
+      text-align: center;
+      padding: 35px;
+      color: #8a7294;
+    }
+
+    .cargando {
+      text-align: center;
+      padding: 30px;
+      color: #8a7294;
+    }
+
+    .error {
+      background: #ffe6ed;
+      color: #9e3654;
+      padding: 15px;
+      border-radius: 12px;
+      margin-bottom: 20px;
+      display: none;
+    }
+
+    .credencial {
+      font-family: monospace;
+      background: #f8f1fb;
+      padding: 4px 7px;
+      border-radius: 6px;
+      display: inline-block;
+      word-break: break-all;
+    }
+
+    @media (max-width: 600px) {
+      header h1 {
+        font-size: 23px;
+      }
+
+      .contenedor {
+        width: 96%;
+      }
+
+      .panel {
+        padding: 12px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <header>
+    <h1>🦋 Butterfly Shop</h1>
+    <p>📦 Gestión de inventario</p>
+  </header>
+
+  <main class="contenedor">
+
+    <div class="acciones">
+      <a href="admin.html" class="boton btn-volver">
+        ← Volver al panel
+      </a>
+
+      <button class="btn-recargar" onclick="cargarInventario()">
+        🔄 Actualizar
+      </button>
+    </div>
+
+    <div id="mensajeError" class="error"></div>
+
+    <section class="estadisticas">
+
+      <div class="estadistica">
+        <div class="numero" id="totalCuentas">0</div>
+        <div class="texto">📦 Cuentas totales</div>
+      </div>
+
+      <div class="estadistica">
+        <div class="numero" id="cuentasDisponibles">0</div>
+        <div class="texto">🟢 Disponibles</div>
+      </div>
+
+      <div class="estadistica">
+        <div class="numero" id="cuentasVendidas">0</div>
+        <div class="texto">🔴 Vendidas</div>
+      </div>
+
+    </section>
+
+    <section class="panel">
+
+      <h2>📋 Inventario de cuentas</h2>
+
+      <div id="cargando" class="cargando">
+        🦋 Cargando inventario...
+      </div>
+
+      <div id="sinDatos" class="sin-datos" style="display:none;">
+        📦 No hay cuentas registradas en el inventario.
+      </div>
+
+      <table id="tablaInventario" style="display:none;">
+
+        <thead>
+          <tr>
+            <th>Producto</th>
+            <th>Correo</th>
+            <th>Contraseña</th>
+            <th>Perfil</th>
+            <th>PIN</th>
+            <th>Estado</th>
+            <th>Vendida a</th>
+            <th>Fecha</th>
+          </tr>
+        </thead>
+
+        <tbody id="cuerpoInventario"></tbody>
+
+      </table>
+
+    </section>
+
+  </main>
+
+  <script>
+
+    let inventarioActual = [];
+
+    function escaparHTML(texto) {
+      if (texto === null || texto === undefined) {
+        return "";
+      }
+
+      return String(texto)
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;")
+        .replace(/'/g, "&#039;");
+    }
+
+    function mostrarError(mensaje) {
+      const elemento = document.getElementById("mensajeError");
+
+      elemento.textContent = mensaje;
+      elemento.style.display = "block";
+    }
+
+    function ocultarError() {
+      const elemento = document.getElementById("mensajeError");
+
+      elemento.textContent = "";
+      elemento.style.display = "none";
+    }
+
+    function formatearFecha(fecha) {
+
+      if (!fecha) {
+        return "—";
+      }
+
+      const fechaObj = new Date(fecha);
+
+      if (isNaN(fechaObj.getTime())) {
+        return "—";
+      }
+
+      return fechaObj.toLocaleString("es-MX", {
+        dateStyle: "short",
+        timeStyle: "short"
+      });
+    }
+
+    async function verificarAdministrador() {
+
+      const {
+        data: { user },
+        error: errorUsuario
+      } = await supabaseClient.auth.getUser();
+
+      if (errorUsuario || !user) {
+        window.location.href = "login.html";
+        return false;
+      }
+
+      const {
+        data: perfil,
+        error: errorPerfil
+      } = await supabaseClient
+        .from("profiles")
+        .select("role")
+        .eq("id", user.id)
+        .single();
+
+      if (errorPerfil || !perfil || perfil.role !== "admin") {
+        alert("No tienes permisos de administrador.");
+        window.location.href = "panel.html";
+        return false;
+      }
+
+      return true;
+    }
+
+    function actualizarEstadisticas(datos) {
+
+      const total = datos.length;
+
+      const disponibles = datos.filter(
+        cuenta => cuenta.status === "available"
+      ).length;
+
+      const vendidas = datos.filter(
+        cuenta => cuenta.status === "sold"
+      ).length;
+
+      document.getElementById("totalCuentas").textContent = total;
+      document.getElementById("cuentasDisponibles").textContent = disponibles;
+      document.getElementById("cuentasVendidas").textContent = vendidas;
+    }
+
+    function mostrarInventario(datos) {
+
+      const cargando = document.getElementById("cargando");
+      const sinDatos = document.getElementById("sinDatos");
+      const tabla = document.getElementById("tablaInventario");
+      const cuerpo = document.getElementById("cuerpoInventario");
+
+      cargando.style.display = "none";
+      cuerpo.innerHTML = "";
+
+      actualizarEstadisticas(datos);
+
+      if (!datos || datos.length === 0) {
+        tabla.style.display = "none";
+        sinDatos.style.display = "block";
+        return;
+      }
+
+      sinDatos.style.display = "none";
+      tabla.style.display = "table";
+
+      datos.forEach(cuenta => {
+
+        const fila = document.createElement("tr");
+
+        const estadoDisponible = cuenta.status === "available";
+
+        const estadoTexto = estadoDisponible
+          ? "Disponible"
+          : "Vendida";
+
+        const estadoClase = estadoDisponible
+          ? "disponible"
+          : "vendida";
+
+        const vendidoA = cuenta.sold_to
+          ? escaparHTML(cuenta.sold_to)
+          : "—";
+
+        fila.innerHTML = `
+          <td>
+            <strong>
+              ${escaparHTML(cuenta.product_name)}
+            </strong>
+          </td>
+
+          <td>
+            <span class="credencial">
+              ${escaparHTML(cuenta.email)}
+            </span>
+          </td>
+
+          <td>
+            <span class="credencial">
+              ${escaparHTML(cuenta.password || "—")}
+            </span>
+          </td>
+
+          <td>
+            ${escaparHTML(cuenta.profile_name || "—")}
+          </td>
+
+          <td>
+            ${escaparHTML(cuenta.profile_pin || "—")}
+          </td>
+
+          <td>
+            <span class="estado ${estadoClase}">
+              ${estadoTexto}
+            </span>
+          </td>
+
+          <td>
+            ${vendidoA}
+          </td>
+
+          <td>
+            ${formatearFecha(cuenta.created_at)}
+          </td>
+        `;
+
+        cuerpo.appendChild(fila);
+      });
+    }
+
+    async function cargarInventario() {
+
+      ocultarError();
+
+      const cargando = document.getElementById("cargando");
+      const tabla = document.getElementById("tablaInventario");
+      const sinDatos = document.getElementById("sinDatos");
+
+      cargando.style.display = "block";
+      tabla.style.display = "none";
+      sinDatos.style.display = "none";
+
+      try {
+
+        const esAdmin = await verificarAdministrador();
+
+        if (!esAdmin) {
+          return;
+        }
+
+        const {
+          data,
+          error
+        } = await supabaseClient.rpc(
+          "get_admin_inventory"
+        );
+
+        if (error) {
+          throw error;
+        }
+
+        inventarioActual = data || [];
+
+        mostrarInventario(inventarioActual);
+
+      } catch (error) {
+
+        console.error("Error cargando inventario:", error);
+
+        cargando.style.display = "none";
+
+        actualizarEstadisticas([]);
+
+        mostrarError(
+          "No se pudo cargar el inventario: " +
+          (error.message || "Error desconocido.")
+        );
+      }
+    }
+
+    document.addEventListener(
+      "DOMContentLoaded",
+      cargarInventario
+    );
+
+  </script>
+
+</body>
+</html>
