@@ -1,12 +1,7 @@
-<!DOCTYPE html>
-<html lang="es">
+<!DOCTYPE html><html lang="es">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-  <title>Butterfly Shop | Productos</title>
-
-  <style>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">  <title>Butterfly Shop | Productos</title>  <style>
     * {
       box-sizing: border-box;
       margin: 0;
@@ -528,6 +523,15 @@
       font-size: 12px;
     }
 
+    .edit-account-btn {
+      background: #eadcff;
+      color: #66377f;
+    }
+
+    .edit-account-btn:hover {
+      background: #dfcdf5;
+    }
+
     .delete-account-btn {
       background: #fde5e5;
       color: #a33f3f;
@@ -582,6 +586,17 @@
       font-family: monospace;
     }
 
+    .edit-note {
+      margin-bottom: 18px;
+      padding: 12px;
+      border-radius: 11px;
+      background: #f8f1ff;
+      border: 1px solid #e5d4f1;
+      color: #77677f;
+      font-size: 13px;
+      line-height: 1.5;
+    }
+
     @media (max-width: 600px) {
 
       .header-content {
@@ -618,429 +633,300 @@
         flex-direction: column;
         align-items: stretch;
       }
+
+      .account-actions {
+        flex-direction: column;
+      }
     }
-  </style>
-</head>
+  </style></head><body>  <header><div class="header-content">
 
-<body>
+  <div class="logo">
+    🦋 Butterfly Shop
+  </div>
 
-  <header>
+  <a href="admin.html" class="back-btn">
+    ← Volver al panel
+  </a>
 
-    <div class="header-content">
+</div>
 
-      <div class="logo">
-        🦋 Butterfly Shop
-      </div>
+  </header>  <main class="container"><div class="welcome">
 
-      <a href="admin.html" class="back-btn">
-        ← Volver al panel
-      </a>
+  <h1>
+    🛍️ Gestionar productos
+  </h1>
 
+  <p>
+    Crea y administra los productos y el inventario de cuentas de Butterfly Shop.
+  </p>
+
+</div>
+
+
+<div class="products-box">
+
+  <div class="products-header">
+
+    <h2>
+      🦋 Productos de la tienda
+    </h2>
+
+    <button class="btn" onclick="crearProducto()">
+      ➕ Nuevo producto
+    </button>
+
+  </div>
+
+
+  <div
+    id="diagnostic-container"
+    class="diagnostic-box"
+  >
+
+    <h3>
+      🔎 Comprobación de sesión
+    </h3>
+
+    <div
+      id="diagnostic-content"
+      class="diagnostic-line"
+    >
+      ⏳ Comprobando usuario...
     </div>
 
-  </header>
+  </div>
 
 
-  <main class="container">
+  <div id="products-container">
 
-    <div class="welcome">
-
-      <h1>
-        🛍️ Gestionar productos
-      </h1>
-
-      <p>
-        Crea y administra los productos y el inventario de cuentas de Butterfly Shop.
-      </p>
-
+    <div class="empty-message">
+      🦋✨ Cargando productos...
     </div>
 
+  </div>
 
-    <div class="products-box">
+</div>
 
-      <div class="products-header">
+  </main>  <!-- MODAL NUEVO PRODUCTO -->  <div id="product-modal" class="modal"><div class="modal-content">
 
-        <h2>
-          🦋 Productos de la tienda
-        </h2>
+  <div class="modal-header">
 
-        <button class="btn" onclick="crearProducto()">
-          ➕ Nuevo producto
-        </button>
+    <h2>
+      🦋 Nuevo producto
+    </h2>
+
+    <button class="close-btn" onclick="cerrarModal()">
+      ×
+    </button>
+
+  </div>
+
+
+  <form id="product-form">
+
+    <div class="form-group">
+
+      <label>
+        🖼️ Imagen del producto
+      </label>
+
+      <div class="upload-box">
+
+        <input
+          type="file"
+          id="product-image"
+          accept="image/*"
+        >
+
+        <p>
+          Selecciona una imagen desde tu dispositivo.
+        </p>
 
       </div>
 
-
-      <div
-        id="diagnostic-container"
-        class="diagnostic-box"
+      <img
+        id="image-preview"
+        class="image-preview"
+        alt="Vista previa"
       >
 
-        <h3>
-          🔎 Comprobación de sesión
-        </h3>
-
-        <div
-          id="diagnostic-content"
-          class="diagnostic-line"
-        >
-          ⏳ Comprobando usuario...
-        </div>
-
-      </div>
+    </div>
 
 
-      <div id="products-container">
+    <div class="form-group">
 
-        <div class="empty-message">
-          🦋✨ Cargando productos...
-        </div>
+      <label for="product-name">
+        🏷️ Nombre del producto
+      </label>
 
-      </div>
+      <input
+        type="text"
+        id="product-name"
+        placeholder="Ej. Netflix"
+        required
+      >
 
     </div>
 
-  </main>
 
+    <div class="form-group">
 
-  <!-- MODAL NUEVO PRODUCTO -->
+      <label for="product-description">
+        📝 Descripción
+      </label>
 
-  <div id="product-modal" class="modal">
-
-    <div class="modal-content">
-
-      <div class="modal-header">
-
-        <h2>
-          🦋 Nuevo producto
-        </h2>
-
-        <button class="close-btn" onclick="cerrarModal()">
-          ×
-        </button>
-
-      </div>
-
-
-      <form id="product-form">
-
-        <div class="form-group">
-
-          <label>
-            🖼️ Imagen del producto
-          </label>
-
-          <div class="upload-box">
-
-            <input
-              type="file"
-              id="product-image"
-              accept="image/*"
-            >
-
-            <p>
-              Selecciona una imagen desde tu dispositivo.
-            </p>
-
-          </div>
-
-          <img
-            id="image-preview"
-            class="image-preview"
-            alt="Vista previa"
-          >
-
-        </div>
-
-
-        <div class="form-group">
-
-          <label for="product-name">
-            🏷️ Nombre del producto
-          </label>
-
-          <input
-            type="text"
-            id="product-name"
-            placeholder="Ej. Netflix"
-            required
-          >
-
-        </div>
-
-
-        <div class="form-group">
-
-          <label for="product-description">
-            📝 Descripción
-          </label>
-
-          <textarea
-            id="product-description"
-            placeholder="Describe el producto..."
-            required
-          ></textarea>
-
-        </div>
-
-
-        <div class="form-group">
-
-          <label for="product-price">
-            💎 Precio en créditos
-          </label>
-
-          <input
-            type="number"
-            id="product-price"
-            min="1"
-            step="1"
-            placeholder="Ej. 50"
-            required
-          >
-
-        </div>
-
-
-        <div class="form-group">
-
-          <label for="product-category">
-            🏷️ Categoría
-          </label>
-
-          <input
-            type="text"
-            id="product-category"
-            placeholder="Ej. Streaming"
-            required
-          >
-
-        </div>
-
-
-        <div class="form-group">
-
-          <label for="product-active">
-            🟢 Estado
-          </label>
-
-          <select id="product-active">
-
-            <option value="true">
-              🟢 Activo
-            </option>
-
-            <option value="false">
-              🔴 Inactivo
-            </option>
-
-          </select>
-
-        </div>
-
-
-        <div
-          id="status-message"
-          class="status-message"
-        ></div>
-
-
-        <div class="modal-actions">
-
-          <button
-            type="button"
-            class="cancel-btn"
-            onclick="cerrarModal()"
-          >
-            Cancelar
-          </button>
-
-          <button
-            type="submit"
-            class="save-btn"
-            id="save-product-btn"
-          >
-            💾 Crear producto
-          </button>
-
-        </div>
-
-      </form>
+      <textarea
+        id="product-description"
+        placeholder="Describe el producto..."
+        required
+      ></textarea>
 
     </div>
+
+
+    <div class="form-group">
+
+      <label for="product-price">
+        💎 Precio en créditos
+      </label>
+
+      <input
+        type="number"
+        id="product-price"
+        min="1"
+        step="1"
+        placeholder="Ej. 50"
+        required
+      >
+
+    </div>
+
+
+    <div class="form-group">
+
+      <label for="product-category">
+        🏷️ Categoría
+      </label>
+
+      <input
+        type="text"
+        id="product-category"
+        placeholder="Ej. Streaming"
+        required
+      >
+
+    </div>
+
+
+    <div class="form-group">
+
+      <label for="product-active">
+        🟢 Estado
+      </label>
+
+      <select id="product-active">
+
+        <option value="true">
+          🟢 Activo
+        </option>
+
+        <option value="false">
+          🔴 Inactivo
+        </option>
+
+      </select>
+
+    </div>
+
+
+    <div
+      id="status-message"
+      class="status-message"
+    ></div>
+
+
+    <div class="modal-actions">
+
+      <button
+        type="button"
+        class="cancel-btn"
+        onclick="cerrarModal()"
+      >
+        Cancelar
+      </button>
+
+      <button
+        type="submit"
+        class="save-btn"
+        id="save-product-btn"
+      >
+        💾 Crear producto
+      </button>
+
+    </div>
+
+  </form>
+
+</div>
+
+  </div>  <!-- MODAL INVENTARIO -->  <div id="inventory-modal" class="modal"><div class="modal-content modal-content-large">
+
+  <div class="modal-header">
+
+    <h2 id="inventory-title">
+      📦 Inventario
+    </h2>
+
+    <button class="close-btn" onclick="cerrarInventario()">
+      ×
+    </button>
 
   </div>
 
 
-  <!-- MODAL INVENTARIO -->
+  <div class="inventory-summary">
 
-  <div id="inventory-modal" class="modal">
+    <h3>
+      🦋 Resumen del inventario
+    </h3>
 
-    <div class="modal-content modal-content-large">
+    <div class="summary-numbers">
 
-      <div class="modal-header">
+      <div class="summary-number">
 
-        <h2 id="inventory-title">
-          📦 Inventario
-        </h2>
+        <strong id="total-accounts">
+          0
+        </strong>
 
-        <button class="close-btn" onclick="cerrarInventario()">
-          ×
-        </button>
-
-      </div>
-
-
-      <div class="inventory-summary">
-
-        <h3>
-          🦋 Resumen del inventario
-        </h3>
-
-        <div class="summary-numbers">
-
-          <div class="summary-number">
-
-            <strong id="total-accounts">
-              0
-            </strong>
-
-            <span>
-              Total
-            </span>
-
-          </div>
-
-
-          <div class="summary-number">
-
-            <strong id="available-accounts">
-              0
-            </strong>
-
-            <span>
-              Disponibles
-            </span>
-
-          </div>
-
-
-          <div class="summary-number">
-
-            <strong id="sold-accounts">
-              0
-            </strong>
-
-            <span>
-              Vendidas
-            </span>
-
-          </div>
-
-        </div>
+        <span>
+          Total
+        </span>
 
       </div>
 
 
-      <form id="account-form">
+      <div class="summary-number">
 
-        <div class="form-group">
+        <strong id="available-accounts">
+          0
+        </strong>
 
-          <label for="account-email">
-            📧 Correo de la cuenta
-          </label>
+        <span>
+          Disponibles
+        </span>
 
-          <input
-            type="email"
-            id="account-email"
-            placeholder="correo@ejemplo.com"
-            required
-          >
-
-        </div>
+      </div>
 
 
-        <div class="form-group">
+      <div class="summary-number">
 
-          <label for="account-password">
-            🔑 Contraseña
-          </label>
+        <strong id="sold-accounts">
+          0
+        </strong>
 
-          <input
-            type="text"
-            id="account-password"
-            class="password-field"
-            placeholder="Contraseña de la cuenta"
-            required
-          >
-
-        </div>
-
-
-        <div class="form-group">
-
-          <label for="account-profile">
-            👤 Nombre del perfil
-          </label>
-
-          <input
-            type="text"
-            id="account-profile"
-            placeholder="Ej. Perfil 3"
-          >
-
-        </div>
-
-
-        <div class="form-group">
-
-          <label for="account-pin">
-            🔢 PIN del perfil
-          </label>
-
-          <input
-            type="text"
-            id="account-pin"
-            placeholder="Ej. 1234"
-          >
-
-        </div>
-
-
-        <div
-          id="account-status-message"
-          class="status-message"
-        ></div>
-
-
-        <div class="modal-actions">
-
-          <button
-            type="submit"
-            class="save-btn"
-            id="save-account-btn"
-          >
-            ➕ Agregar cuenta
-          </button>
-
-        </div>
-
-      </form>
-
-
-      <div
-        style="
-          margin:25px 0 15px;
-          border-top:1px solid #eadcff;
-        "
-      ></div>
-
-
-      <div id="accounts-container">
-
-        <div class="empty-message">
-          ⏳ Cargando inventario...
-        </div>
+        <span>
+          Vendidas
+        </span>
 
       </div>
 
@@ -1049,16 +935,228 @@
   </div>
 
 
-  <!-- Supabase -->
+  <form id="account-form">
 
-  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <div class="form-group">
 
-  <!-- Configuración -->
+      <label for="account-email">
+        📧 Correo de la cuenta
+      </label>
 
-  <script src="supabase-config.js"></script>
+      <input
+        type="email"
+        id="account-email"
+        placeholder="correo@ejemplo.com"
+        required
+      >
+
+    </div>
 
 
-  <script>
+    <div class="form-group">
+
+      <label for="account-password">
+        🔑 Contraseña
+      </label>
+
+      <input
+        type="text"
+        id="account-password"
+        class="password-field"
+        placeholder="Contraseña de la cuenta"
+        required
+      >
+
+    </div>
+
+
+    <div class="form-group">
+
+      <label for="account-profile">
+        👤 Nombre del perfil
+      </label>
+
+      <input
+        type="text"
+        id="account-profile"
+        placeholder="Ej. Perfil 3"
+      >
+
+    </div>
+
+
+    <div class="form-group">
+
+      <label for="account-pin">
+        🔢 PIN del perfil
+      </label>
+
+      <input
+        type="text"
+        id="account-pin"
+        placeholder="Ej. 1234"
+      >
+
+    </div>
+
+
+    <div
+      id="account-status-message"
+      class="status-message"
+    ></div>
+
+
+    <div class="modal-actions">
+
+      <button
+        type="submit"
+        class="save-btn"
+        id="save-account-btn"
+      >
+        ➕ Agregar cuenta
+      </button>
+
+    </div>
+
+  </form>
+
+
+  <div
+    style="
+      margin:25px 0 15px;
+      border-top:1px solid #eadcff;
+    "
+  ></div>
+
+
+  <div id="accounts-container">
+
+    <div class="empty-message">
+      ⏳ Cargando inventario...
+    </div>
+
+  </div>
+
+</div>
+
+  </div>  <!-- MODAL EDITAR CUENTA -->  <div id="edit-account-modal" class="modal"><div class="modal-content">
+
+  <div class="modal-header">
+
+    <h2>
+      ✏️ Editar cuenta
+    </h2>
+
+    <button
+      class="close-btn"
+      type="button"
+      onclick="cerrarEditarCuenta()"
+    >
+      ×
+    </button>
+
+  </div>
+
+
+  <div class="edit-note">
+    🦋 Puedes corregir los datos de una cuenta disponible.
+    <br>
+    🔒 Las cuentas que ya fueron vendidas no se pueden editar.
+  </div>
+
+
+  <form id="edit-account-form">
+
+    <div class="form-group">
+
+      <label for="edit-account-email">
+        📧 Correo de la cuenta
+      </label>
+
+      <input
+        type="email"
+        id="edit-account-email"
+        required
+      >
+
+    </div>
+
+
+    <div class="form-group">
+
+      <label for="edit-account-password">
+        🔑 Contraseña
+      </label>
+
+      <input
+        type="text"
+        id="edit-account-password"
+        class="password-field"
+        required
+      >
+
+    </div>
+
+
+    <div class="form-group">
+
+      <label for="edit-account-profile">
+        👤 Nombre del perfil
+      </label>
+
+      <input
+        type="text"
+        id="edit-account-profile"
+      >
+
+    </div>
+
+
+    <div class="form-group">
+
+      <label for="edit-account-pin">
+        🔢 PIN del perfil
+      </label>
+
+      <input
+        type="text"
+        id="edit-account-pin"
+      >
+
+    </div>
+
+
+    <div
+      id="edit-account-status-message"
+      class="status-message"
+    ></div>
+
+
+    <div class="modal-actions">
+
+      <button
+        type="button"
+        class="cancel-btn"
+        onclick="cerrarEditarCuenta()"
+      >
+        Cancelar
+      </button>
+
+      <button
+        type="submit"
+        class="save-btn"
+        id="save-edit-account-btn"
+      >
+        💾 Guardar cambios
+      </button>
+
+    </div>
+
+  </form>
+
+</div>
+
+  </div>  <!-- Supabase -->  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>  <!-- Configuración -->  <script src="supabase-config.js"></script>  <script>
 
     const modal =
       document.getElementById("product-modal");
@@ -1108,7 +1206,26 @@
       document.getElementById("accounts-container");
 
 
+    const editAccountModal =
+      document.getElementById("edit-account-modal");
+
+
+    const editAccountForm =
+      document.getElementById("edit-account-form");
+
+
+    const editAccountStatusMessage =
+      document.getElementById("edit-account-status-message");
+
+
+    const saveEditAccountButton =
+      document.getElementById("save-edit-account-btn");
+
+
     let productoInventarioActual = null;
+
+
+    let cuentaEditandoActual = null;
 
 
     function escaparHtml(valor) {
@@ -1166,6 +1283,28 @@
         "status-message status-success";
 
       accountStatusMessage.textContent =
+        mensaje;
+
+    }
+
+
+    function mostrarErrorEditarCuenta(mensaje) {
+
+      editAccountStatusMessage.className =
+        "status-message status-error";
+
+      editAccountStatusMessage.textContent =
+        "❌ " + mensaje;
+
+    }
+
+
+    function mostrarExitoEditarCuenta(mensaje) {
+
+      editAccountStatusMessage.className =
+        "status-message status-success";
+
+      editAccountStatusMessage.textContent =
         mensaje;
 
     }
@@ -2208,6 +2347,20 @@
 
               <div class="account-actions">
 
+                ${
+                  cuenta.status === "available"
+                    ? `
+                      <button
+                        class="edit-account-btn"
+                        onclick='abrirEditarCuenta(${JSON.stringify(cuenta)})'
+                      >
+                        ✏️ Editar
+                      </button>
+                    `
+                    : ""
+                }
+
+
                 <button
                   class="delete-account-btn"
                   onclick='eliminarCuenta(${JSON.stringify(cuenta.id)})'
@@ -2268,6 +2421,275 @@
         sold;
 
     }
+
+
+    function abrirEditarCuenta(
+      cuenta
+    ) {
+
+      if (
+        !cuenta ||
+        cuenta.status !== "available"
+      ) {
+
+        alert(
+          "🔒 Esta cuenta ya fue vendida y no se puede editar."
+        );
+
+        return;
+
+      }
+
+
+      cuentaEditandoActual =
+        cuenta.id;
+
+
+      document.getElementById(
+        "edit-account-email"
+      ).value =
+        cuenta.email || "";
+
+
+      document.getElementById(
+        "edit-account-password"
+      ).value =
+        cuenta.password || "";
+
+
+      document.getElementById(
+        "edit-account-profile"
+      ).value =
+        cuenta.profile_name || "";
+
+
+      document.getElementById(
+        "edit-account-pin"
+      ).value =
+        cuenta.profile_pin || "";
+
+
+      editAccountStatusMessage.className =
+        "status-message";
+
+      editAccountStatusMessage.textContent =
+        "";
+
+
+      editAccountModal.classList.add(
+        "active"
+      );
+
+    }
+
+
+    function cerrarEditarCuenta() {
+
+      editAccountModal.classList.remove(
+        "active"
+      );
+
+
+      cuentaEditandoActual =
+        null;
+
+
+      editAccountForm.reset();
+
+
+      editAccountStatusMessage.className =
+        "status-message";
+
+      editAccountStatusMessage.textContent =
+        "";
+
+    }
+
+
+    editAccountForm.addEventListener(
+      "submit",
+      async (event) => {
+
+        event.preventDefault();
+
+
+        if (!cuentaEditandoActual) {
+
+          mostrarErrorEditarCuenta(
+            "No se seleccionó ninguna cuenta."
+          );
+
+          return;
+
+        }
+
+
+        saveEditAccountButton.disabled =
+          true;
+
+        saveEditAccountButton.textContent =
+          "⏳ Guardando...";
+
+
+        editAccountStatusMessage.className =
+          "status-message";
+
+        editAccountStatusMessage.textContent =
+          "";
+
+
+        try {
+
+          await comprobarAdministrador();
+
+
+          const email =
+            document
+              .getElementById("edit-account-email")
+              .value
+              .trim();
+
+
+          const password =
+            document
+              .getElementById("edit-account-password")
+              .value
+              .trim();
+
+
+          const profileName =
+            document
+              .getElementById("edit-account-profile")
+              .value
+              .trim();
+
+
+          const profilePin =
+            document
+              .getElementById("edit-account-pin")
+              .value
+              .trim();
+
+
+          if (!email || !password) {
+
+            throw new Error(
+              "El correo y la contraseña son obligatorios."
+            );
+
+          }
+
+
+          /*
+           * Esta función RPC se creará en Supabase
+           * en el siguiente paso.
+           */
+
+          const {
+            data,
+            error
+          } =
+            await supabaseClient.rpc(
+              "update_product_account",
+              {
+                p_account_id:
+                  cuentaEditandoActual,
+
+                p_email:
+                  email,
+
+                p_password:
+                  password,
+
+                p_profile_name:
+                  profileName || null,
+
+                p_profile_pin:
+                  profilePin || null
+              }
+            );
+
+
+          if (error) {
+
+            console.error(
+              "Error actualizando cuenta:",
+              error
+            );
+
+
+            throw new Error(
+              `Código: ${error.code || "sin código"} | ` +
+              `Mensaje: ${error.message || "sin mensaje"}`
+            );
+
+          }
+
+
+          if (
+            data &&
+            data.success === false
+          ) {
+
+            throw new Error(
+              data.message ||
+              "No se pudo actualizar la cuenta."
+            );
+
+          }
+
+
+          mostrarExitoEditarCuenta(
+            "🦋✨ ¡Cuenta actualizada correctamente!"
+          );
+
+
+          if (productoInventarioActual) {
+
+            await cargarCuentasProducto(
+              productoInventarioActual
+            );
+
+          }
+
+
+          await cargarProductos();
+
+
+          setTimeout(
+            () => {
+
+              cerrarEditarCuenta();
+
+            },
+            900
+          );
+
+
+        } catch (error) {
+
+          console.error(
+            "ERROR AL EDITAR CUENTA:",
+            error
+          );
+
+
+          mostrarErrorEditarCuenta(
+            error.message ||
+            "No se pudo actualizar la cuenta."
+          );
+
+        }
+
+
+        saveEditAccountButton.disabled =
+          false;
+
+        saveEditAccountButton.textContent =
+          "💾 Guardar cambios";
+
+      }
+    );
 
 
     accountForm.addEventListener(
@@ -2595,13 +3017,20 @@
 
         }
 
+
+        if (
+          event.target === editAccountModal
+        ) {
+
+          cerrarEditarCuenta();
+
+        }
+
       }
     );
 
 
     iniciarPagina();
 
-  </script>
-
-</body>
+  </script></body>
 </html>
