@@ -369,12 +369,13 @@
               de los usuarios.
             </p>
 
-            <a
-              href="#solicitudes-recarga"
+            <button
+              type="button"
               class="btn"
+              onclick="irARecargas()"
             >
               Ver recargas
-            </a>
+            </button>
 
           </div>
 
@@ -430,6 +431,35 @@
   <script src="supabase-config.js"></script>
 
   <script>
+
+    function irARecargas() {
+
+      const seccion =
+        document.getElementById(
+          "solicitudes-recarga"
+        );
+
+      if (!seccion) {
+
+        console.error(
+          "No se encontró la sección solicitudes-recarga."
+        );
+
+        return;
+
+      }
+
+      const posicion =
+        seccion.getBoundingClientRect().top
+        + window.pageYOffset;
+
+      window.scrollTo({
+        top: posicion,
+        behavior: "smooth"
+      });
+
+    }
+
 
     async function verificarAdministrador() {
 
