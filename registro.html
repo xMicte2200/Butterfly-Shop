@@ -243,6 +243,14 @@
 
     <script src="supabase-config.js"></script>
 
+
+    <!-- PRUEBA TEMPORAL -->
+
+    <script>
+        alert("REGISTRO JS FUNCIONANDO 🦋");
+    </script>
+
+
     <script>
 
         const form =
@@ -255,6 +263,7 @@
         form.addEventListener("submit", async (event) => {
 
             event.preventDefault();
+
 
             const username =
                 document.getElementById("name").value.trim();
@@ -271,7 +280,9 @@
 
             if (!username) {
 
-                alert("Escribe un nombre de usuario 🦋");
+                alert(
+                    "Escribe un nombre de usuario 🦋"
+                );
 
                 return;
 
@@ -280,7 +291,9 @@
 
             if (password !== confirmPassword) {
 
-                alert("Las contraseñas no coinciden 🦋");
+                alert(
+                    "Las contraseñas no coinciden 🦋"
+                );
 
                 return;
 
@@ -309,21 +322,22 @@
                 const {
                     data,
                     error
-                } = await supabaseClient.auth.signUp({
+                } =
+                    await supabaseClient.auth.signUp({
 
-                    email: email,
+                        email: email,
 
-                    password: password,
+                        password: password,
 
-                    options: {
+                        options: {
 
-                        data: {
-                            username: username
+                            data: {
+                                username: username
+                            }
+
                         }
 
-                    }
-
-                });
+                    });
 
 
                 if (error) {
