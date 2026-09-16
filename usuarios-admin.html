@@ -1,0 +1,774 @@
+<!DOCTYPE html><html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">  <title>Butterfly Shop | Usuarios</title>  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: Arial, sans-serif;
+    }
+
+    body {
+      background: #faf7ff;
+      color: #33243f;
+    }
+
+    header {
+      background: linear-gradient(135deg, #b98cff, #e7a8d8);
+      color: white;
+      padding: 20px;
+      box-shadow: 0 4px 15px #b98cff55;
+    }
+
+    .header-content {
+      max-width: 1200px;
+      margin: auto;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 15px;
+    }
+
+    .logo {
+      font-size: 24px;
+      font-weight: bold;
+    }
+
+    .admin-tag {
+      background: #ffffff33;
+      padding: 8px 14px;
+      border-radius: 20px;
+      font-size: 13px;
+    }
+
+    .container {
+      max-width: 1200px;
+      margin: 30px auto;
+      padding: 0 18px;
+    }
+
+    .top-bar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 15px;
+      margin-bottom: 25px;
+      flex-wrap: wrap;
+    }
+
+    .title h1 {
+      color: #743d91;
+      margin-bottom: 7px;
+    }
+
+    .title p {
+      color: #77677f;
+    }
+
+    .back-btn {
+      display: inline-block;
+      text-decoration: none;
+      background: white;
+      color: #743d91;
+      border: 1px solid #eadcff;
+      padding: 10px 15px;
+      border-radius: 12px;
+      font-weight: bold;
+      box-shadow: 0 4px 12px #8d5ca515;
+    }
+
+    .summary {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(190px, 1fr));
+      gap: 18px;
+      margin-bottom: 25px;
+    }
+
+    .summary-card {
+      background: white;
+      border: 1px solid #eadcff;
+      border-radius: 18px;
+      padding: 20px;
+      box-shadow: 0 5px 18px #8d5ca515;
+    }
+
+    .summary-icon {
+      font-size: 28px;
+      margin-bottom: 8px;
+    }
+
+    .summary-card h2 {
+      color: #743d91;
+      font-size: 25px;
+    }
+
+    .summary-card p {
+      color: #81758a;
+      font-size: 14px;
+      margin-top: 4px;
+    }
+
+    .users-box {
+      background: white;
+      border: 1px solid #eadcff;
+      border-radius: 18px;
+      box-shadow: 0 5px 18px #8d5ca515;
+      overflow: hidden;
+    }
+
+    .box-header {
+      padding: 20px;
+      border-bottom: 1px solid #eee5f7;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 15px;
+      flex-wrap: wrap;
+    }
+
+    .box-header h2 {
+      color: #66377f;
+      font-size: 20px;
+    }
+
+    .refresh-btn {
+      border: none;
+      cursor: pointer;
+      background: linear-gradient(135deg, #9b6de3, #d98bc9);
+      color: white;
+      padding: 10px 15px;
+      border-radius: 12px;
+      font-weight: bold;
+    }
+
+    .table-container {
+      width: 100%;
+      overflow-x: auto;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      min-width: 800px;
+    }
+
+    th {
+      background: #f7f0ff;
+      color: #66377f;
+      text-align: left;
+      padding: 14px;
+      font-size: 13px;
+    }
+
+    td {
+      padding: 15px 14px;
+      border-top: 1px solid #eee5f7;
+      color: #665a6e;
+      font-size: 14px;
+      vertical-align: middle;
+    }
+
+    tr:hover td {
+      background: #fcf9ff;
+    }
+
+    .username {
+      color: #5d3970;
+      font-weight: bold;
+    }
+
+    .email {
+      color: #77677f;
+    }
+
+    .credits {
+      display: inline-block;
+      background: #f0e6ff;
+      color: #7546a1;
+      padding: 6px 10px;
+      border-radius: 20px;
+      font-weight: bold;
+      white-space: nowrap;
+    }
+
+    .role {
+      display: inline-block;
+      padding: 6px 10px;
+      border-radius: 20px;
+      background: #f7eafa;
+      color: #8b4d8e;
+      font-size: 12px;
+      font-weight: bold;
+    }
+
+    .role.admin {
+      background: #eee2ff;
+      color: #6b3ba0;
+    }
+
+    .loading,
+    .empty,
+    .error {
+      text-align: center;
+      padding: 50px 20px;
+      color: #81758a;
+    }
+
+    .loading {
+      color: #743d91;
+      font-size: 17px;
+    }
+
+    .error {
+      color: #a24c73;
+    }
+
+    footer {
+      text-align: center;
+      padding: 25px;
+      color: #8b7b91;
+      font-size: 13px;
+    }
+
+    @media (max-width: 600px) {
+
+      .header-content {
+        flex-direction: column;
+        text-align: center;
+      }
+
+      .title h1 {
+        font-size: 25px;
+      }
+
+      .top-bar {
+        align-items: stretch;
+      }
+
+      .back-btn {
+        text-align: center;
+      }
+    }
+  </style></head><body>  <div id="loading" class="loading">
+    🦋 Verificando acceso...
+  </div>  <div id="page-content" style="display:none;"><header>
+
+  <div class="header-content">
+
+    <div class="logo">
+      🦋 Butterfly Shop
+    </div>
+
+    <div class="admin-tag">
+      👑 Gestión de Usuarios
+    </div>
+
+  </div>
+
+</header>
+
+
+<main class="container">
+
+  <div class="top-bar">
+
+    <div class="title">
+
+      <h1>
+        👥 Usuarios
+      </h1>
+
+      <p>
+        Consulta los usuarios registrados en Butterfly Shop.
+      </p>
+
+    </div>
+
+    <a
+      href="admin.html"
+      class="back-btn"
+    >
+      ← Volver al panel
+    </a>
+
+  </div>
+
+
+  <div class="summary">
+
+    <div class="summary-card">
+
+      <div class="summary-icon">
+        👥
+      </div>
+
+      <h2 id="total-users">
+        0
+      </h2>
+
+      <p>
+        Usuarios registrados
+      </p>
+
+    </div>
+
+
+    <div class="summary-card">
+
+      <div class="summary-icon">
+        💎
+      </div>
+
+      <h2 id="total-credits">
+        0
+      </h2>
+
+      <p>
+        Créditos disponibles
+      </p>
+
+    </div>
+
+
+    <div class="summary-card">
+
+      <div class="summary-icon">
+        👑
+      </div>
+
+      <h2 id="total-admins">
+        0
+      </h2>
+
+      <p>
+        Administradores
+      </p>
+
+    </div>
+
+  </div>
+
+
+  <div class="users-box">
+
+    <div class="box-header">
+
+      <h2>
+        📋 Usuarios registrados
+      </h2>
+
+      <button
+        class="refresh-btn"
+        onclick="cargarUsuarios()"
+      >
+        🔄 Actualizar
+      </button>
+
+    </div>
+
+
+    <div class="table-container">
+
+      <div
+        id="users-container"
+        class="loading"
+      >
+        🦋 Cargando usuarios...
+      </div>
+
+    </div>
+
+  </div>
+
+</main>
+
+
+<footer>
+  🦋 Butterfly Shop · Gestión de usuarios
+</footer>
+
+  </div>  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>  <script src="supabase-config.js"></script>  <script>
+
+    /* =========================
+       VERIFICAR ADMINISTRADOR
+    ========================= */
+
+    async function verificarAdministrador() {
+
+      try {
+
+        const {
+          data: { user },
+          error: userError
+        } = await supabaseClient.auth.getUser();
+
+
+        if (userError || !user) {
+
+          window.location.href = "login.html";
+
+          return;
+
+        }
+
+
+        const {
+          data: profile,
+          error: profileError
+        } = await supabaseClient
+          .from("profiles")
+          .select("role")
+          .eq("id", user.id)
+          .single();
+
+
+        if (
+          profileError ||
+          !profile ||
+          profile.role !== "admin"
+        ) {
+
+          alert(
+            "No tienes permisos de administrador. 🦋"
+          );
+
+          window.location.href = "panel.html";
+
+          return;
+
+        }
+
+
+        document.getElementById(
+          "loading"
+        ).style.display = "none";
+
+
+        document.getElementById(
+          "page-content"
+        ).style.display = "block";
+
+
+        cargarUsuarios();
+
+
+      } catch (error) {
+
+        console.error(error);
+
+        alert(
+          "Ocurrió un error al verificar el acceso."
+        );
+
+        window.location.href = "panel.html";
+
+      }
+
+    }
+
+
+    /* =========================
+       ESCAPAR HTML
+    ========================= */
+
+    function escaparHTML(texto) {
+
+      if (
+        texto === null ||
+        texto === undefined
+      ) {
+        return "";
+      }
+
+      return String(texto)
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;")
+        .replace(/'/g, "&#039;");
+
+    }
+
+
+    /* =========================
+       CARGAR USUARIOS
+    ========================= */
+
+    async function cargarUsuarios() {
+
+      const container =
+        document.getElementById(
+          "users-container"
+        );
+
+
+      container.className = "loading";
+
+      container.innerHTML =
+        "🦋 Cargando usuarios...";
+
+
+      try {
+
+        const {
+          data,
+          error
+        } = await supabaseClient.rpc(
+          "get_all_users"
+        );
+
+
+        if (error) {
+          throw error;
+        }
+
+
+        const usuarios =
+          data || [];
+
+
+        let totalCredits = 0;
+
+        let totalAdmins = 0;
+
+
+        usuarios.forEach(usuario => {
+
+          totalCredits +=
+            Number(
+              usuario.credits || 0
+            );
+
+
+          if (
+            usuario.role === "admin"
+          ) {
+
+            totalAdmins++;
+
+          }
+
+        });
+
+
+        document.getElementById(
+          "total-users"
+        ).textContent =
+          usuarios.length;
+
+
+        document.getElementById(
+          "total-credits"
+        ).textContent =
+          totalCredits.toLocaleString(
+            "es-MX"
+          );
+
+
+        document.getElementById(
+          "total-admins"
+        ).textContent =
+          totalAdmins;
+
+
+        if (usuarios.length === 0) {
+
+          container.className = "empty";
+
+          container.innerHTML = `
+            🦋 No hay usuarios registrados.
+          `;
+
+          return;
+
+        }
+
+
+        container.className = "";
+
+
+        container.innerHTML = `
+
+          <table>
+
+            <thead>
+
+              <tr>
+
+                <th>
+                  Usuario
+                </th>
+
+                <th>
+                  Correo
+                </th>
+
+                <th>
+                  Créditos
+                </th>
+
+                <th>
+                  Rol
+                </th>
+
+                <th>
+                  Registro
+                </th>
+
+              </tr>
+
+            </thead>
+
+            <tbody>
+
+              ${
+                usuarios.map(usuario => {
+
+                  const fecha =
+                    usuario.created_at
+                      ? new Date(
+                          usuario.created_at
+                        ).toLocaleString(
+                          "es-MX",
+                          {
+                            dateStyle: "medium",
+                            timeStyle: "short"
+                          }
+                        )
+                      : "Sin fecha";
+
+
+                  const roleClass =
+                    usuario.role === "admin"
+                      ? "role admin"
+                      : "role";
+
+
+                  const roleText =
+                    usuario.role === "admin"
+                      ? "👑 Administrador"
+                      : "👤 Usuario";
+
+
+                  return `
+
+                    <tr>
+
+                      <td>
+
+                        <div class="username">
+
+                          🦋 ${
+                            escaparHTML(
+                              usuario.username ||
+                              "Sin username"
+                            )
+                          }
+
+                        </div>
+
+                      </td>
+
+
+                      <td>
+
+                        <div class="email">
+
+                          ${
+                            escaparHTML(
+                              usuario.email ||
+                              "Sin correo"
+                            )
+                          }
+
+                        </div>
+
+                      </td>
+
+
+                      <td>
+
+                        <span class="credits">
+
+                          💎 ${
+                            Number(
+                              usuario.credits || 0
+                            ).toLocaleString(
+                              "es-MX"
+                            )
+                          }
+
+                        </span>
+
+                      </td>
+
+
+                      <td>
+
+                        <span class="${roleClass}">
+
+                          ${roleText}
+
+                        </span>
+
+                      </td>
+
+
+                      <td>
+
+                        ${fecha}
+
+                      </td>
+
+                    </tr>
+
+                  `;
+
+                }).join("")
+
+              }
+
+            </tbody>
+
+          </table>
+
+        `;
+
+
+      } catch (error) {
+
+        console.error(error);
+
+
+        container.className = "error";
+
+
+        container.innerHTML = `
+
+          ❌ No se pudieron cargar los usuarios.
+
+          <br><br>
+
+          <small>
+            ${escaparHTML(
+              error.message ||
+              "Error desconocido."
+            )}
+          </small>
+
+        `;
+
+      }
+
+    }
+
+
+    /* =========================
+       INICIAR
+    ========================= */
+
+    verificarAdministrador();
+
+  </script></body>
+</html>
