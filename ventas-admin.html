@@ -1,0 +1,823 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+
+  <meta charset="UTF-8">
+
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0"
+  >
+
+  <title>Ventas | Butterfly Shop</title>
+
+  <style>
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: Arial, sans-serif;
+    }
+
+    body {
+      background: #faf7ff;
+      color: #33243f;
+    }
+
+    header {
+      background: linear-gradient(135deg, #b98cff, #e7a8d8);
+      color: white;
+      padding: 22px;
+      box-shadow: 0 4px 15px #b98cff55;
+    }
+
+    .header-content {
+      max-width: 1250px;
+      margin: auto;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 15px;
+    }
+
+    .logo {
+      font-size: 24px;
+      font-weight: bold;
+    }
+
+    .tag {
+      background: #ffffff33;
+      padding: 8px 14px;
+      border-radius: 20px;
+      font-size: 13px;
+    }
+
+    .container {
+      max-width: 1250px;
+      margin: 30px auto;
+      padding: 0 18px;
+    }
+
+    .top-bar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 15px;
+      flex-wrap: wrap;
+      margin-bottom: 25px;
+    }
+
+    h1 {
+      color: #743d91;
+      margin-bottom: 7px;
+    }
+
+    .subtitle {
+      color: #81758a;
+      font-size: 14px;
+    }
+
+    .actions {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    .btn {
+      border: none;
+      cursor: pointer;
+      text-decoration: none;
+      display: inline-block;
+      background: linear-gradient(135deg, #9b6de3, #d98bc9);
+      color: white;
+      padding: 11px 16px;
+      border-radius: 12px;
+      font-weight: bold;
+      font-size: 14px;
+    }
+
+    .btn:hover {
+      opacity: 0.9;
+    }
+
+    .btn-secondary {
+      background: #eee3ff;
+      color: #70458d;
+    }
+
+    .stats {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(190px, 1fr));
+      gap: 18px;
+      margin-bottom: 25px;
+    }
+
+    .stat {
+      background: white;
+      border: 1px solid #eadcff;
+      border-radius: 18px;
+      padding: 20px;
+      box-shadow: 0 5px 18px #8d5ca515;
+    }
+
+    .stat-icon {
+      font-size: 28px;
+      margin-bottom: 8px;
+    }
+
+    .stat h2 {
+      color: #743d91;
+      font-size: 25px;
+    }
+
+    .stat p {
+      color: #81758a;
+      font-size: 14px;
+      margin-top: 4px;
+    }
+
+    .table-box {
+      background: white;
+      border: 1px solid #eadcff;
+      border-radius: 18px;
+      padding: 20px;
+      box-shadow: 0 5px 18px #8d5ca515;
+      overflow-x: auto;
+    }
+
+    .table-title {
+      color: #743d91;
+      font-size: 20px;
+      margin-bottom: 18px;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      min-width: 850px;
+    }
+
+    th {
+      background: #f1e8ff;
+      color: #66377f;
+      text-align: left;
+      padding: 13px;
+      font-size: 13px;
+      white-space: nowrap;
+    }
+
+    td {
+      padding: 13px;
+      border-bottom: 1px solid #eee5f7;
+      color: #5f5368;
+      font-size: 13px;
+      vertical-align: middle;
+    }
+
+    tr:last-child td {
+      border-bottom: none;
+    }
+
+    .badge {
+      display: inline-block;
+      padding: 6px 10px;
+      border-radius: 20px;
+      font-size: 12px;
+      font-weight: bold;
+    }
+
+    .badge-completed {
+      background: #e4f8e9;
+      color: #328047;
+    }
+
+    .badge-pending {
+      background: #fff3d7;
+      color: #9a711b;
+    }
+
+    .badge-cancelled {
+      background: #ffe1e5;
+      color: #a33d4c;
+    }
+
+    .empty,
+    .loading,
+    .error {
+      text-align: center;
+      padding: 45px 15px;
+      color: #81758a;
+    }
+
+    .loading {
+      color: #743d91;
+      font-size: 17px;
+    }
+
+    .error {
+      color: #b14c67;
+    }
+
+    .product-name {
+      color: #66377f;
+      font-weight: bold;
+    }
+
+    .credits {
+      color: #743d91;
+      font-weight: bold;
+    }
+
+    .date {
+      white-space: nowrap;
+      color: #81758a;
+    }
+
+    footer {
+      text-align: center;
+      padding: 25px;
+      color: #8b7b91;
+      font-size: 13px;
+    }
+
+    @media (max-width: 600px) {
+
+      .header-content {
+        flex-direction: column;
+        text-align: center;
+      }
+
+      .top-bar {
+        align-items: flex-start;
+        flex-direction: column;
+      }
+
+    }
+
+  </style>
+
+</head>
+
+
+<body>
+
+
+  <header>
+
+    <div class="header-content">
+
+      <div class="logo">
+        🦋 Butterfly Shop
+      </div>
+
+      <div class="tag">
+        💰 Administración de ventas
+      </div>
+
+    </div>
+
+  </header>
+
+
+  <main class="container">
+
+
+    <div class="top-bar">
+
+      <div>
+
+        <h1>
+          💰 Ventas realizadas
+        </h1>
+
+        <p class="subtitle">
+          Consulta todas las compras hechas en Butterfly Shop.
+        </p>
+
+      </div>
+
+
+      <div class="actions">
+
+        <a
+          href="admin.html"
+          class="btn btn-secondary"
+        >
+          ← Volver al panel
+        </a>
+
+        <button
+          class="btn"
+          onclick="cargarVentas()"
+        >
+          🔄 Actualizar
+        </button>
+
+      </div>
+
+    </div>
+
+
+    <div class="stats">
+
+
+      <div class="stat">
+
+        <div class="stat-icon">
+          🛍️
+        </div>
+
+        <h2 id="total-ventas">
+          0
+        </h2>
+
+        <p>
+          Ventas totales
+        </p>
+
+      </div>
+
+
+      <div class="stat">
+
+        <div class="stat-icon">
+          💎
+        </div>
+
+        <h2 id="total-creditos">
+          0
+        </h2>
+
+        <p>
+          Créditos vendidos
+        </p>
+
+      </div>
+
+
+      <div class="stat">
+
+        <div class="stat-icon">
+          👥
+        </div>
+
+        <h2 id="clientes">
+          0
+        </h2>
+
+        <p>
+          Clientes con compras
+        </p>
+
+      </div>
+
+
+    </div>
+
+
+    <section class="table-box">
+
+      <h2 class="table-title">
+        📋 Historial de compras
+      </h2>
+
+
+      <div id="contenido">
+
+        <div class="loading">
+          🦋 Cargando ventas...
+        </div>
+
+      </div>
+
+    </section>
+
+
+  </main>
+
+
+  <footer>
+    🦋 Butterfly Shop · Panel administrativo
+  </footer>
+
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+  <script src="supabase-config.js"></script>
+
+
+  <script>
+
+
+    function escaparHTML(valor) {
+
+      if (valor === null || valor === undefined) {
+        return "";
+      }
+
+      return String(valor)
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;")
+        .replace(/'/g, "&#039;");
+
+    }
+
+
+    function obtenerClaseEstado(status) {
+
+      const estado =
+        String(status || "").toLowerCase();
+
+      if (
+        estado === "completed" ||
+        estado === "completada" ||
+        estado === "completado"
+      ) {
+        return "badge-completed";
+      }
+
+      if (
+        estado === "pending" ||
+        estado === "pendiente"
+      ) {
+        return "badge-pending";
+      }
+
+      return "badge-cancelled";
+
+    }
+
+
+    function traducirEstado(status) {
+
+      const estado =
+        String(status || "").toLowerCase();
+
+      if (
+        estado === "completed" ||
+        estado === "completada" ||
+        estado === "completado"
+      ) {
+        return "Completada";
+      }
+
+      if (
+        estado === "pending" ||
+        estado === "pendiente"
+      ) {
+        return "Pendiente";
+      }
+
+      if (
+        estado === "cancelled" ||
+        estado === "cancelada" ||
+        estado === "cancelado"
+      ) {
+        return "Cancelada";
+      }
+
+      return status || "Sin estado";
+
+    }
+
+
+    async function verificarAdministrador() {
+
+      try {
+
+        const {
+          data: { user },
+          error: userError
+        } = await supabaseClient.auth.getUser();
+
+
+        if (userError || !user) {
+
+          window.location.href = "login.html";
+
+          return false;
+
+        }
+
+
+        const {
+          data: profile,
+          error: profileError
+        } = await supabaseClient
+          .from("profiles")
+          .select("role")
+          .eq("id", user.id)
+          .single();
+
+
+        if (
+          profileError ||
+          !profile ||
+          profile.role !== "admin"
+        ) {
+
+          alert(
+            "No tienes permisos de administrador. 🦋"
+          );
+
+          window.location.href = "panel.html";
+
+          return false;
+
+        }
+
+
+        return true;
+
+      } catch (error) {
+
+        console.error(error);
+
+        window.location.href = "panel.html";
+
+        return false;
+
+      }
+
+    }
+
+
+    async function cargarVentas() {
+
+      const contenido =
+        document.getElementById("contenido");
+
+
+      contenido.innerHTML = `
+        <div class="loading">
+          🦋 Cargando ventas...
+        </div>
+      `;
+
+
+      try {
+
+
+        const autorizado =
+          await verificarAdministrador();
+
+
+        if (!autorizado) {
+          return;
+        }
+
+
+        const {
+          data,
+          error
+        } = await supabaseClient.rpc(
+          "get_admin_sales"
+        );
+
+
+        if (error) {
+
+          throw error;
+
+        }
+
+
+        const ventas =
+          data || [];
+
+
+        const totalVentas =
+          ventas.length;
+
+
+        const totalCreditos =
+          ventas.reduce(
+            (total, venta) =>
+              total +
+              Number(
+                venta.price_credits || 0
+              ),
+            0
+          );
+
+
+        const clientes =
+          new Set(
+            ventas.map(
+              venta => venta.user_id
+            )
+          ).size;
+
+
+        document.getElementById(
+          "total-ventas"
+        ).textContent =
+          totalVentas;
+
+
+        document.getElementById(
+          "total-creditos"
+        ).textContent =
+          totalCreditos;
+
+
+        document.getElementById(
+          "clientes"
+        ).textContent =
+          clientes;
+
+
+        if (ventas.length === 0) {
+
+          contenido.innerHTML = `
+            <div class="empty">
+              🦋 Todavía no hay ventas registradas.
+            </div>
+          `;
+
+          return;
+
+        }
+
+
+        contenido.innerHTML = `
+
+          <table>
+
+            <thead>
+
+              <tr>
+
+                <th>Usuario</th>
+
+                <th>Correo</th>
+
+                <th>Producto</th>
+
+                <th>Créditos</th>
+
+                <th>Estado</th>
+
+                <th>Fecha</th>
+
+                <th>ID de compra</th>
+
+              </tr>
+
+            </thead>
+
+            <tbody>
+
+              ${
+                ventas.map(venta => {
+
+                  const fecha =
+                    venta.created_at
+                      ? new Date(
+                          venta.created_at
+                        ).toLocaleString(
+                          "es-MX",
+                          {
+                            dateStyle: "medium",
+                            timeStyle: "short"
+                          }
+                        )
+                      : "Sin fecha";
+
+
+                  return `
+
+                    <tr>
+
+                      <td>
+                        <strong>
+                          ${
+                            escaparHTML(
+                              venta.username ||
+                              "Sin usuario"
+                            )
+                          }
+                        </strong>
+                      </td>
+
+                      <td>
+                        ${
+                          escaparHTML(
+                            venta.email ||
+                            "Sin correo"
+                          )
+                        }
+                      </td>
+
+                      <td class="product-name">
+                        ${
+                          escaparHTML(
+                            venta.product_name ||
+                            "Producto eliminado"
+                          )
+                        }
+                      </td>
+
+                      <td class="credits">
+                        💎 ${
+                          Number(
+                            venta.price_credits || 0
+                          )
+                        }
+                      </td>
+
+                      <td>
+
+                        <span
+                          class="badge ${
+                            obtenerClaseEstado(
+                              venta.status
+                            )
+                          }"
+                        >
+                          ${
+                            escaparHTML(
+                              traducirEstado(
+                                venta.status
+                              )
+                            )
+                          }
+                        </span>
+
+                      </td>
+
+                      <td class="date">
+                        ${
+                          escaparHTML(
+                            fecha
+                          )
+                        }
+                      </td>
+
+                      <td>
+                        <small>
+                          ${
+                            escaparHTML(
+                              venta.purchase_id
+                            )
+                          }
+                        </small>
+                      </td>
+
+                    </tr>
+
+                  `;
+
+                }).join("")
+
+              }
+
+            </tbody>
+
+          </table>
+
+        `;
+
+
+      } catch (error) {
+
+        console.error(error);
+
+
+        contenido.innerHTML = `
+
+          <div class="error">
+
+            ❌ No se pudieron cargar las ventas.
+
+            <br><br>
+
+            ${
+              escaparHTML(
+                error.message ||
+                "Error desconocido"
+              )
+            }
+
+          </div>
+
+        `;
+
+      }
+
+    }
+
+
+    cargarVentas();
+
+
+  </script>
+
+
+</body>
+
+</html>
