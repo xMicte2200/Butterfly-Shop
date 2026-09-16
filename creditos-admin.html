@@ -1,0 +1,471 @@
+<!DOCTYPE html><html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">  <title>Butterfly Shop — Créditos</title>  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>  <script src="supabase-config.js"></script>  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      font-family: Arial, sans-serif;
+      background: linear-gradient(135deg, #f8edff, #fff4fa, #eee6ff);
+      color: #4d3b57;
+    }
+
+    header {
+      padding: 22px 20px;
+      text-align: center;
+      background: linear-gradient(135deg, #9b59b6, #d98acb);
+      color: white;
+      box-shadow: 0 4px 15px rgba(120, 70, 140, 0.2);
+    }
+
+    header h1 {
+      margin: 0;
+      font-size: 28px;
+    }
+
+    header p {
+      margin: 7px 0 0;
+      font-size: 14px;
+      opacity: 0.95;
+    }
+
+    main {
+      width: min(1100px, 94%);
+      margin: 25px auto;
+    }
+
+    .acciones {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      margin-bottom: 20px;
+    }
+
+    button {
+      border: none;
+      border-radius: 12px;
+      padding: 11px 18px;
+      font-size: 14px;
+      font-weight: bold;
+      cursor: pointer;
+      transition: 0.2s;
+    }
+
+    button:hover {
+      transform: translateY(-1px);
+      opacity: 0.92;
+    }
+
+    .btn-principal {
+      background: #9b59b6;
+      color: white;
+    }
+
+    .btn-regresar {
+      background: white;
+      color: #7d4b91;
+      border: 1px solid #dec8e8;
+    }
+
+    .mensaje {
+      display: none;
+      padding: 14px;
+      border-radius: 12px;
+      margin-bottom: 20px;
+      text-align: center;
+      font-weight: bold;
+    }
+
+    .mensaje.error {
+      display: block;
+      background: #ffe5ed;
+      color: #a33b59;
+    }
+
+    .mensaje.exito {
+      display: block;
+      background: #e7f8ed;
+      color: #287544;
+    }
+
+    .estado {
+      background: white;
+      border-radius: 18px;
+      padding: 25px;
+      text-align: center;
+      box-shadow: 0 5px 20px rgba(100, 60, 120, 0.1);
+      margin-bottom: 20px;
+    }
+
+    .estado.oculto {
+      display: none;
+    }
+
+    .estadisticas {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
+      gap: 15px;
+      margin-bottom: 22px;
+    }
+
+    .tarjeta {
+      background: white;
+      border-radius: 18px;
+      padding: 20px;
+      text-align: center;
+      box-shadow: 0 5px 20px rgba(100, 60, 120, 0.1);
+    }
+
+    .tarjeta .icono {
+      font-size: 28px;
+    }
+
+    .tarjeta .numero {
+      margin-top: 8px;
+      font-size: 25px;
+      font-weight: bold;
+      color: #8b4da3;
+    }
+
+    .tarjeta .texto {
+      margin-top: 5px;
+      font-size: 13px;
+      color: #76657d;
+    }
+
+    .tabla-contenedor {
+      background: white;
+      border-radius: 18px;
+      padding: 18px;
+      box-shadow: 0 5px 20px rgba(100, 60, 120, 0.1);
+      overflow-x: auto;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      min-width: 650px;
+    }
+
+    th {
+      background: #f3e5f8;
+      color: #684577;
+      padding: 13px 10px;
+      text-align: left;
+      font-size: 13px;
+    }
+
+    td {
+      padding: 13px 10px;
+      border-bottom: 1px solid #eee4f2;
+      font-size: 14px;
+    }
+
+    tr:last-child td {
+      border-bottom: none;
+    }
+
+    .creditos {
+      font-weight: bold;
+      color: #8b4da3;
+    }
+
+    .rol {
+      display: inline-block;
+      padding: 5px 9px;
+      border-radius: 20px;
+      background: #f3e5f8;
+      color: #78458d;
+      font-size: 12px;
+      font-weight: bold;
+    }
+
+    .sin-datos {
+      text-align: center;
+      padding: 30px;
+      color: #806f87;
+    }
+
+    footer {
+      text-align: center;
+      padding: 25px;
+      color: #8b7a92;
+      font-size: 13px;
+    }
+  </style></head><body>  <header>
+    <h1>🦋 Butterfly Shop</h1>
+    <p>💎 Gestión de créditos de usuarios</p>
+  </header>  <main><div class="acciones">
+  <button
+    class="btn-regresar"
+    onclick="window.location.href='admin.html'"
+  >
+    ← Regresar al panel
+  </button>
+
+  <button
+    class="btn-principal"
+    onclick="cargarCreditos()"
+  >
+    🔄 Actualizar
+  </button>
+</div>
+
+<div id="mensaje" class="mensaje"></div>
+
+<div id="cargando" class="estado">
+  🦋 Cargando información de créditos...
+</div>
+
+<section id="contenido" class="oculto">
+
+  <div class="estadisticas">
+
+    <div class="tarjeta">
+      <div class="icono">👥</div>
+      <div id="totalUsuarios" class="numero">0</div>
+      <div class="texto">Usuarios registrados</div>
+    </div>
+
+    <div class="tarjeta">
+      <div class="icono">💎</div>
+      <div id="totalCreditos" class="numero">0</div>
+      <div class="texto">Créditos en circulación</div>
+    </div>
+
+    <div class="tarjeta">
+      <div class="icono">👑</div>
+      <div id="totalAdmins" class="numero">0</div>
+      <div class="texto">Administradores</div>
+    </div>
+
+  </div>
+
+  <div class="tabla-contenedor">
+
+    <table>
+      <thead>
+        <tr>
+          <th>👤 Usuario</th>
+          <th>📧 Correo</th>
+          <th>💎 Créditos</th>
+          <th>🛡️ Rol</th>
+        </tr>
+      </thead>
+
+      <tbody id="tablaUsuarios"></tbody>
+    </table>
+
+    <div id="sinDatos" class="sin-datos" style="display:none;">
+      🦋 No hay usuarios registrados.
+    </div>
+
+  </div>
+
+</section>
+
+  </main>  <footer>
+    🦋 Butterfly Shop · Panel administrativo 💗
+  </footer>  <script>
+
+    function escaparHTML(valor) {
+      if (valor === null || valor === undefined) {
+        return "";
+      }
+
+      return String(valor)
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;")
+        .replace(/'/g, "&#039;");
+    }
+
+
+    function mostrarMensaje(texto, tipo = "error") {
+      const mensaje = document.getElementById("mensaje");
+
+      mensaje.textContent = texto;
+      mensaje.className = "mensaje " + tipo;
+    }
+
+
+    function ocultarMensaje() {
+      const mensaje = document.getElementById("mensaje");
+
+      mensaje.textContent = "";
+      mensaje.className = "mensaje";
+    }
+
+
+    async function verificarAdministrador() {
+
+      const {
+        data: {
+          user
+        },
+        error: authError
+      } = await supabaseClient.auth.getUser();
+
+      if (authError) {
+        throw new Error("No se pudo verificar la sesión.");
+      }
+
+      if (!user) {
+        window.location.href = "login.html";
+        return false;
+      }
+
+      const {
+        data: perfil,
+        error: perfilError
+      } = await supabaseClient
+        .from("profiles")
+        .select("role")
+        .eq("id", user.id)
+        .single();
+
+      if (perfilError) {
+        throw new Error("No se pudo verificar tu perfil.");
+      }
+
+      if (!perfil || perfil.role !== "admin") {
+        alert("No tienes permisos de administrador.");
+        window.location.href = "panel.html";
+        return false;
+      }
+
+      return true;
+    }
+
+
+    async function cargarCreditos() {
+
+      const cargando = document.getElementById("cargando");
+      const contenido = document.getElementById("contenido");
+      const tabla = document.getElementById("tablaUsuarios");
+      const sinDatos = document.getElementById("sinDatos");
+
+      ocultarMensaje();
+
+      cargando.style.display = "block";
+      cargando.textContent = "🦋 Cargando información de créditos...";
+      contenido.classList.add("oculto");
+
+      try {
+
+        const esAdmin = await verificarAdministrador();
+
+        if (!esAdmin) {
+          return;
+        }
+
+        const {
+          data,
+          error
+        } = await supabaseClient.rpc(
+          "get_all_user_credits"
+        );
+
+        if (error) {
+          throw error;
+        }
+
+        tabla.innerHTML = "";
+
+        if (!data || data.length === 0) {
+
+          sinDatos.style.display = "block";
+
+          document.getElementById("totalUsuarios").textContent = "0";
+          document.getElementById("totalCreditos").textContent = "0";
+          document.getElementById("totalAdmins").textContent = "0";
+
+          contenido.classList.remove("oculto");
+          cargando.style.display = "none";
+
+          return;
+        }
+
+        sinDatos.style.display = "none";
+
+        let totalCreditos = 0;
+        let totalAdmins = 0;
+
+        data.forEach(usuario => {
+
+          const creditos = Number(usuario.credits || 0);
+
+          totalCreditos += creditos;
+
+          if (usuario.role === "admin") {
+            totalAdmins++;
+          }
+
+          const fila = document.createElement("tr");
+
+          fila.innerHTML = `
+            <td>
+              ${escaparHTML(usuario.username || "Sin usuario")}
+            </td>
+
+            <td>
+              ${escaparHTML(usuario.email || "Sin correo")}
+            </td>
+
+            <td class="creditos">
+              💎 ${creditos.toLocaleString("es-MX")}
+            </td>
+
+            <td>
+              <span class="rol">
+                ${escaparHTML(usuario.role || "usuario")}
+              </span>
+            </td>
+          `;
+
+          tabla.appendChild(fila);
+
+        });
+
+        document.getElementById("totalUsuarios").textContent =
+          data.length.toLocaleString("es-MX");
+
+        document.getElementById("totalCreditos").textContent =
+          totalCreditos.toLocaleString("es-MX");
+
+        document.getElementById("totalAdmins").textContent =
+          totalAdmins.toLocaleString("es-MX");
+
+        contenido.classList.remove("oculto");
+        cargando.style.display = "none";
+
+      } catch (error) {
+
+        console.error("Error cargando créditos:", error);
+
+        cargando.style.display = "none";
+        contenido.classList.add("oculto");
+
+        mostrarMensaje(
+          "❌ No se pudieron cargar los créditos: " +
+          (error.message || "Error desconocido.")
+        );
+
+      }
+    }
+
+
+    document.addEventListener(
+      "DOMContentLoaded",
+      () => {
+        cargarCreditos();
+      }
+    );
+
+  </script></body>
+</html>
