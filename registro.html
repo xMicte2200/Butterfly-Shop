@@ -239,31 +239,22 @@
     </div>
 
 
-    <!-- Supabase -->
-
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
     <script src="supabase-config.js"></script>
 
     <script>
 
-        const { createClient } = supabase;
+        const form =
+            document.getElementById("register-form");
 
-        const supabaseClient = createClient(
-            SUPABASE_URL,
-            SUPABASE_ANON_KEY
-        );
-
-
-        const form = document.getElementById("register-form");
-
-        const button = document.getElementById("register-button");
+        const button =
+            document.getElementById("register-button");
 
 
         form.addEventListener("submit", async (event) => {
 
             event.preventDefault();
-
 
             const username =
                 document.getElementById("name").value.trim();
@@ -278,40 +269,69 @@
                 document.getElementById("confirm-password").value;
 
 
+            if (!username) {
+
+                alert("Escribe un nombre de usuario 🦋");
+
+                return;
+
+            }
+
+
             if (password !== confirmPassword) {
 
                 alert("Las contraseñas no coinciden 🦋");
 
                 return;
+
+            }
+
+
+            if (password.length < 6) {
+
+                alert(
+                    "La contraseña debe tener al menos 6 caracteres."
+                );
+
+                return;
+
             }
 
 
             button.disabled = true;
 
-            button.textContent = "Creando cuenta... 🦋";
+            button.textContent =
+                "Creando cuenta... 🦋";
 
 
             try {
 
-                const { data, error } =
-                    await supabaseClient.auth.signUp({
+                const {
+                    data,
+                    error
+                } = await supabaseClient.auth.signUp({
 
-                        email: email,
+                    email: email,
 
-                        password: password,
+                    password: password,
 
-                        options: {
+                    options: {
 
-                            data: {
-                                username: username
-                            }
-
+                        data: {
+                            username: username
                         }
 
-                    });
+                    }
+
+                });
 
 
                 if (error) {
+
+                    console.error(
+                        "Error de registro:",
+                        error
+                    );
 
                     alert(
                         "No se pudo crear la cuenta:\n\n" +
@@ -324,6 +344,23 @@
                         "✨ Crear mi cuenta";
 
                     return;
+
+                }
+
+
+                if (!data || !data.user) {
+
+                    alert(
+                        "Supabase no devolvió un usuario. Revisa la configuración del proyecto."
+                    );
+
+                    button.disabled = false;
+
+                    button.textContent =
+                        "✨ Crear mi cuenta";
+
+                    return;
+
                 }
 
 
@@ -332,15 +369,20 @@
                 );
 
 
-                window.location.href = "login.html";
+                window.location.href =
+                    "login.html";
 
 
             } catch (error) {
 
-                console.error(error);
+                console.error(
+                    "Error inesperado durante el registro:",
+                    error
+                );
 
                 alert(
-                    "Ocurrió un error inesperado. Inténtalo nuevamente."
+                    "Ocurrió un error inesperado:\n\n" +
+                    error.message
                 );
 
                 button.disabled = false;
