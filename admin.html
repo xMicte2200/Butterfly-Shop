@@ -419,8 +419,6 @@
 
       <div class="admin-grid">
 
-        <!-- USUARIOS -->
-
         <div class="admin-card">
 
           <div class="icon">
@@ -443,8 +441,6 @@
           </a>
 
         </div>
-
-        <!-- CREDITOS -->
 
         <div class="admin-card">
 
@@ -469,8 +465,6 @@
 
         </div>
 
-        <!-- PRODUCTOS -->
-
         <div class="admin-card">
 
           <div class="icon">
@@ -494,8 +488,6 @@
 
         </div>
 
-        <!-- INVENTARIO -->
-
         <div class="admin-card">
 
           <div class="icon">
@@ -518,8 +510,6 @@
           </a>
 
         </div>
-
-        <!-- VENTAS -->
 
         <div class="admin-card">
 
@@ -563,14 +553,19 @@
           <button
             type="button"
             class="btn"
-            onclick="alert('BOTÓN FUNCIONANDO')"
+            onclick="
+              document
+                .getElementById('solicitudes-recarga')
+                .scrollIntoView({
+                  behavior: 'smooth',
+                  block: 'start'
+                });
+            "
           >
             Ver recargas
           </button>
 
         </div>
-
-        <!-- REPORTES -->
 
         <div class="admin-card">
 
@@ -594,8 +589,6 @@
           </a>
 
         </div>
-
-        <!-- ESTADISTICAS -->
 
         <div class="admin-card">
 
@@ -662,35 +655,6 @@
   <script src="supabase-config.js"></script>
 
   <script>
-
-    /* =========================
-       IR A SOLICITUDES DE RECARGA
-    ========================= */
-
-    function irARecargas() {
-
-      const seccion =
-        document.getElementById(
-          "solicitudes-recarga"
-        );
-
-      if (!seccion) {
-
-        console.error(
-          "No se encontró la sección de solicitudes de recarga."
-        );
-
-        return;
-
-      }
-
-      seccion.scrollIntoView({
-        behavior: "smooth",
-        block: "start"
-      });
-
-    }
-
 
     /* =========================
        VERIFICAR ADMINISTRADOR
