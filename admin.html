@@ -4,10 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-  <title>Butterfly Shop | Administración</title>
-
-  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-  <script src="supabase-config.js"></script>
+  <title>Butterfly Shop — Administración</title>
 
   <style>
 
@@ -17,30 +14,26 @@
 
     * {
       box-sizing: border-box;
-      margin: 0;
-      padding: 0;
     }
 
     body {
+      margin: 0;
       font-family: Arial, sans-serif;
       background: linear-gradient(
         135deg,
-        #f8efff,
+        #f7ecff,
         #fff5fb
       );
-      color: #4a355e;
-      min-height: 100vh;
+      color: #4b3158;
     }
 
-    #loading {
+    .loading {
       min-height: 100vh;
       display: flex;
-      justify-content: center;
       align-items: center;
-      font-size: 22px;
-      color: #9b59b6;
-      text-align: center;
-      padding: 20px;
+      justify-content: center;
+      font-size: 20px;
+      color: #8b5aa8;
     }
 
     #admin-content {
@@ -50,81 +43,58 @@
     header {
       background: linear-gradient(
         135deg,
-        #b57edc,
-        #d8a7e8,
-        #f3b6d8
+        #b77bd4,
+        #e7a8d8
       );
+      color: white;
       padding: 25px 20px;
       text-align: center;
-      color: white;
-      box-shadow: 0 5px 20px rgba(155, 89, 182, 0.2);
+      box-shadow: 0 4px 15px rgba(120, 70, 150, 0.2);
     }
 
     header h1 {
-      font-size: 30px;
-      margin-bottom: 8px;
+      margin: 0;
+      font-size: 28px;
     }
 
     header p {
-      font-size: 14px;
-      opacity: 0.95;
+      margin: 8px 0 0;
+      opacity: 0.9;
     }
 
     .container {
-      width: 92%;
       max-width: 1200px;
-      margin: 30px auto;
-    }
-
-    .welcome {
-      background: white;
-      border-radius: 20px;
+      margin: auto;
       padding: 25px;
-      margin-bottom: 25px;
-      box-shadow: 0 5px 20px rgba(155, 89, 182, 0.1);
-    }
-
-    .welcome h2 {
-      color: #9b59b6;
-      margin-bottom: 8px;
-    }
-
-    .welcome p {
-      color: #765b85;
     }
 
     .stats {
       display: grid;
       grid-template-columns: repeat(
         auto-fit,
-        minmax(200px, 1fr)
+        minmax(180px, 1fr)
       );
-      gap: 18px;
+      gap: 15px;
       margin-bottom: 30px;
     }
 
-    .stat-card {
+    .stat {
       background: white;
       border-radius: 18px;
-      padding: 22px;
+      padding: 20px;
       text-align: center;
-      box-shadow: 0 5px 18px rgba(155, 89, 182, 0.1);
+      box-shadow: 0 5px 20px rgba(150, 100, 170, 0.12);
     }
 
-    .stat-card .icon {
-      font-size: 30px;
-      margin-bottom: 8px;
+    .stat h3 {
+      margin: 0;
+      font-size: 28px;
+      color: #a45fc0;
     }
 
-    .stat-card h3 {
-      color: #9b59b6;
-      font-size: 26px;
-      margin-bottom: 5px;
-    }
-
-    .stat-card p {
-      color: #876c94;
-      font-size: 14px;
+    .stat p {
+      margin: 8px 0 0;
+      color: #80668b;
     }
 
     .section {
@@ -132,162 +102,92 @@
       border-radius: 20px;
       padding: 25px;
       margin-bottom: 30px;
-      box-shadow: 0 5px 20px rgba(155, 89, 182, 0.1);
+      box-shadow: 0 5px 20px rgba(150, 100, 170, 0.12);
     }
 
     .section-title {
-      color: #9b59b6;
-      margin-bottom: 20px;
-      font-size: 22px;
+      margin-top: 0;
+      color: #9a5bb5;
       scroll-margin-top: 20px;
     }
 
-    .topups-container {
-      display: flex;
-      flex-direction: column;
+    .topups-grid {
+      display: grid;
       gap: 15px;
     }
 
     .topup-card {
-      border: 2px solid #f0dff7;
-      border-radius: 16px;
+      border: 1px solid #ead9f0;
+      border-radius: 15px;
       padding: 18px;
       background: #fffaff;
     }
 
     .topup-card h3 {
-      color: #9b59b6;
-      margin-bottom: 10px;
+      margin-top: 0;
+      color: #914faf;
     }
 
     .topup-card p {
-      margin: 6px 0;
-      color: #70587d;
-      font-size: 14px;
-      word-break: break-word;
-    }
-
-    .topup-actions {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 10px;
-      margin-top: 15px;
+      margin: 7px 0;
     }
 
     .btn {
       display: inline-block;
       border: none;
       border-radius: 12px;
-      padding: 11px 18px;
-      background: linear-gradient(
-        135deg,
-        #b57edc,
-        #d98fc4
-      );
+      padding: 11px 16px;
+      margin: 5px;
+      background: #b66bd0;
       color: white;
       text-decoration: none;
       cursor: pointer;
       font-size: 14px;
-      transition: 0.2s;
     }
 
     .btn:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 5px 12px rgba(155, 89, 182, 0.2);
+      background: #9d54bb;
     }
 
     .btn-danger {
-      background: linear-gradient(
-        135deg,
-        #e58ca8,
-        #d86b8d
-      );
+      background: #d46b8c;
     }
 
-    .empty {
-      text-align: center;
-      padding: 25px;
-      color: #9a819f;
+    .btn-danger:hover {
+      background: #bd5275;
+    }
+
+    .cards {
+      display: grid;
+      grid-template-columns:
+        repeat(auto-fit, minmax(220px, 1fr));
+      gap: 18px;
+    }
+
+    .card {
+      background: white;
+      border-radius: 18px;
+      padding: 22px;
+      box-shadow: 0 5px 20px rgba(150, 100, 170, 0.12);
+    }
+
+    .card h3 {
+      margin-top: 0;
+      color: #9b59b6;
     }
 
     .error {
-      background: #fff0f4;
-      border: 1px solid #f2b5c7;
-      color: #a14d69;
+      background: #ffe7ee;
+      color: #a33b5d;
       padding: 15px;
       border-radius: 12px;
       margin-bottom: 15px;
     }
 
-    .grid {
-      display: grid;
-      grid-template-columns: repeat(
-        auto-fit,
-        minmax(220px, 1fr)
-      );
-      gap: 18px;
-    }
-
-    .admin-card {
-      background: linear-gradient(
-        135deg,
-        #fffaff,
-        #f8efff
-      );
-      border: 1px solid #efdff5;
-      border-radius: 18px;
-      padding: 22px;
-      text-align: center;
-    }
-
-    .admin-card .emoji {
-      font-size: 35px;
-      margin-bottom: 10px;
-    }
-
-    .admin-card h3 {
-      color: #8d4baa;
-      margin-bottom: 8px;
-    }
-
-    .admin-card p {
-      color: #80688b;
-      font-size: 14px;
-      margin-bottom: 15px;
-    }
-
-    .activity {
-      color: #765b85;
-      font-size: 14px;
-      line-height: 1.7;
-    }
-
-    footer {
+    .empty {
       text-align: center;
       padding: 25px;
-      color: #9a819f;
-      font-size: 13px;
-    }
-
-    @media (max-width: 600px) {
-
-      header h1 {
-        font-size: 24px;
-      }
-
-      .container {
-        width: 94%;
-      }
-
-      .section {
-        padding: 18px;
-      }
-
-      .btn {
-        width: 100%;
-        text-align: center;
-      }
-
+      color: #8d7894;
     }
 
   </style>
@@ -295,7 +195,10 @@
 
 <body>
 
-  <div id="loading">
+  <div
+    id="loading"
+    class="loading"
+  >
     🦋 Verificando acceso...
   </div>
 
@@ -308,45 +211,32 @@
 
     <main class="container">
 
-      <div class="welcome">
-
-        <h2>✨ Bienvenida, administradora</h2>
-
-        <p>
-          Desde aquí puedes gestionar usuarios,
-          créditos, productos, inventario, ventas
-          y solicitudes de recarga.
-        </p>
-
-      </div>
-
       <div class="stats">
 
-        <div class="stat-card">
-          <div class="icon">👥</div>
-          <h3 id="stat-users">—</h3>
-          <p>Usuarios registrados</p>
+        <div class="stat">
+          <h3 id="total-users">0</h3>
+          <p>Usuarios</p>
         </div>
 
-        <div class="stat-card">
-          <div class="icon">💎</div>
-          <h3 id="stat-credits">—</h3>
-          <p>Créditos en circulación</p>
+        <div class="stat">
+          <h3 id="total-products">0</h3>
+          <p>Productos</p>
         </div>
 
-        <div class="stat-card">
-          <div class="icon">🛍️</div>
-          <h3 id="stat-products">—</h3>
-          <p>Productos activos</p>
+        <div class="stat">
+          <h3 id="total-topups">0</h3>
+          <p>Recargas</p>
         </div>
 
-        <div class="stat-card">
-          <div class="icon">💳</div>
-          <h3 id="stat-topups">—</h3>
-          <p>Solicitudes pendientes</p>
+        <div class="stat">
+          <h3 id="total-sales">0</h3>
+          <p>Ventas</p>
         </div>
 
       </div>
+
+
+      <!-- SOLICITUDES DE RECARGA -->
 
       <section
         class="section"
@@ -357,33 +247,33 @@
           💳 Solicitudes de recarga
         </h2>
 
-        <div id="topups-container">
-
-          <div class="empty">
-            Cargando solicitudes...
-          </div>
-
+        <div
+          id="topups-container"
+          class="topups-grid"
+        >
+          Cargando solicitudes...
         </div>
 
       </section>
 
+
+      <!-- TARJETAS ADMINISTRATIVAS -->
+
       <section class="section">
 
         <h2 class="section-title">
-          🛍️ Gestión de tienda
+          🛠️ Administración
         </h2>
 
-        <div class="grid">
+        <div class="cards">
 
-          <div class="admin-card">
+          <div class="card">
 
-            <div class="emoji">👥</div>
-
-            <h3>Usuarios</h3>
+            <h3>👥 Usuarios</h3>
 
             <p>
-              Consulta y administra los usuarios
-              registrados.
+              Gestiona los usuarios registrados
+              en Butterfly Shop.
             </p>
 
             <a
@@ -395,15 +285,14 @@
 
           </div>
 
-          <div class="admin-card">
 
-            <div class="emoji">💎</div>
+          <div class="card">
 
-            <h3>Créditos</h3>
+            <h3>💰 Créditos</h3>
 
             <p>
-              Consulta los créditos disponibles
-              de cada usuario.
+              Consulta y administra los créditos
+              de los usuarios.
             </p>
 
             <a
@@ -415,15 +304,13 @@
 
           </div>
 
-          <div class="admin-card">
 
-            <div class="emoji">📦</div>
+          <div class="card">
 
-            <h3>Productos</h3>
+            <h3>📦 Productos</h3>
 
             <p>
-              Administra productos y cuentas
-              disponibles.
+              Administra los productos de la tienda.
             </p>
 
             <a
@@ -435,15 +322,14 @@
 
           </div>
 
-          <div class="admin-card">
 
-            <div class="emoji">🗃️</div>
+          <div class="card">
 
-            <h3>Inventario</h3>
+            <h3>📋 Inventario</h3>
 
             <p>
-              Revisa cuentas disponibles y
-              cuentas vendidas.
+              Consulta las cuentas disponibles
+              y vendidas.
             </p>
 
             <a
@@ -455,15 +341,13 @@
 
           </div>
 
-          <div class="admin-card">
 
-            <div class="emoji">🧾</div>
+          <div class="card">
 
-            <h3>Ventas</h3>
+            <h3>🛍️ Ventas</h3>
 
             <p>
-              Consulta las compras realizadas
-              y sus compradores.
+              Consulta todas las ventas realizadas.
             </p>
 
             <a
@@ -475,39 +359,33 @@
 
           </div>
 
-          <div class="admin-card">
 
-            <div class="emoji">💳</div>
+          <div class="card">
 
-            <h3>Recargas</h3>
+            <h3>💳 Recargas</h3>
 
             <p>
               Revisa las solicitudes de recarga
-              de créditos.
+              de los usuarios.
             </p>
 
-            <button
-              type="button"
+            <a
+              href="#solicitudes-recarga"
               class="btn"
-              onclick="window.scrollTo({
-                top: document.getElementById('solicitudes-recarga').offsetTop,
-                behavior: 'smooth'
-              })"
             >
               Ver recargas
-            </button>
+            </a>
 
           </div>
 
-          <div class="admin-card">
 
-            <div class="emoji">🚨</div>
+          <div class="card">
 
-            <h3>Reportes</h3>
+            <h3>📊 Reportes</h3>
 
             <p>
-              Consulta los reportes enviados
-              por los usuarios.
+              Consulta información y movimientos
+              de la tienda.
             </p>
 
             <a
@@ -519,23 +397,22 @@
 
           </div>
 
-          <div class="admin-card">
 
-            <div class="emoji">📊</div>
+          <div class="card">
 
-            <h3>Estadísticas</h3>
+            <h3>📈 Estadísticas</h3>
 
             <p>
-              Próximamente podrás consultar
-              estadísticas detalladas.
+              Consulta estadísticas generales
+              de Butterfly Shop.
             </p>
 
             <button
               type="button"
               class="btn"
-              disabled
+              onclick="cargarEstadisticas()"
             >
-              Próximamente
+              Actualizar estadísticas
             </button>
 
           </div>
@@ -544,100 +421,66 @@
 
       </section>
 
-      <section class="section">
-
-        <h2 class="section-title">
-          🕒 Actividad reciente
-        </h2>
-
-        <div class="activity">
-
-          <p>
-            🦋 Panel administrativo de
-            Butterfly Shop.
-          </p>
-
-          <p>
-            💳 Desde aquí se gestionan las
-            solicitudes de recarga.
-          </p>
-
-          <p>
-            🛍️ También puedes administrar
-            productos, inventario y ventas.
-          </p>
-
-        </div>
-
-      </section>
-
     </main>
 
-    <footer>
-      🦋 Butterfly Shop · Panel de administración
-    </footer>
-
   </div>
+
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="supabase-config.js"></script>
 
   <script>
 
     async function verificarAdministrador() {
-
-      const loading =
-        document.getElementById("loading");
-
-      const content =
-        document.getElementById("admin-content");
 
       try {
 
         const {
           data: {
             user
-          },
-          error: authError
-        } =
-          await supabaseClient.auth.getUser();
+          }
+        } = await supabaseClient.auth.getUser();
 
-        if (authError || !user) {
+        if (!user) {
 
-          window.location.href =
-            "login.html";
+          window.location.href = "login.html";
 
           return;
 
         }
 
         const {
-          data: profile,
-          error: profileError
-        } =
-          await supabaseClient
-            .from("profiles")
-            .select("username, role")
-            .eq("id", user.id)
-            .single();
+          data: perfil,
+          error
+        } = await supabaseClient
+          .from("profiles")
+          .select("role")
+          .eq("id", user.id)
+          .single();
 
-        if (
-          profileError ||
-          !profile ||
-          profile.role !== "admin"
-        ) {
+        if (error) {
+          throw error;
+        }
+
+        if (!perfil || perfil.role !== "admin") {
 
           alert(
-            "No tienes permisos de administrador."
+            "No tienes permisos para acceder."
           );
 
-          window.location.href =
-            "panel.html";
+          window.location.href = "index.html";
 
           return;
 
         }
 
-        loading.style.display = "none";
+        document
+          .getElementById("loading")
+          .style.display = "none";
 
-        content.style.display = "block";
+        document
+          .getElementById("admin-content")
+          .style.display = "block";
 
         await cargarRecargas();
 
@@ -647,8 +490,10 @@
 
         console.error(error);
 
-        loading.innerHTML =
-          "❌ Ocurrió un error al verificar el acceso.";
+        document
+          .getElementById("loading")
+          .textContent =
+          "❌ No se pudo verificar el acceso.";
 
       }
 
@@ -663,236 +508,139 @@
         );
 
       container.innerHTML =
-        `<div class="empty">
-          Cargando solicitudes...
-        </div>`;
+        "Cargando solicitudes...";
 
-      try {
-
-        const {
-          data,
-          error
-        } =
-          await supabaseClient
-            .from("topups")
-            .select(`
-              id,
-              amount_credits,
-              payment_method,
-              payment_reference,
-              status,
-              created_at,
-              user_id,
-              profiles (
-                username,
-                email
-              )
-            `)
-            .order(
-              "created_at",
-              {
-                ascending: false
-              }
-            );
-
-        if (error) {
-
-          console.error(error);
-
-          container.innerHTML =
-            `<div class="error">
-              ❌ Error al cargar las solicitudes:
-              ${error.message}
-            </div>`;
-
-          return;
-
-        }
-
-        if (!data || data.length === 0) {
-
-          container.innerHTML =
-            `<div class="empty">
-              No hay solicitudes de recarga.
-            </div>`;
-
-          return;
-
-        }
-
-        container.innerHTML = "";
-
-        data.forEach(topup => {
-
-          const card =
-            document.createElement("div");
-
-          card.className =
-            "topup-card";
-
-          const username =
-            topup.profiles?.username ||
-            "Usuario desconocido";
-
-          const email =
-            topup.profiles?.email ||
-            "Sin correo";
-
-          const fecha =
-            new Date(
-              topup.created_at
-            ).toLocaleString(
-              "es-MX"
-            );
-
-          let estado = "";
-
-          if (
-            topup.status ===
-            "pending"
-          ) {
-
-            estado =
-              "⏳ Pendiente";
-
-          } else if (
-            topup.status ===
-            "approved"
-          ) {
-
-            estado =
-              "✅ Aprobada";
-
-          } else if (
-            topup.status ===
-            "rejected"
-          ) {
-
-            estado =
-              "❌ Rechazada";
-
-          } else {
-
-            estado =
-              topup.status || "—";
-
+      const {
+        data,
+        error
+      } = await supabaseClient
+        .from("topups")
+        .select("*")
+        .order(
+          "created_at",
+          {
+            ascending: false
           }
+        );
 
-          card.innerHTML = `
-
-            <h3>
-              💳 ${topup.amount_credits}
-              créditos
-            </h3>
-
-            <p>
-              👤 <strong>Usuario:</strong>
-              ${username}
-            </p>
-
-            <p>
-              📧 <strong>Correo:</strong>
-              ${email}
-            </p>
-
-            <p>
-              💰 <strong>Método:</strong>
-              ${topup.payment_method || "—"}
-            </p>
-
-            <p>
-              🧾 <strong>Referencia:</strong>
-              ${topup.payment_reference || "—"}
-            </p>
-
-            <p>
-              📌 <strong>Estado:</strong>
-              ${estado}
-            </p>
-
-            <p>
-              🕒 <strong>Fecha:</strong>
-              ${fecha}
-            </p>
-
-          `;
-
-          if (
-            topup.status ===
-            "pending"
-          ) {
-
-            const actions =
-              document.createElement(
-                "div"
-              );
-
-            actions.className =
-              "topup-actions";
-
-            const approveButton =
-              document.createElement(
-                "button"
-              );
-
-            approveButton.className =
-              "btn";
-
-            approveButton.textContent =
-              "✅ Aprobar y acreditar";
-
-            approveButton.onclick =
-              () =>
-                aprobarRecarga(
-                  topup.id
-                );
-
-            const rejectButton =
-              document.createElement(
-                "button"
-              );
-
-            rejectButton.className =
-              "btn btn-danger";
-
-            rejectButton.textContent =
-              "❌ Rechazar";
-
-            rejectButton.onclick =
-              () =>
-                rechazarRecarga(
-                  topup.id
-                );
-
-            actions.appendChild(
-              approveButton
-            );
-
-            actions.appendChild(
-              rejectButton
-            );
-
-            card.appendChild(
-              actions
-            );
-
-          }
-
-          container.appendChild(
-            card
-          );
-
-        });
-
-      } catch (error) {
+      if (error) {
 
         console.error(error);
 
-        container.innerHTML =
-          `<div class="error">
-            ❌ Error inesperado:
-            ${error.message}
-          </div>`;
+        container.innerHTML = `
+          <div class="error">
+            ❌ Error al cargar las solicitudes.
+          </div>
+        `;
+
+        return;
+
+      }
+
+      if (!data || data.length === 0) {
+
+        container.innerHTML = `
+          <div class="empty">
+            🦋 No hay solicitudes de recarga.
+          </div>
+        `;
+
+        return;
+
+      }
+
+      container.innerHTML = "";
+
+      for (const topup of data) {
+
+        const card =
+          document.createElement("div");
+
+        card.className = "topup-card";
+
+        card.innerHTML = `
+
+          <h3>
+            💳 Solicitud de recarga
+          </h3>
+
+          <p>
+            <strong>Créditos:</strong>
+            ${topup.amount_credits ?? 0}
+          </p>
+
+          <p>
+            <strong>Método:</strong>
+            ${topup.payment_method ?? "No indicado"}
+          </p>
+
+          <p>
+            <strong>Referencia:</strong>
+            ${topup.payment_reference ?? "Sin referencia"}
+          </p>
+
+          <p>
+            <strong>Estado:</strong>
+            ${topup.status ?? "pendiente"}
+          </p>
+
+          <p>
+            <strong>Fecha:</strong>
+            ${
+              topup.created_at
+                ? new Date(
+                    topup.created_at
+                  ).toLocaleString("es-MX")
+                : "Sin fecha"
+            }
+          </p>
+
+        `;
+
+        if (
+          topup.status === "pending"
+        ) {
+
+          const aprobar =
+            document.createElement("button");
+
+          aprobar.className = "btn";
+
+          aprobar.textContent =
+            "✅ Aprobar";
+
+          aprobar.onclick = () =>
+            aprobarRecarga(
+              topup.id
+            );
+
+
+          const rechazar =
+            document.createElement("button");
+
+          rechazar.className =
+            "btn btn-danger";
+
+          rechazar.textContent =
+            "❌ Rechazar";
+
+          rechazar.onclick = () =>
+            rechazarRecarga(
+              topup.id
+            );
+
+
+          card.appendChild(
+            aprobar
+          );
+
+          card.appendChild(
+            rechazar
+          );
+
+        }
+
+        container.appendChild(card);
 
       }
 
@@ -903,66 +651,44 @@
       topupId
     ) {
 
-      const confirmar =
-        confirm(
-          "¿Seguro que quieres aprobar esta recarga y acreditar los créditos?"
+      if (
+        !confirm(
+          "¿Quieres aprobar esta recarga?"
+        )
+      ) {
+        return;
+      }
+
+      const {
+        data,
+        error
+      } =
+        await supabaseClient.rpc(
+          "approve_topup",
+          {
+            p_topup_id: topupId
+          }
         );
 
-      if (!confirmar) {
+      if (error) {
+
+        console.error(error);
+
+        alert(
+          "❌ No se pudo aprobar la recarga."
+        );
 
         return;
 
       }
 
-      try {
+      alert(
+        "✅ Recarga aprobada correctamente."
+      );
 
-        const {
-          data,
-          error
-        } =
-          await supabaseClient.rpc(
-            "approve_topup",
-            {
-              p_topup_id:
-                topupId
-            }
-          );
+      await cargarRecargas();
 
-        if (error) {
-
-          console.error(error);
-
-          alert(
-            "❌ No se pudo aprobar la recarga:\n" +
-            error.message
-          );
-
-          return;
-
-        }
-
-        alert(
-          "✅ Recarga aprobada correctamente.\n\n" +
-          "Nuevo saldo: " +
-          (
-            data?.new_balance ??
-            "actualizado"
-          )
-        );
-
-        await cargarRecargas();
-
-        await cargarEstadisticas();
-
-      } catch (error) {
-
-        console.error(error);
-
-        alert(
-          "❌ Ocurrió un error inesperado."
-        );
-
-      }
+      await cargarEstadisticas();
 
     }
 
@@ -971,63 +697,43 @@
       topupId
     ) {
 
-      const confirmar =
-        confirm(
-          "¿Seguro que quieres rechazar esta solicitud?"
-        );
+      if (
+        !confirm(
+          "¿Quieres rechazar esta recarga?"
+        )
+      ) {
+        return;
+      }
 
-      if (!confirmar) {
+      const {
+        error
+      } =
+        await supabaseClient
+          .from("topups")
+          .update({
+            status: "rejected"
+          })
+          .eq("id", topupId);
+
+      if (error) {
+
+        console.error(error);
+
+        alert(
+          "❌ No se pudo rechazar la recarga."
+        );
 
         return;
 
       }
 
-      try {
+      alert(
+        "❌ Recarga rechazada."
+      );
 
-        const {
-          error
-        } =
-          await supabaseClient
-            .from("topups")
-            .update({
-              status:
-                "rejected"
-            })
-            .eq(
-              "id",
-              topupId
-            );
+      await cargarRecargas();
 
-        if (error) {
-
-          console.error(error);
-
-          alert(
-            "❌ No se pudo rechazar la recarga:\n" +
-            error.message
-          );
-
-          return;
-
-        }
-
-        alert(
-          "❌ Solicitud rechazada."
-        );
-
-        await cargarRecargas();
-
-        await cargarEstadisticas();
-
-      } catch (error) {
-
-        console.error(error);
-
-        alert(
-          "❌ Ocurrió un error inesperado."
-        );
-
-      }
+      await cargarEstadisticas();
 
     }
 
@@ -1044,48 +750,10 @@
             .select(
               "*",
               {
-                count:
-                  "exact",
-                head:
-                  true
+                count: "exact",
+                head: true
               }
             );
-
-        document.getElementById(
-          "stat-users"
-        ).textContent =
-          usersCount ?? 0;
-
-
-        const {
-          data: profiles
-        } =
-          await supabaseClient
-            .from("profiles")
-            .select(
-              "credits"
-            );
-
-        const totalCredits =
-          (profiles || [])
-            .reduce(
-              (
-                total,
-                profile
-              ) =>
-                total +
-                Number(
-                  profile.credits ||
-                  0
-                ),
-              0
-            );
-
-        document.getElementById(
-          "stat-credits"
-        ).textContent =
-          totalCredits;
-
 
         const {
           count: productsCount
@@ -1095,22 +763,10 @@
             .select(
               "*",
               {
-                count:
-                  "exact",
-                head:
-                  true
+                count: "exact",
+                head: true
               }
-            )
-            .eq(
-              "active",
-              true
             );
-
-        document.getElementById(
-          "stat-products"
-        ).textContent =
-          productsCount ?? 0;
-
 
         const {
           count: topupsCount
@@ -1120,21 +776,55 @@
             .select(
               "*",
               {
-                count:
-                  "exact",
-                head:
-                  true
+                count: "exact",
+                head: true
               }
-            )
-            .eq(
-              "status",
-              "pending"
             );
 
-        document.getElementById(
-          "stat-topups"
-        ).textContent =
+        const {
+          count: salesCount
+        } =
+          await supabaseClient
+            .from("purchases")
+            .select(
+              "*",
+              {
+                count: "exact",
+                head: true
+              }
+            );
+
+
+        document
+          .getElementById(
+            "total-users"
+          )
+          .textContent =
+          usersCount ?? 0;
+
+
+        document
+          .getElementById(
+            "total-products"
+          )
+          .textContent =
+          productsCount ?? 0;
+
+
+        document
+          .getElementById(
+            "total-topups"
+          )
+          .textContent =
           topupsCount ?? 0;
+
+
+        document
+          .getElementById(
+            "total-sales"
+          )
+          .textContent =
+          salesCount ?? 0;
 
       } catch (error) {
 
