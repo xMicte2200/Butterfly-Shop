@@ -563,11 +563,7 @@
           <button
             type="button"
             class="btn"
-            onclick="
-              document
-                .getElementById('solicitudes-recarga')
-                .scrollIntoView();
-            "
+            onclick="window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' })"
           >
             Ver recargas
           </button>
