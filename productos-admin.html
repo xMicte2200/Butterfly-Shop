@@ -1,6 +1,12 @@
-<!DOCTYPE html><html lang="es"><head>
+<!DOCTYPE html>
+<html lang="es">
+<head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">  <title>Butterfly Shop | Productos</title>  <style>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>Butterfly Shop | Productos</title>
+
+  <style>
     * {
       box-sizing: border-box;
       margin: 0;
@@ -102,10 +108,68 @@
       opacity: 0.9;
     }
 
+    .products-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 18px;
+    }
+
+    .product-card {
+      border: 1px solid #eadcff;
+      border-radius: 16px;
+      padding: 18px;
+      background: #fcf9ff;
+    }
+
+    .product-card h3 {
+      color: #743d91;
+      margin-bottom: 8px;
+      font-size: 20px;
+    }
+
+    .product-description {
+      color: #77677f;
+      margin-bottom: 15px;
+      line-height: 1.5;
+    }
+
+    .product-info {
+      display: flex;
+      flex-direction: column;
+      gap: 7px;
+      margin-bottom: 12px;
+      font-size: 14px;
+    }
+
+    .price {
+      color: #8a4db0;
+      font-weight: bold;
+      font-size: 17px;
+    }
+
+    .active {
+      color: #2e8b57;
+      font-weight: bold;
+    }
+
+    .inactive {
+      color: #b34d4d;
+      font-weight: bold;
+    }
+
     .empty-message {
       text-align: center;
       color: #8a7b91;
       padding: 40px 15px;
+    }
+
+    .error-message {
+      text-align: center;
+      color: #b34d4d;
+      background: #fff0f0;
+      border: 1px solid #f0cccc;
+      padding: 20px;
+      border-radius: 12px;
     }
 
     @media (max-width: 600px) {
@@ -124,66 +188,151 @@
         width: 100%;
       }
     }
-  </style></head><body>  <header><div class="header-content">
+  </style>
+</head>
 
-  <div class="logo">
-    🦋 Butterfly Shop
-  </div>
+<body>
 
-  <a href="admin.html" class="back-btn">
-    ← Volver al panel
-  </a>
+  <header>
+    <div class="header-content">
 
-</div>
+      <div class="logo">
+        🦋 Butterfly Shop
+      </div>
 
-  </header>  <main class="container"><div class="welcome">
+      <a href="admin.html" class="back-btn">
+        ← Volver al panel
+      </a>
 
-  <h1>
-    🛍️ Gestionar productos
-  </h1>
-
-  <p>
-    Crea, modifica, activa o desactiva los productos de Butterfly Shop.
-  </p>
-
-</div>
+    </div>
+  </header>
 
 
-<div class="products-box">
+  <main class="container">
 
-  <div class="products-header">
+    <div class="welcome">
 
-    <h2>
-      🦋 Productos de la tienda
-    </h2>
+      <h1>
+        🛍️ Gestionar productos
+      </h1>
 
-    <button class="btn" onclick="crearProducto()">
-      ➕ Nuevo producto
-    </button>
+      <p>
+        Crea, modifica, activa o desactiva los productos de Butterfly Shop.
+      </p>
 
-  </div>
-
-
-  <div id="products-container">
-
-    <div class="empty-message">
-      🦋✨ Aún no hay productos cargados.
-      <br>
-      Los productos aparecerán aquí cuando los conectemos con Supabase.
     </div>
 
-  </div>
 
-</div>
+    <div class="products-box">
 
-  </main>  <!-- Supabase -->  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>  <!-- Configuración de Supabase -->  <script src="supabase-config.js"></script>  <script>
+      <div class="products-header">
 
-    function crearProducto() {
+        <h2>
+          🦋 Productos de la tienda
+        </h2>
 
-      alert(
-        "La creación de productos la conectaremos en el siguiente paso. 🦋💗"
-      );
+        <button class="btn" onclick="crearProducto()">
+          ➕ Nuevo producto
+        </button>
 
-    }
+      </div>
 
-  </script></body></html>
+
+      <div id="products-container">
+
+        <div class="empty-message">
+          🦋✨ Cargando productos...
+        </div>
+
+      </div>
+
+    </div>
+
+  </main>
+
+
+  <!-- Supabase -->
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+  <!-- Configuración de Supabase -->
+
+  <script src="supabase-config.js"></script>
+
+
+  <script>
+
+    async function cargarProductos() {
+
+      const container = document.getElementById("products-container");
+
+      container.innerHTML = `
+        <div class="empty-message">
+          🦋✨ Cargando productos...
+        </div>
+      `;
+
+      const { data, error } = await supabaseClient
+        .from("Products")
+        .select("*")
+        .order("create_at", { ascending: false });
+
+
+      if (error) {
+
+        console.error("Error al cargar productos:", error);
+
+        container.innerHTML = `
+          <div class="error-message">
+            ❌ No se pudieron cargar los productos.
+            <br><br>
+            ${error.message}
+          </div>
+        `;
+
+        return;
+      }
+
+
+      if (!data || data.length === 0) {
+
+        container.innerHTML = `
+          <div class="empty-message">
+            🦋✨ Aún no hay productos cargados.
+          </div>
+        `;
+
+        return;
+      }
+
+
+      container.innerHTML = `
+        <div class="products-grid">
+
+          ${data.map(producto => `
+
+            <div class="product-card">
+
+              <h3>
+                ${producto.name ?? "Sin nombre"}
+              </h3>
+
+              <div class="product-description">
+                ${producto.descripción ?? "Sin descripción"}
+              </div>
+
+              <div class="product-info">
+
+                <div class="price">
+                  💎 ${producto.price_credits ?? 0} créditos
+                </div>
+
+                <div>
+                  🏷️ Categoría:
+                  ${producto.categoria ?? "Sin categoría"}
+                </div>
+
+                <div>
+                  🆔 ID:
+                  ${producto.id ?? "Sin ID"}
+                </
