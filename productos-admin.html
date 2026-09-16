@@ -1,7 +1,8 @@
 <!DOCTYPE html><html lang="es">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">  <title>Butterfly Shop | Productos</title>  <style>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Butterfly Shop | Productos</title>  <style>
     * {
       box-sizing: border-box;
       margin: 0;
@@ -638,9 +639,8 @@
         flex-direction: column;
       }
     }
-  </style></head><body>  <header><div class="header-content">
-
-  <div class="logo">
+  </style></head><body>  <header>
+    <div class="header-content">  <div class="logo">
     🦋 Butterfly Shop
   </div>
 
@@ -2580,11 +2580,6 @@
           }
 
 
-          /*
-           * Esta función RPC se creará en Supabase
-           * en el siguiente paso.
-           */
-
           const {
             data,
             error
@@ -2881,16 +2876,30 @@
         await comprobarAdministrador();
 
 
+        /*
+         * La eliminación se realiza mediante una función
+         * segura de Supabase.
+         *
+         * Esta función comprueba:
+         * 1. Que exista una sesión.
+         * 2. Que el usuario sea administrador.
+         * 3. Que la cuenta exista.
+         * 4. Que la cuenta todavía esté disponible.
+         *
+         * Una cuenta vendida NO puede eliminarse.
+         */
+
         const {
+          data,
           error
         } =
-          await supabaseClient
-            .from("product_accounts")
-            .delete()
-            .eq(
-              "id",
-              accountId
-            );
+          await supabaseClient.rpc(
+            "delete_product_account",
+            {
+              p_account_id:
+                accountId
+            }
+          );
 
 
         if (error) {
@@ -2904,6 +2913,19 @@
           throw new Error(
             `Código: ${error.code || "sin código"} | ` +
             `Mensaje: ${error.message || "sin mensaje"}`
+          );
+
+        }
+
+
+        if (
+          data &&
+          data.success === false
+        ) {
+
+          throw new Error(
+            data.message ||
+            "No se pudo eliminar la cuenta."
           );
 
         }
@@ -3033,4 +3055,4 @@
     iniciarPagina();
 
   </script></body>
-</html>
+  </html>
