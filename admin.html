@@ -560,12 +560,13 @@
             Revisa solicitudes de recarga y acredita créditos a usuarios.
           </p>
 
-          <a
-            href="#solicitudes-recarga"
+          <button
+            type="button"
             class="btn"
+            onclick="irARecargas()"
           >
             Ver recargas
-          </a>
+          </button>
 
         </div>
 
@@ -661,6 +662,35 @@
   <script src="supabase-config.js"></script>
 
   <script>
+
+    /* =========================
+       IR A SOLICITUDES DE RECARGA
+    ========================= */
+
+    function irARecargas() {
+
+      const seccion =
+        document.getElementById(
+          "solicitudes-recarga"
+        );
+
+      if (!seccion) {
+
+        console.error(
+          "No se encontró la sección de solicitudes de recarga."
+        );
+
+        return;
+
+      }
+
+      seccion.scrollIntoView({
+        behavior: "smooth",
+        block: "start"
+      });
+
+    }
+
 
     /* =========================
        VERIFICAR ADMINISTRADOR
