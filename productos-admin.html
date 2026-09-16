@@ -276,7 +276,7 @@
 
 
       const { data, error } = await supabaseClient
-        .from("Products")
+        .from("products")
         .select("*");
 
 
@@ -364,7 +364,9 @@
 
     function crearProducto() {
 
-      alert("🦋✨ El formulario para crear productos lo agregaremos en el siguiente paso.");
+      alert(
+        "🦋✨ El formulario para crear productos lo agregaremos en el siguiente paso."
+      );
 
     }
 
