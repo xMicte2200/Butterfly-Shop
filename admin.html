@@ -751,7 +751,8 @@
         console.error(error);
 
         alert(
-          "❌ No se pudo rechazar la recarga."
+          "❌ Error al rechazar:\n" +
+          error.message
         );
 
         return;
