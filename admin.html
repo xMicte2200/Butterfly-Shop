@@ -736,14 +736,15 @@
       }
 
       const {
+        data,
         error
       } =
-        await supabaseClient
-          .from("topups")
-          .update({
-            status: "rejected"
-          })
-          .eq("id", topupId);
+        await supabaseClient.rpc(
+          "reject_topup",
+          {
+            p_topup_id: topupId
+          }
+        );
 
       if (error) {
 
