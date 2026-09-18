@@ -746,12 +746,23 @@
           }
         );
 
+      console.log(
+        "Resultado reject_topup:",
+        {
+          data,
+          error
+        }
+      );
+
       if (error) {
 
-        console.error(error);
+        console.error(
+          "Error de reject_topup:",
+          error
+        );
 
         alert(
-          "❌ Error al rechazar:\n" +
+          "❌ Error al rechazar:\n\n" +
           error.message
         );
 
@@ -759,9 +770,80 @@
 
       }
 
-      alert(
-        "❌ Recarga rechazada."
+
+      /*
+       * DIAGNÓSTICO TEMPORAL
+       *
+       * Comprobamos directamente qué estado
+       * tiene la solicitud después de ejecutar
+       * reject_topup.
+       */
+
+      const {
+        data: topupActual,
+        error: consultaError
+      } =
+        await supabaseClient
+          .from("topups")
+          .select(
+            "id, amount_credits, status, processed_at"
+          )
+          .eq("id", topupId)
+          .maybeSingle();
+
+
+      console.log(
+        "Resultado después del rechazo:",
+        {
+          topupActual,
+          consultaError
+        }
       );
+
+
+      if (consultaError) {
+
+        alert(
+          "⚠️ La función no devolvió error,\n" +
+          "pero no se pudo comprobar la solicitud.\n\n" +
+          "Error de consulta:\n" +
+          consultaError.message
+        );
+
+        return;
+
+      }
+
+
+      if (!topupActual) {
+
+        alert(
+          "⚠️ La función no devolvió error,\n" +
+          "pero la solicitud no pudo encontrarse después."
+        );
+
+        return;
+
+      }
+
+
+      alert(
+        "🔎 DIAGNÓSTICO DEL RECHAZO\n\n" +
+
+        "RPC devolvió:\n" +
+        String(data) +
+        "\n\n" +
+
+        "Estado actual:\n" +
+        topupActual.status +
+        "\n\n" +
+
+        "processed_at:\n" +
+        String(
+          topupActual.processed_at
+        )
+      );
+
 
       await cargarRecargas();
 
