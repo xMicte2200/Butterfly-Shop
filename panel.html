@@ -371,7 +371,7 @@
         Consulta tus movimientos.
       </a>
 
-      <a class="action" href="#" id="purchases-action">
+      <a class="action" href="mis-compras.html" id="purchases-action">
         🛒<br><br>
         <strong>Mis compras</strong>
         <br><br>
@@ -824,17 +824,6 @@
         await supabaseClient.auth.signOut();
 
         window.location.href = "login.html";
-      });
-
-
-    document.getElementById("purchases-action")
-      .addEventListener("click", (event) => {
-
-        event.preventDefault();
-
-        alert(
-          "La sección de compras estará disponible próximamente."
-        );
       });
 
 
