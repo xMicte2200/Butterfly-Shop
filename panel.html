@@ -3,7 +3,8 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Panel | Butterfly Shop</title>
+
+  <title>Mi Panel - Butterfly Shop</title>
 
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <script src="supabase-config.js"></script>
@@ -18,28 +19,46 @@
     body {
       font-family: Arial, sans-serif;
       min-height: 100vh;
-      background: linear-gradient(135deg, #f7eaff, #ead7ff, #fce4f4);
-      color: #4b315c;
+      background: linear-gradient(135deg, #f8e8ff, #ead7ff, #fce4f2);
+      color: #4a315d;
     }
 
     header {
-      background: rgba(255,255,255,0.8);
-      padding: 18px 25px;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      box-shadow: 0 3px 15px rgba(100,60,130,0.15);
+      background: rgba(255, 255, 255, 0.9);
+      padding: 15px 20px;
+      box-shadow: 0 3px 15px rgba(120, 70, 150, 0.12);
+      position: sticky;
+      top: 0;
+      z-index: 20;
     }
 
     header h1 {
-      color: #9b59b6;
+      text-align: center;
+      color: #8d55b7;
+      margin-bottom: 12px;
+      font-size: 25px;
+    }
+
+    nav {
+      display: flex;
+      justify-content: center;
+      flex-wrap: wrap;
+      gap: 8px;
     }
 
     nav a {
-      margin-left: 15px;
       text-decoration: none;
-      color: #7d3c98;
-      font-weight: bold;
+      color: #71458f;
+      background: #f5e8ff;
+      padding: 8px 13px;
+      border-radius: 12px;
+      font-size: 14px;
+      transition: 0.2s;
+    }
+
+    nav a:hover {
+      background: #ead5fa;
+      transform: translateY(-1px);
     }
 
     .admin-link {
@@ -47,30 +66,37 @@
     }
 
     .container {
-      max-width: 1000px;
-      margin: 35px auto;
-      padding: 20px;
+      width: min(950px, 92%);
+      margin: 30px auto;
     }
 
     .welcome {
-      background: rgba(255,255,255,0.8);
-      border-radius: 20px;
+      background: rgba(255, 255, 255, 0.9);
+      border-radius: 22px;
       padding: 25px;
+      box-shadow: 0 5px 20px rgba(120, 70, 150, 0.12);
       margin-bottom: 25px;
-      box-shadow: 0 5px 20px rgba(100,60,130,0.12);
+      text-align: center;
     }
 
     .welcome h2 {
-      color: #8e44ad;
+      color: #8d55b7;
       margin-bottom: 10px;
     }
 
+    .welcome p {
+      color: #725b7d;
+      margin-bottom: 15px;
+    }
+
     .credits {
-      margin-top: 15px;
       font-size: 22px;
       font-weight: bold;
-      color: #b03a9b;
+      color: #7b45a2;
+      margin: 15px 0;
     }
+
+    /* WHATSAPP */
 
     .whatsapp-button {
       display: inline-block;
@@ -82,7 +108,7 @@
       text-decoration: none;
       font-size: 14px;
       font-weight: bold;
-      box-shadow: 0 3px 10px rgba(37,211,102,0.25);
+      box-shadow: 0 3px 10px rgba(37, 211, 102, 0.25);
       transition: 0.2s;
     }
 
@@ -91,26 +117,226 @@
       opacity: 0.9;
     }
 
+    /* BOTÓN COMPRAR CRÉDITOS */
+
+    .payment-button {
+      display: block;
+      margin: 12px auto 0;
+      padding: 10px 16px;
+      border: none;
+      border-radius: 12px;
+      background: linear-gradient(135deg, #c58be8, #a86dcc);
+      color: white;
+      font-size: 14px;
+      font-weight: bold;
+      cursor: pointer;
+      box-shadow: 0 4px 12px rgba(140, 80, 180, 0.22);
+      transition: 0.2s;
+    }
+
+    .payment-button:hover {
+      transform: translateY(-2px);
+      opacity: 0.92;
+    }
+
+    /* MODAL DE PAGO */
+
+    .payment-modal {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(60, 30, 75, 0.55);
+      z-index: 1000;
+      padding: 20px;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .payment-modal.show {
+      display: flex;
+    }
+
+    .payment-modal-content {
+      width: min(500px, 100%);
+      max-height: 90vh;
+      overflow-y: auto;
+      background: #ffffff;
+      border-radius: 24px;
+      padding: 25px;
+      box-shadow: 0 10px 35px rgba(50, 20, 70, 0.3);
+      position: relative;
+      animation: modalEntrada 0.2s ease;
+    }
+
+    @keyframes modalEntrada {
+      from {
+        transform: scale(0.94);
+        opacity: 0;
+      }
+
+      to {
+        transform: scale(1);
+        opacity: 1;
+      }
+    }
+
+    .payment-modal-content h2 {
+      text-align: center;
+      color: #8d55b7;
+      margin-bottom: 8px;
+    }
+
+    .payment-subtitle {
+      text-align: center;
+      color: #765b82;
+      font-size: 14px;
+      margin-bottom: 20px;
+    }
+
+    .close-payment-modal {
+      position: absolute;
+      top: 12px;
+      right: 15px;
+      border: none;
+      background: #f5e7fa;
+      color: #75458f;
+      width: 35px;
+      height: 35px;
+      border-radius: 50%;
+      cursor: pointer;
+      font-size: 20px;
+      line-height: 35px;
+      margin: 0;
+      padding: 0;
+    }
+
+    .payment-info {
+      background: #faf3ff;
+      border: 1px solid #ead5f5;
+      border-radius: 16px;
+      padding: 17px;
+      margin-bottom: 15px;
+    }
+
+    .payment-row {
+      margin-bottom: 13px;
+    }
+
+    .payment-row:last-child {
+      margin-bottom: 0;
+    }
+
+    .payment-label {
+      display: block;
+      color: #8d55b7;
+      font-size: 13px;
+      font-weight: bold;
+      margin-bottom: 4px;
+    }
+
+    .payment-value {
+      display: block;
+      color: #493454;
+      font-size: 15px;
+      word-break: break-word;
+    }
+
+    .clabe-box {
+      display: flex;
+      gap: 8px;
+      align-items: center;
+    }
+
+    .clabe-number {
+      flex: 1;
+      background: white;
+      border: 1px solid #dfc8ea;
+      padding: 10px;
+      border-radius: 10px;
+      font-weight: bold;
+      letter-spacing: 0.5px;
+      overflow-wrap: anywhere;
+    }
+
+    .copy-clabe {
+      border: none;
+      background: #b879d7;
+      color: white;
+      padding: 10px 12px;
+      border-radius: 10px;
+      cursor: pointer;
+      font-size: 13px;
+      font-weight: bold;
+      margin: 0;
+      white-space: nowrap;
+    }
+
+    .copy-clabe:hover {
+      opacity: 0.9;
+    }
+
+    .payment-warning {
+      background: #fff3f8;
+      border: 1px solid #f1cddd;
+      border-radius: 15px;
+      padding: 15px;
+      color: #7c435f;
+      font-size: 14px;
+      line-height: 1.5;
+      margin-bottom: 15px;
+    }
+
+    .payment-proof {
+      background: #f3ebff;
+      border-radius: 15px;
+      padding: 15px;
+      color: #644579;
+      font-size: 14px;
+      line-height: 1.5;
+    }
+
+    .payment-whatsapp {
+      display: block;
+      text-align: center;
+      text-decoration: none;
+      background: #25D366;
+      color: white;
+      padding: 11px;
+      border-radius: 12px;
+      margin-top: 12px;
+      font-weight: bold;
+      transition: 0.2s;
+    }
+
+    .payment-whatsapp:hover {
+      opacity: 0.9;
+      transform: translateY(-1px);
+    }
+
+    /* ACCIONES */
+
     .actions {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-      gap: 18px;
+      grid-template-columns: repeat(auto-fit, minmax(190px, 1fr));
+      gap: 15px;
+      margin-bottom: 25px;
     }
 
     .action {
-      background: white;
-      padding: 25px;
+      background: rgba(255, 255, 255, 0.92);
       border-radius: 18px;
-      text-decoration: none;
-      color: #633974;
+      padding: 20px;
       text-align: center;
-      box-shadow: 0 4px 15px rgba(100,60,130,0.12);
-      transition: 0.2s;
+      box-shadow: 0 4px 15px rgba(120, 70, 150, 0.1);
       cursor: pointer;
+      transition: 0.2s;
+      color: #674377;
+      font-weight: bold;
     }
 
     .action:hover {
       transform: translateY(-3px);
+      box-shadow: 0 7px 18px rgba(120, 70, 150, 0.16);
     }
 
     .admin-action {
@@ -118,133 +344,189 @@
     }
 
     button {
-      margin-top: 25px;
-      padding: 12px 22px;
       border: none;
-      border-radius: 12px;
-      background: #9b59b6;
+      background: #a66acb;
       color: white;
-      font-weight: bold;
+      padding: 10px 15px;
+      border-radius: 11px;
       cursor: pointer;
+      font-weight: bold;
+      transition: 0.2s;
+      margin-top: 25px;
     }
 
     button:hover {
-      background: #8e44ad;
+      opacity: 0.9;
+      transform: translateY(-1px);
     }
 
-    button:disabled {
-      opacity: 0.6;
-      cursor: not-allowed;
-    }
+    /* CAMBIO DE USUARIO */
 
     .username-box,
     .topup-box,
     .topup-history-box {
-      margin-top: 25px;
-      padding: 20px;
-      background: white;
-      border-radius: 18px;
-      box-shadow: 0 4px 15px rgba(100,60,130,0.10);
+      background: #faf6ff;
+      border-radius: 17px;
+      padding: 18px;
+      margin-top: 18px;
+      border: 1px solid #eadcf4;
+      text-align: left;
     }
 
     .username-box h3,
     .topup-box h3,
     .topup-history-box h3 {
-      color: #8e44ad;
-      margin-bottom: 8px;
+      color: #8550a8;
+      margin-bottom: 10px;
+      font-size: 18px;
     }
 
     .username-box p,
     .topup-box p {
-      margin-bottom: 15px;
+      color: #765f80;
+      font-size: 14px;
+      margin-bottom: 10px;
+    }
+
+    input {
+      width: 100%;
+      padding: 11px 12px;
+      border: 1px solid #dcc7e8;
+      border-radius: 11px;
+      outline: none;
+      background: white;
+      color: #513961;
       font-size: 14px;
     }
 
-    .username-box input,
-    .topup-box input {
+    input:focus {
+      border-color: #aa70ca;
+      box-shadow: 0 0 0 3px rgba(170, 112, 202, 0.1);
+    }
+
+    #change-username-button,
+    #request-topup-button {
       width: 100%;
-      padding: 12px;
-      border: 2px solid #e5d2f0;
-      border-radius: 10px;
-      outline: none;
-      font-size: 15px;
-    }
-
-    .username-box input:focus,
-    .topup-box input:focus {
-      border-color: #9b59b6;
-    }
-
-    #username-button,
-    #topup-button {
-      margin-top: 12px;
+      margin-top: 10px;
     }
 
     .topup-info {
-      padding: 12px;
-      margin-bottom: 15px;
-      background: #f7eaff;
+      background: #f0e5ff;
       border-radius: 12px;
+      padding: 12px;
+      color: #674377;
       font-size: 14px;
+      margin: 10px 0;
     }
 
-    .topup-history-box {
-      scroll-margin-top: 20px;
+    .topup-history {
+      margin-top: 10px;
     }
 
     .topup-card {
-      border: 2px solid #eadcf3;
-      border-radius: 14px;
-      padding: 15px;
-      margin-top: 12px;
-      background: #fcf9ff;
+      background: white;
+      border: 1px solid #eadcf4;
+      border-radius: 13px;
+      padding: 13px;
+      margin-bottom: 10px;
+    }
+
+    .topup-card:last-child {
+      margin-bottom: 0;
     }
 
     .topup-card p {
-      margin: 6px 0;
-      font-size: 14px;
+      margin: 4px 0;
+      font-size: 13px;
+      color: #6d5876;
     }
 
-    .topup-status {
+    .status {
       display: inline-block;
-      padding: 6px 10px;
-      border-radius: 20px;
+      padding: 5px 9px;
+      border-radius: 10px;
       font-size: 12px;
       font-weight: bold;
-      margin-bottom: 8px;
+      margin-top: 5px;
     }
 
     .status-pending {
-      background: #fff3cd;
-      color: #856404;
+      background: #fff0c7;
+      color: #866315;
     }
 
     .status-approved {
-      background: #d4edda;
-      color: #155724;
+      background: #dcf8e7;
+      color: #267044;
     }
 
     .status-rejected {
-      background: #f8d7da;
-      color: #721c24;
+      background: #ffe0e5;
+      color: #913c4d;
     }
 
     .empty-history {
-      margin-top: 12px;
-      padding: 15px;
-      background: #f7eaff;
-      border-radius: 12px;
-      font-size: 14px;
+      color: #8b7793;
       text-align: center;
+      padding: 10px;
+      font-size: 14px;
     }
 
-    .refresh-button {
-      background: #c084d8;
-      margin-top: 15px;
+    #refresh-history-button {
+      width: 100%;
+      margin-top: 12px;
     }
 
-    .refresh-button:hover {
-      background: #a968c0;
+    .logout-button {
+      background: #d87b9e;
+      width: 100%;
+      margin-top: 20px;
+    }
+
+    /* RESPONSIVE */
+
+    @media (max-width: 600px) {
+      header h1 {
+        font-size: 22px;
+      }
+
+      .container {
+        width: 94%;
+      }
+
+      .welcome {
+        padding: 18px;
+      }
+
+      .credits {
+        font-size: 20px;
+      }
+
+      .actions {
+        grid-template-columns: 1fr 1fr;
+      }
+
+      .action {
+        padding: 16px 10px;
+        font-size: 14px;
+      }
+
+      .payment-modal {
+        padding: 12px;
+      }
+
+      .payment-modal-content {
+        padding: 20px 16px;
+      }
+
+      .clabe-box {
+        flex-direction: column;
+        align-items: stretch;
+      }
+
+      .copy-clabe {
+        width: 100%;
+      }
     }
   </style>
 </head>
@@ -252,15 +534,14 @@
 <body>
 
   <header>
-    <h1>🦋 Butterfly Shop</h1>
+    <h1>🦋 Butterfly Shop 🦋</h1>
 
     <nav>
       <a href="index.html">Inicio</a>
       <a href="catalogo.html">Catálogo</a>
       <a href="panel.html">Mi panel</a>
-
-      <a href="admin.html" id="admin-menu" class="admin-link">
-        🛠️ Administración
+      <a href="admin.html" id="admin-link" class="admin-link">
+        Administración
       </a>
     </nav>
   </header>
@@ -273,11 +554,26 @@
         ¡Hola, <span id="username">Usuario</span>! 🦋
       </h2>
 
-      <p>Bienvenido a tu panel de Butterfly Shop.</p>
+      <p>
+        Bienvenido/a a tu panel de Butterfly Shop 💜
+      </p>
+
+      <!-- CRÉDITOS -->
 
       <div class="credits">
-        💜 Créditos: <span id="credits">0</span>
+        💜 Créditos:
+        <span id="credits">0</span>
+
+        <button
+          type="button"
+          class="payment-button"
+          id="payment-button"
+        >
+          💳 Comprar créditos
+        </button>
       </div>
+
+      <!-- WHATSAPP -->
 
       <a
         href="https://wa.me/525534867206"
@@ -288,13 +584,15 @@
         💬 WhatsApp
       </a>
 
+      <!-- CAMBIAR USERNAME -->
+
       <div class="username-box">
 
-        <h3>👤 Cambiar nombre de usuario</h3>
+        <h3>✨ Cambiar nombre de usuario</h3>
 
         <p>
-          Puedes cambiar tu nombre de usuario cuando quieras.
-          Debe tener entre 3 y 30 caracteres.
+          Puedes cambiar tu nombre de usuario sin modificar tu correo,
+          contraseña, créditos o rol.
         </p>
 
         <input
@@ -302,136 +600,275 @@
           id="new-username"
           placeholder="Nuevo nombre de usuario"
           maxlength="30"
-          autocomplete="off"
         >
 
-        <button id="username-button">
-          ✨ Guardar nuevo usuario
+        <button id="change-username-button">
+          ✨ Cambiar usuario
         </button>
 
       </div>
 
-      <div class="topup-box" id="topup-box">
+      <!-- RECARGA -->
 
-        <h3>💳 Comprar créditos</h3>
+      <div class="topup-box">
 
-        <p>
-          Los créditos tienen un valor de
-          <strong>$1 MXN por crédito</strong>.
-        </p>
+        <h3>💜 Solicitar créditos</h3>
 
         <div class="topup-info">
-          💜 Después de realizar tu pago, envía tu solicitud.
-          El administrador verificará el pago y agregará los créditos
-          manualmente a tu cuenta.
+          💰 <strong>$1 MXN = 1 crédito</strong><br>
+          Realiza tu pago y coloca la referencia o comprobante
+          correspondiente para solicitar la recarga.
         </div>
 
         <input
           type="number"
           id="topup-amount"
-          placeholder="Cantidad de créditos"
           min="1"
           step="1"
+          placeholder="Cantidad de créditos"
         >
+
+        <br><br>
 
         <input
           type="text"
-          id="payment-reference"
-          placeholder="Referencia del pago (opcional)"
-          maxlength="100"
-          autocomplete="off"
-          style="margin-top:10px;"
+          id="topup-reference"
+          placeholder="Referencia / comprobante"
         >
 
-        <button id="topup-button">
-          🦋 Enviar solicitud
+        <button id="request-topup-button">
+          💜 Solicitar recarga
         </button>
 
       </div>
 
-      <div class="topup-history-box" id="topup-history-box">
+      <!-- HISTORIAL -->
 
-        <h3>📋 Mis solicitudes de recarga</h3>
+      <div class="topup-history-box">
 
-        <p style="font-size:14px;">
-          Aquí podrás consultar el estado de tus solicitudes.
-        </p>
+        <h3>📋 Historial de recargas</h3>
 
-        <div id="topup-history">
-          Cargando solicitudes...
+        <div
+          id="topup-history"
+          class="topup-history"
+        >
+          <div class="empty-history">
+            Cargando historial...
+          </div>
         </div>
 
-        <button
-          class="refresh-button"
-          id="refresh-topups-button"
-        >
-          🔄 Actualizar solicitudes
+        <button id="refresh-history-button">
+          🔄 Actualizar historial
         </button>
 
       </div>
 
-      <button id="logout-button">
-        Cerrar sesión
+      <!-- CERRAR SESIÓN -->
+
+      <button
+        id="logout-button"
+        class="logout-button"
+      >
+        🚪 Cerrar sesión
       </button>
 
     </section>
 
+
+    <!-- ACCIONES -->
+
     <section class="actions">
 
-      <a class="action" href="catalogo.html">
-        🛍️<br><br>
-        <strong>Ver catálogo</strong>
-        <br><br>
-        Explora nuestros productos.
-      </a>
+      <div
+        class="action"
+        id="catalog-action"
+      >
+        🛍️<br>
+        Catálogo
+      </div>
 
-      <a class="action" href="#topup-box" id="topup-action">
-        💳<br><br>
-        <strong>Comprar créditos</strong>
-        <br><br>
-        Solicita una recarga.
-      </a>
+      <div
+        class="action"
+        id="topup-action"
+      >
+        💜<br>
+        Comprar créditos
+      </div>
 
-      <a class="action" href="#topup-history-box" id="history-action">
-        📋<br><br>
-        <strong>Historial</strong>
-        <br><br>
-        Consulta tus movimientos.
-      </a>
+      <div
+        class="action"
+        id="history-action"
+      >
+        📋<br>
+        Historial de recargas
+      </div>
 
-      <a class="action" href="mis-compras.html" id="purchases-action">
-        🛒<br><br>
-        <strong>Mis compras</strong>
-        <br><br>
-        Revisa tus productos adquiridos.
-      </a>
+      <div
+        class="action"
+        id="purchases-action"
+      >
+        🛒<br>
+        Mis compras
+      </div>
 
-      <a class="action" href="reportar.html">
-        ⚠️<br><br>
-        <strong>Reportar problema</strong>
-        <br><br>
-        Envía un reporte sobre una compra.
-      </a>
+      <div
+        class="action"
+        id="report-action"
+      >
+        🚨<br>
+        Reportar problema
+      </div>
 
-      <a
+      <div
         class="action admin-action"
-        href="admin.html"
         id="admin-action"
       >
-        🛠️<br><br>
-        <strong>Panel de administración</strong>
-        <br><br>
-        Gestiona Butterfly Shop.
-      </a>
+        ⚙️<br>
+        Administración
+      </div>
 
     </section>
 
   </main>
 
+
+  <!-- ========================= -->
+  <!-- MODAL DE PAGO -->
+  <!-- ========================= -->
+
+  <div
+    class="payment-modal"
+    id="payment-modal"
+  >
+
+    <div class="payment-modal-content">
+
+      <button
+        type="button"
+        class="close-payment-modal"
+        id="close-payment-modal"
+      >
+        ×
+      </button>
+
+      <h2>💳 Comprar créditos</h2>
+
+      <p class="payment-subtitle">
+        Realiza tu pago utilizando los siguientes datos:
+      </p>
+
+
+      <div class="payment-info">
+
+        <div class="payment-row">
+          <span class="payment-label">
+            🏦 Banco
+          </span>
+
+          <span class="payment-value">
+            Nu
+          </span>
+        </div>
+
+
+        <div class="payment-row">
+
+          <span class="payment-label">
+            💜 CLABE
+          </span>
+
+          <div class="clabe-box">
+
+            <span
+              class="clabe-number"
+              id="clabe-number"
+            >
+              638180010075839928
+            </span>
+
+            <button
+              type="button"
+              class="copy-clabe"
+              id="copy-clabe"
+            >
+              📋 Copiar
+            </button>
+
+          </div>
+
+        </div>
+
+
+        <div class="payment-row">
+
+          <span class="payment-label">
+            👤 Titular
+          </span>
+
+          <span class="payment-value">
+            Frida Mundo
+          </span>
+
+        </div>
+
+
+        <div class="payment-row">
+
+          <span class="payment-label">
+            📝 Concepto
+          </span>
+
+          <span class="payment-value">
+            DONACIÓN, ROPA, ETC.
+          </span>
+
+        </div>
+
+      </div>
+
+
+      <div class="payment-warning">
+
+        ⚠️ <strong>IMPORTANTE</strong><br><br>
+
+        Los pagos realizados a otras cuentas o CLABEs
+        <strong>no serán válidos</strong> para Butterfly Shop.
+
+      </div>
+
+
+      <div class="payment-proof">
+
+        🧾 <strong>Después de realizar tu pago:</strong><br><br>
+
+        Envía tu comprobante para que podamos
+        validar tu pago y realizar la recarga
+        correspondiente de créditos.
+
+        <a
+          href="https://wa.me/525534867206"
+          target="_blank"
+          rel="noopener noreferrer"
+          class="payment-whatsapp"
+        >
+          💬 Enviar comprobante por WhatsApp
+        </a>
+
+      </div>
+
+    </div>
+
+  </div>
+
+
   <script>
 
     let usuarioActual = null;
 
+
+    /* ========================= */
+    /* CARGAR PANEL */
+    /* ========================= */
 
     async function cargarPanel() {
 
@@ -440,56 +877,77 @@
         error: userError
       } = await supabaseClient.auth.getUser();
 
+
       if (userError || !user) {
+
         window.location.href = "login.html";
+
         return;
       }
+
 
       usuarioActual = user;
 
+
       const {
-        data: profile,
-        error: profileError
+        data: perfil,
+        error: perfilError
       } = await supabaseClient
         .from("profiles")
-        .select("username, email, credits, role")
+        .select("*")
         .eq("id", user.id)
         .single();
 
-      if (profileError) {
-        console.error("Error cargando perfil:", profileError);
+
+      if (perfilError) {
+
+        console.error(perfilError);
+
         alert("No se pudo cargar tu perfil.");
+
         return;
       }
 
+
       document.getElementById("username").textContent =
-        profile.username || "Usuario";
+        perfil.username || "Usuario";
+
 
       document.getElementById("credits").textContent =
-        profile.credits ?? 0;
+        perfil.credits ?? 0;
+
 
       document.getElementById("new-username").value =
-        profile.username || "";
+        perfil.username || "";
 
-      if (profile.role === "admin") {
 
-        document.getElementById("admin-menu").style.display =
+      /* ADMIN */
+
+      if (perfil.role === "admin") {
+
+        document.getElementById("admin-link").style.display =
           "inline-block";
 
         document.getElementById("admin-action").style.display =
           "block";
       }
 
+
       await cargarSolicitudesRecarga();
     }
 
+
+    /* ========================= */
+    /* ACTUALIZAR SALDO */
+    /* ========================= */
 
     async function actualizarSaldo() {
 
       if (!usuarioActual) return;
 
+
       const {
-        data: profile,
+        data,
         error
       } = await supabaseClient
         .from("profiles")
@@ -497,31 +955,34 @@
         .eq("id", usuarioActual.id)
         .single();
 
-      if (error) {
-        console.error("Error actualizando saldo:", error);
-        return;
-      }
 
-      document.getElementById("credits").textContent =
-        profile.credits ?? 0;
+      if (!error && data) {
+
+        document.getElementById("credits").textContent =
+          data.credits ?? 0;
+      }
     }
 
+
+    /* ========================= */
+    /* ESTADO DE RECARGA */
+    /* ========================= */
 
     function obtenerTextoEstado(status) {
 
       if (status === "pending") {
-        return "⏳ Pendiente";
+        return "Pendiente";
       }
 
       if (status === "approved") {
-        return "✅ Aprobada";
+        return "Aprobada";
       }
 
       if (status === "rejected") {
-        return "❌ Rechazada";
+        return "Rechazada";
       }
 
-      return status || "Desconocido";
+      return status;
     }
 
 
@@ -543,71 +1004,95 @@
     }
 
 
+    /* ========================= */
+    /* FORMATEAR FECHA */
+    /* ========================= */
+
     function formatearFecha(fecha) {
 
-      if (!fecha) return "Sin fecha";
+      if (!fecha) return "—";
 
-      return new Date(fecha).toLocaleString("es-MX", {
-        dateStyle: "medium",
-        timeStyle: "short"
-      });
+
+      return new Date(fecha).toLocaleString(
+        "es-MX",
+        {
+          dateStyle: "short",
+          timeStyle: "short"
+        }
+      );
     }
 
 
+    /* ========================= */
+    /* CARGAR HISTORIAL */
+    /* ========================= */
+
     async function cargarSolicitudesRecarga() {
 
-      const historyContainer =
+      const contenedor =
         document.getElementById("topup-history");
 
-      historyContainer.innerHTML =
-        "Cargando solicitudes...";
 
-      const {
-        data: { user },
-        error: userError
-      } = await supabaseClient.auth.getUser();
+      contenedor.innerHTML = `
+        <div class="empty-history">
+          Cargando historial...
+        </div>
+      `;
 
-      if (userError || !user) {
-        historyContainer.innerHTML =
-          "No se pudo verificar tu sesión.";
-        return;
-      }
+
+      if (!usuarioActual) return;
+
 
       const {
         data,
         error
       } = await supabaseClient
         .from("topups")
-        .select(
-          "id, amount_credits, payment_method, payment_reference, status, created_at, processed_at"
-        )
-        .eq("user_id", user.id)
+        .select(`
+          id,
+          amount_credits,
+          payment_method,
+          payment_reference,
+          status,
+          created_at,
+          processed_at
+        `)
+        .eq("user_id", usuarioActual.id)
         .order("created_at", {
           ascending: false
         });
 
+
       if (error) {
 
-        console.error(
-          "Error cargando solicitudes:",
-          error
-        );
+        console.error(error);
 
-        historyContainer.innerHTML =
-          '<div class="empty-history">❌ No se pudieron cargar tus solicitudes.</div>';
+        contenedor.innerHTML = `
+          <div class="empty-history">
+            No se pudo cargar el historial.
+          </div>
+        `;
 
         return;
       }
+
 
       if (!data || data.length === 0) {
 
-        historyContainer.innerHTML =
-          '<div class="empty-history">🦋 Todavía no tienes solicitudes de recarga.</div>';
+        contenedor.innerHTML = `
+          <div class="empty-history">
+            Todavía no tienes solicitudes de recarga.
+          </div>
+        `;
+
+        await actualizarSaldo();
 
         return;
       }
 
-      historyContainer.innerHTML = "";
+
+      contenedor.innerHTML = "";
+
 
       data.forEach((topup) => {
 
@@ -616,34 +1101,35 @@
 
         card.className = "topup-card";
 
-        const statusClass =
-          obtenerClaseEstado(topup.status);
 
-        const statusText =
+        const estado =
           obtenerTextoEstado(topup.status);
 
+
+        const claseEstado =
+          obtenerClaseEstado(topup.status);
+
+
         card.innerHTML = `
-          <span class="topup-status ${statusClass}">
-            ${statusText}
-          </span>
 
           <p>
-            💜 <strong>Créditos solicitados:</strong>
-            ${topup.amount_credits}
+            💜 <strong>
+              ${topup.amount_credits}
+            </strong> créditos
           </p>
 
           <p>
-            💰 <strong>Total:</strong>
-            $${topup.amount_credits} MXN
+            💳 Método:
+            ${topup.payment_method || "—"}
           </p>
 
           <p>
-            🧾 <strong>Referencia:</strong>
-            ${topup.payment_reference || "No proporcionada"}
+            🧾 Referencia:
+            ${topup.payment_reference || "—"}
           </p>
 
           <p>
-            📅 <strong>Solicitud:</strong>
+            📅 Solicitud:
             ${formatearFecha(topup.created_at)}
           </p>
 
@@ -651,209 +1137,441 @@
             topup.processed_at
               ? `
                 <p>
-                  🔎 <strong>Procesada:</strong>
+                  ✅ Procesada:
                   ${formatearFecha(topup.processed_at)}
                 </p>
               `
               : ""
           }
+
+          <span class="status ${claseEstado}">
+            ${estado}
+          </span>
+
         `;
 
-        historyContainer.appendChild(card);
+
+        contenedor.appendChild(card);
+
       });
+
 
       await actualizarSaldo();
     }
 
 
-    document.getElementById("username-button")
+    /* ========================= */
+    /* CAMBIAR USERNAME */
+    /* ========================= */
+
+    document
+      .getElementById("change-username-button")
       .addEventListener("click", async () => {
 
-        const input =
-          document.getElementById("new-username");
+        const nuevoUsername =
+          document
+            .getElementById("new-username")
+            .value
+            .trim();
 
-        const button =
-          document.getElementById("username-button");
 
-        const newUsername =
-          input.value.trim();
+        if (!nuevoUsername) {
 
-        if (!newUsername) {
-          alert("Escribe un nombre de usuario.");
+          alert("Escribe un nuevo nombre de usuario.");
+
           return;
         }
 
-        if (newUsername.length < 3) {
-          alert(
-            "El nombre de usuario debe tener al menos 3 caracteres."
-          );
-          return;
-        }
-
-        if (newUsername.length > 30) {
-          alert(
-            "El nombre de usuario no puede superar 30 caracteres."
-          );
-          return;
-        }
-
-        button.disabled = true;
-        button.textContent = "Guardando...";
 
         const {
-          data,
           error
         } = await supabaseClient.rpc(
           "change_username",
           {
-            p_new_username: newUsername
+            p_new_username: nuevoUsername
           }
         );
 
-        button.disabled = false;
-        button.textContent =
-          "✨ Guardar nuevo usuario";
 
         if (error) {
+
           console.error(error);
+
           alert(
             error.message ||
             "No se pudo cambiar el nombre de usuario."
           );
+
           return;
         }
 
-        document.getElementById("username").textContent =
-          data;
 
-        input.value = data;
+        document.getElementById("username").textContent =
+          nuevoUsername;
+
 
         alert(
-          "✨ ¡Nombre de usuario cambiado correctamente!"
+          "✨ Tu nombre de usuario se cambió correctamente."
         );
+
       });
 
 
-    document.getElementById("topup-button")
+    /* ========================= */
+    /* SOLICITAR RECARGA */
+    /* ========================= */
+
+    document
+      .getElementById("request-topup-button")
       .addEventListener("click", async () => {
 
-        const amountInput =
-          document.getElementById("topup-amount");
-
-        const referenceInput =
-          document.getElementById("payment-reference");
-
-        const button =
-          document.getElementById("topup-button");
-
         const amount =
-          Number(amountInput.value);
+          parseInt(
+            document.getElementById("topup-amount").value
+          );
+
 
         const reference =
-          referenceInput.value.trim();
+          document
+            .getElementById("topup-reference")
+            .value
+            .trim();
 
-        if (!Number.isInteger(amount) || amount <= 0) {
+
+        if (!amount || amount < 1) {
+
           alert(
             "Escribe una cantidad válida de créditos."
           );
+
           return;
         }
 
-        button.disabled = true;
-        button.textContent = "Enviando...";
+
+        if (!reference) {
+
+          alert(
+            "Escribe la referencia o comprobante."
+          );
+
+          return;
+        }
+
 
         const {
-          data,
           error
         } = await supabaseClient.rpc(
           "request_topup",
           {
             p_amount_credits: amount,
-            p_payment_reference:
-              reference || null
+            p_payment_reference: reference
           }
         );
 
-        button.disabled = false;
-        button.textContent =
-          "🦋 Enviar solicitud";
 
         if (error) {
+
           console.error(error);
+
           alert(
             error.message ||
             "No se pudo enviar la solicitud."
           );
+
           return;
         }
 
-        amountInput.value = "";
-        referenceInput.value = "";
 
         alert(
-          "🦋 ¡Solicitud enviada correctamente!\n\n" +
-          "Solicitud: " + data + "\n" +
-          "Créditos solicitados: " + amount + "\n" +
-          "Total: $" + amount + " MXN\n\n" +
-          "El administrador verificará tu pago."
+          "💜 Solicitud de recarga enviada correctamente."
         );
 
-        await cargarSolicitudesRecarga();
-      });
 
+        document.getElementById("topup-amount").value =
+          "";
 
-    document.getElementById("topup-action")
-      .addEventListener("click", (event) => {
+        document.getElementById("topup-reference").value =
+          "";
 
-        event.preventDefault();
-
-        document.querySelector(".topup-box")
-          .scrollIntoView({
-            behavior: "smooth",
-            block: "center"
-          });
-      });
-
-
-    document.getElementById("history-action")
-      .addEventListener("click", (event) => {
-
-        event.preventDefault();
-
-        document.getElementById("topup-history-box")
-          .scrollIntoView({
-            behavior: "smooth",
-            block: "center"
-          });
-
-        cargarSolicitudesRecarga();
-      });
-
-
-    document.getElementById("refresh-topups-button")
-      .addEventListener("click", async () => {
-
-        const button =
-          document.getElementById("refresh-topups-button");
-
-        button.disabled = true;
-        button.textContent = "Actualizando...";
 
         await cargarSolicitudesRecarga();
 
-        button.disabled = false;
-        button.textContent = "🔄 Actualizar solicitudes";
       });
 
 
-    document.getElementById("logout-button")
+    /* ========================= */
+    /* CATÁLOGO */
+    /* ========================= */
+
+    document
+      .getElementById("catalog-action")
+      .addEventListener("click", () => {
+
+        window.location.href =
+          "catalogo.html";
+
+      });
+
+
+    /* ========================= */
+    /* COMPRAR CRÉDITOS */
+    /* ========================= */
+
+    document
+      .getElementById("topup-action")
+      .addEventListener("click", () => {
+
+        document
+          .querySelector(".topup-box")
+          .scrollIntoView({
+            behavior: "smooth"
+          });
+
+      });
+
+
+    /* ========================= */
+    /* HISTORIAL */
+    /* ========================= */
+
+    document
+      .getElementById("history-action")
       .addEventListener("click", async () => {
 
-        await supabaseClient.auth.signOut();
+        document
+          .querySelector(".topup-history-box")
+          .scrollIntoView({
+            behavior: "smooth"
+          });
 
-        window.location.href = "login.html";
+
+        await cargarSolicitudesRecarga();
+
       });
 
+
+    /* ========================= */
+    /* MIS COMPRAS */
+    /* ========================= */
+
+    document
+      .getElementById("purchases-action")
+      .addEventListener("click", () => {
+
+        window.location.href =
+          "mis-compras.html";
+
+      });
+
+
+    /* ========================= */
+    /* REPORTAR */
+    /* ========================= */
+
+    document
+      .getElementById("report-action")
+      .addEventListener("click", () => {
+
+        window.location.href =
+          "reportar.html";
+
+      });
+
+
+    /* ========================= */
+    /* ADMIN */
+    /* ========================= */
+
+    document
+      .getElementById("admin-action")
+      .addEventListener("click", () => {
+
+        window.location.href =
+          "admin.html";
+
+      });
+
+
+    /* ========================= */
+    /* ACTUALIZAR HISTORIAL */
+    /* ========================= */
+
+    document
+      .getElementById("refresh-history-button")
+      .addEventListener("click", async () => {
+
+        await cargarSolicitudesRecarga();
+
+      });
+
+
+    /* ========================= */
+    /* CERRAR SESIÓN */
+    /* ========================= */
+
+    document
+      .getElementById("logout-button")
+      .addEventListener("click", async () => {
+
+        const {
+          error
+        } = await supabaseClient.auth.signOut();
+
+
+        if (error) {
+
+          console.error(error);
+
+          alert(
+            "No se pudo cerrar la sesión."
+          );
+
+          return;
+        }
+
+
+        window.location.href =
+          "login.html";
+
+      });
+
+
+    /* ========================= */
+    /* MODAL DE PAGO */
+    /* ========================= */
+
+    const paymentModal =
+      document.getElementById("payment-modal");
+
+
+    const paymentButton =
+      document.getElementById("payment-button");
+
+
+    const closePaymentModal =
+      document.getElementById("close-payment-modal");
+
+
+    paymentButton.addEventListener(
+      "click",
+      () => {
+
+        paymentModal.classList.add("show");
+
+      }
+    );
+
+
+    closePaymentModal.addEventListener(
+      "click",
+      () => {
+
+        paymentModal.classList.remove("show");
+
+      }
+    );
+
+
+    /* CERRAR AL TOCAR FUERA */
+
+    paymentModal.addEventListener(
+      "click",
+      (event) => {
+
+        if (
+          event.target === paymentModal
+        ) {
+
+          paymentModal.classList.remove(
+            "show"
+          );
+
+        }
+
+      }
+    );
+
+
+    /* ========================= */
+    /* COPIAR CLABE */
+    /* ========================= */
+
+    document
+      .getElementById("copy-clabe")
+      .addEventListener("click", async () => {
+
+        const clabe =
+          document
+            .getElementById("clabe-number")
+            .textContent
+            .trim();
+
+
+        try {
+
+          await navigator.clipboard.writeText(
+            clabe
+          );
+
+
+          const button =
+            document.getElementById(
+              "copy-clabe"
+            );
+
+
+          const textoOriginal =
+            button.textContent;
+
+
+          button.textContent =
+            "✅ Copiado";
+
+
+          setTimeout(() => {
+
+            button.textContent =
+              textoOriginal;
+
+          }, 1500);
+
+
+        } catch (error) {
+
+          alert(
+            "No se pudo copiar automáticamente. Puedes mantener presionada la CLABE para copiarla."
+          );
+
+        }
+
+      });
+
+
+    /* ========================= */
+    /* ESC PARA CERRAR MODAL */
+    /* ========================= */
+
+    document.addEventListener(
+      "keydown",
+      (event) => {
+
+        if (
+          event.key === "Escape"
+        ) {
+
+          paymentModal.classList.remove(
+            "show"
+          );
+
+        }
+
+      }
+    );
+
+
+    /* ========================= */
+    /* INICIAR */
+    /* ========================= */
 
     cargarPanel();
 
