@@ -1,0 +1,403 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Mis compras | Butterfly Shop</title>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="supabase-config.js"></script>
+
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background: linear-gradient(135deg, #f7eaff, #ead7ff, #fce4f4);
+      min-height: 100vh;
+      color: #4a3158;
+    }
+
+    header {
+      background: rgba(255, 255, 255, 0.85);
+      padding: 18px 20px;
+      text-align: center;
+      box-shadow: 0 2px 12px rgba(100, 60, 120, 0.12);
+    }
+
+    header h1 {
+      margin: 0;
+      color: #8e44ad;
+      font-size: 25px;
+    }
+
+    header p {
+      margin: 6px 0 0;
+      color: #76527f;
+      font-size: 14px;
+    }
+
+    .container {
+      width: 92%;
+      max-width: 900px;
+      margin: 30px auto;
+    }
+
+    .top-buttons {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      margin-bottom: 22px;
+    }
+
+    .btn {
+      border: none;
+      border-radius: 12px;
+      padding: 11px 16px;
+      cursor: pointer;
+      text-decoration: none;
+      font-weight: bold;
+      font-size: 14px;
+    }
+
+    .btn-back {
+      background: #ffffff;
+      color: #8e44ad;
+      box-shadow: 0 3px 10px rgba(100, 60, 120, 0.12);
+    }
+
+    .btn-refresh {
+      background: #9b59b6;
+      color: white;
+    }
+
+    .loading,
+    .empty,
+    .error {
+      background: rgba(255, 255, 255, 0.9);
+      padding: 25px;
+      border-radius: 18px;
+      text-align: center;
+      box-shadow: 0 4px 15px rgba(100, 60, 120, 0.12);
+    }
+
+    .error {
+      color: #a33a68;
+    }
+
+    .purchase-card {
+      background: rgba(255, 255, 255, 0.94);
+      border-radius: 18px;
+      padding: 18px;
+      margin-bottom: 18px;
+      box-shadow: 0 5px 18px rgba(100, 60, 120, 0.13);
+    }
+
+    .purchase-top {
+      display: flex;
+      gap: 15px;
+      align-items: center;
+      margin-bottom: 15px;
+    }
+
+    .product-image {
+      width: 70px;
+      height: 70px;
+      border-radius: 14px;
+      object-fit: cover;
+      background: #ead7ff;
+      flex-shrink: 0;
+    }
+
+    .product-info {
+      flex: 1;
+    }
+
+    .product-info h2 {
+      margin: 0 0 5px;
+      color: #8e44ad;
+      font-size: 19px;
+    }
+
+    .category {
+      color: #956ba1;
+      font-size: 13px;
+    }
+
+    .details {
+      display: grid;
+      gap: 8px;
+      margin: 12px 0;
+    }
+
+    .detail {
+      background: #faf5ff;
+      border-radius: 10px;
+      padding: 10px 12px;
+      font-size: 14px;
+    }
+
+    .status {
+      display: inline-block;
+      padding: 5px 10px;
+      border-radius: 20px;
+      background: #ead7ff;
+      color: #7d3c98;
+      font-size: 12px;
+      font-weight: bold;
+    }
+
+    .delivery-box {
+      margin-top: 12px;
+      background: #f8f0ff;
+      border: 1px solid #e2c9ef;
+      border-radius: 12px;
+      padding: 13px;
+      display: none;
+    }
+
+    .delivery-title {
+      font-weight: bold;
+      color: #8e44ad;
+      margin-bottom: 8px;
+    }
+
+    .delivery-data {
+      white-space: pre-wrap;
+      word-break: break-word;
+      font-family: monospace;
+      font-size: 13px;
+      background: white;
+      border-radius: 9px;
+      padding: 11px;
+    }
+
+    .view-data {
+      width: 100%;
+      margin-top: 10px;
+      border: none;
+      border-radius: 11px;
+      padding: 11px;
+      background: #9b59b6;
+      color: white;
+      font-weight: bold;
+      cursor: pointer;
+    }
+
+    .view-data:hover,
+    .btn-refresh:hover {
+      opacity: 0.9;
+    }
+
+    @media (max-width: 500px) {
+      .purchase-top {
+        align-items: flex-start;
+      }
+
+      .product-image {
+        width: 60px;
+        height: 60px;
+      }
+
+      .product-info h2 {
+        font-size: 17px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <header>
+    <h1>🦋 Mis compras</h1>
+    <p>Aquí encontrarás todos los productos que has comprado.</p>
+  </header>
+
+  <main class="container">
+
+    <div class="top-buttons">
+      <a href="panel.html" class="btn btn-back">← Volver al panel</a>
+      <button class="btn btn-refresh" id="refresh-btn">🔄 Actualizar</button>
+    </div>
+
+    <div id="purchases-container">
+      <div class="loading">Cargando tus compras... 🦋</div>
+    </div>
+
+  </main>
+
+  <script>
+    const container = document.getElementById("purchases-container");
+    const refreshButton = document.getElementById("refresh-btn");
+
+    async function cargarCompras() {
+      container.innerHTML = `
+        <div class="loading">
+          Cargando tus compras... 🦋
+        </div>
+      `;
+
+      try {
+        const {
+          data: { user },
+          error: userError
+        } = await supabaseClient.auth.getUser();
+
+        if (userError || !user) {
+          window.location.href = "login.html";
+          return;
+        }
+
+        const { data, error } = await supabaseClient
+          .from("purchases")
+          .select(`
+            id,
+            price_credits,
+            status,
+            created_at,
+            products (
+              name,
+              description,
+              category,
+              image_url
+            ),
+            inventory (
+              delivery_data
+            )
+          `)
+          .eq("user_id", user.id)
+          .order("created_at", { ascending: false });
+
+        if (error) {
+          console.error(error);
+          throw new Error("No se pudieron cargar tus compras.");
+        }
+
+        if (!data || data.length === 0) {
+          container.innerHTML = `
+            <div class="empty">
+              <div style="font-size: 35px;">🛍️</div>
+              <h2>Aún no tienes compras</h2>
+              <p>Cuando compres un producto, aparecerá aquí.</p>
+            </div>
+          `;
+          return;
+        }
+
+        container.innerHTML = "";
+
+        data.forEach((purchase) => {
+          const product = purchase.products;
+          const inventory = purchase.inventory;
+
+          const date = new Date(purchase.created_at).toLocaleString(
+            "es-MX",
+            {
+              dateStyle: "medium",
+              timeStyle: "short"
+            }
+          );
+
+          const card = document.createElement("div");
+          card.className = "purchase-card";
+
+          const image = product?.image_url
+            ? product.image_url
+            : "https://placehold.co/150x150/eaddf7/8e44ad?text=🦋";
+
+          card.innerHTML = `
+            <div class="purchase-top">
+              <img
+                class="product-image"
+                src="${image}"
+                alt="Producto"
+              >
+
+              <div class="product-info">
+                <h2>${product?.name || "Producto"}</h2>
+                <div class="category">
+                  ${product?.category || "Sin categoría"}
+                </div>
+              </div>
+            </div>
+
+            <div class="details">
+              <div class="detail">
+                💜 <strong>Precio:</strong>
+                ${purchase.price_credits} créditos
+              </div>
+
+              <div class="detail">
+                📅 <strong>Fecha:</strong>
+                ${date}
+              </div>
+
+              <div class="detail">
+                📦 <strong>Estado:</strong>
+                <span class="status">
+                  ${purchase.status || "completada"}
+                </span>
+              </div>
+            </div>
+
+            <button class="view-data">
+              🔐 Ver datos del producto
+            </button>
+
+            <div class="delivery-box">
+              <div class="delivery-title">
+                🔑 Datos entregados
+              </div>
+
+              <div class="delivery-data"></div>
+            </div>
+          `;
+
+          const viewButton = card.querySelector(".view-data");
+          const deliveryBox = card.querySelector(".delivery-box");
+          const deliveryData = card.querySelector(".delivery-data");
+
+          deliveryData.textContent =
+            inventory?.delivery_data || "No hay datos disponibles.";
+
+          viewButton.addEventListener("click", () => {
+            const visible = deliveryBox.style.display === "block";
+
+            deliveryBox.style.display = visible ? "none" : "block";
+
+            viewButton.textContent = visible
+              ? "🔐 Ver datos del producto"
+              : "🙈 Ocultar datos";
+          });
+
+          container.appendChild(card);
+        });
+
+      } catch (error) {
+        console.error(error);
+
+        container.innerHTML = `
+          <div class="error">
+            <h2>⚠️ Ocurrió un error</h2>
+            <p>${error.message}</p>
+            <button
+              class="btn btn-refresh"
+              onclick="cargarCompras()"
+            >
+              🔄 Intentar nuevamente
+            </button>
+          </div>
+        `;
+      }
+    }
+
+    refreshButton.addEventListener("click", cargarCompras);
+
+    cargarCompras();
+  </script>
+
+</body>
+</html>
