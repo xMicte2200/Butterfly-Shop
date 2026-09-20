@@ -72,6 +72,25 @@
       color: #b03a9b;
     }
 
+    .whatsapp-button {
+      display: inline-block;
+      margin-top: 12px;
+      padding: 10px 16px;
+      border-radius: 12px;
+      background: #25D366;
+      color: white;
+      text-decoration: none;
+      font-size: 14px;
+      font-weight: bold;
+      box-shadow: 0 3px 10px rgba(37,211,102,0.25);
+      transition: 0.2s;
+    }
+
+    .whatsapp-button:hover {
+      transform: translateY(-2px);
+      opacity: 0.9;
+    }
+
     .actions {
       display: grid;
       grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
@@ -259,6 +278,15 @@
       <div class="credits">
         💜 Créditos: <span id="credits">0</span>
       </div>
+
+      <a
+        href="https://wa.me/525534867206"
+        target="_blank"
+        rel="noopener noreferrer"
+        class="whatsapp-button"
+      >
+        💬 WhatsApp
+      </a>
 
       <div class="username-box">
 
