@@ -3,7 +3,11 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
   <title>Reportar problema | Butterfly Shop</title>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="supabase-config.js"></script>
 
   <style>
     * {
@@ -34,10 +38,10 @@
     }
 
     .box {
-      background: rgba(255, 255, 255, 0.96);
+      background: rgba(255,255,255,0.96);
       padding: 30px;
       border-radius: 25px;
-      box-shadow: 0 8px 25px rgba(100, 60, 120, 0.13);
+      box-shadow: 0 8px 25px rgba(100,60,120,0.13);
     }
 
     .icon {
@@ -58,6 +62,17 @@
       font-size: 14px;
       line-height: 1.5;
       margin-bottom: 28px;
+    }
+
+    .notice {
+      background: #faf2ff;
+      border-left: 4px solid #b66ed6;
+      padding: 13px;
+      border-radius: 10px;
+      margin-bottom: 20px;
+      font-size: 13px;
+      color: #765982;
+      line-height: 1.5;
     }
 
     .group {
@@ -90,6 +105,11 @@
       border-color: #b66ed6;
     }
 
+    input[readonly] {
+      background: #faf7fc;
+      color: #765982;
+    }
+
     textarea {
       min-height: 130px;
       resize: vertical;
@@ -114,14 +134,52 @@
       margin-top: 5px;
     }
 
-    .notice {
-      background: #faf2ff;
-      border-left: 4px solid #b66ed6;
+    .submit:hover {
+      opacity: 0.92;
+    }
+
+    .submit:disabled {
+      opacity: 0.6;
+      cursor: not-allowed;
+    }
+
+    .message {
+      display: none;
       padding: 13px;
-      border-radius: 10px;
-      margin-bottom: 20px;
-      font-size: 13px;
+      border-radius: 12px;
+      margin-bottom: 18px;
+      font-size: 14px;
+      line-height: 1.5;
+    }
+
+    .message.success {
+      display: block;
+      background: #edf9f1;
+      border: 1px solid #b9e5c6;
+      color: #327046;
+    }
+
+    .message.error {
+      display: block;
+      background: #fff0f2;
+      border: 1px solid #f0b9c2;
+      color: #9b3d4c;
+    }
+
+    .loading {
+      text-align: center;
+      color: #8b6a96;
+      font-size: 14px;
+      padding: 10px;
+    }
+
+    .no-purchases {
+      background: #faf7fc;
+      border: 1px solid #ead8f3;
+      border-radius: 12px;
+      padding: 15px;
       color: #765982;
+      font-size: 13px;
       line-height: 1.5;
     }
 
@@ -138,9 +196,7 @@
 
   <main class="container">
 
-    <a href="panel.html" class="back">
-      ← Volver al panel
-    </a>
+    <a href="panel.html" class="back">← Volver al panel</a>
 
     <div class="box">
 
@@ -149,74 +205,104 @@
       <h1>Reportar un problema</h1>
 
       <p class="intro">
-        Cuéntanos qué ocurrió con tu compra y revisaremos tu reporte.
-        🦋
+        Selecciona la compra con la que tuviste el problema y cuéntanos qué ocurrió. 🦋
       </p>
 
       <div class="notice">
-        💜 Proporciona información clara para que podamos identificar
-        rápidamente la compra y ayudarte.
+        💜 Selecciona una de tus compras para que podamos identificar automáticamente
+        el producto, correo, fecha y tipo de cuenta relacionados.
       </div>
 
-      <form>
+      <div id="message" class="message"></div>
 
+      <form id="reportForm">
+
+        <!-- COMPRA -->
         <div class="group">
-          <label for="platform">
-            🛍️ Plataforma o producto
-          </label>
+          <label for="purchase">🛍️ Compra relacionada</label>
 
-          <input
-            type="text"
-            id="platform"
-            placeholder="Ej. Plataforma digital"
-            required
-          >
+          <div id="purchaseLoading" class="loading">
+            Cargando tus compras... 🦋
+          </div>
+
+          <select id="purchase" required style="display:none;">
+            <option value="">Selecciona una compra</option>
+          </select>
+
+          <div id="noPurchases" class="no-purchases" style="display:none;">
+            🦋 No encontramos compras asociadas a tu cuenta.
+            Primero debes realizar una compra para poder reportarla.
+          </div>
+
+          <div class="hint">
+            Selecciona exactamente la compra que presenta el problema.
+          </div>
         </div>
 
+        <!-- EMAIL -->
         <div class="group">
-          <label for="email">
-            📧 Correo relacionado con la compra
-          </label>
+          <label for="email">📧 Correo relacionado con la compra</label>
 
           <input
             type="email"
             id="email"
-            placeholder="correo@ejemplo.com"
-            required
+            placeholder="Tu correo"
+            readonly
           >
         </div>
 
+        <!-- PLATAFORMA / PRODUCTO -->
         <div class="group">
-          <label for="date">
-            📅 Fecha de compra
-          </label>
+          <label for="platform">🛍️ Plataforma o producto</label>
+
+          <input
+            type="text"
+            id="platform"
+            placeholder="Producto"
+            readonly
+          >
+        </div>
+
+        <!-- TIPO DE CUENTA -->
+        <div class="group">
+          <label for="accountType">👤 Tipo de cuenta</label>
+
+          <input
+            type="text"
+            id="accountType"
+            placeholder="Tipo de cuenta"
+            readonly
+          >
+        </div>
+
+        <!-- FECHA -->
+        <div class="group">
+          <label for="date">📅 Fecha de compra</label>
 
           <input
             type="date"
             id="date"
-            required
+            readonly
           >
         </div>
 
+        <!-- TIPO DE PROBLEMA -->
         <div class="group">
-          <label for="type">
-            🔎 Tipo de problema
-          </label>
+          <label for="type">🔎 Tipo de problema</label>
 
           <select id="type" required>
             <option value="">Selecciona una opción</option>
-            <option>Producto no recibido</option>
-            <option>Producto con problema</option>
-            <option>Datos incorrectos</option>
-            <option>Problema de acceso</option>
-            <option>Otro</option>
+            <option value="Producto no recibido">Producto no recibido</option>
+            <option value="Producto con problema">Producto con problema</option>
+            <option value="Datos incorrectos">Datos incorrectos</option>
+            <option value="Problema de acceso">Problema de acceso</option>
+            <option value="Otro">Otro</option>
           </select>
         </div>
 
+        <!-- DESCRIPCIÓN -->
         <div class="group">
-          <label for="description">
-            📝 Describe el problema
-          </label>
+          <label for="description">📝 Describe el problema</label>
 
           <textarea
             id="description"
@@ -229,7 +315,7 @@
           </div>
         </div>
 
-        <button type="submit" class="submit">
+        <button type="submit" class="submit" id="submitButton">
           🦋 Enviar reporte
         </button>
 
@@ -242,6 +328,428 @@
     </div>
 
   </main>
+
+
+  <script>
+
+    let usuarioActual = null;
+    let compras = [];
+
+
+    // ==========================================
+    // MOSTRAR MENSAJES
+    // ==========================================
+
+    function mostrarMensaje(texto, tipo) {
+
+      const message = document.getElementById("message");
+
+      message.textContent = texto;
+
+      message.className = "message " + tipo;
+
+    }
+
+
+    // ==========================================
+    // FORMATEAR FECHA
+    // ==========================================
+
+    function convertirFecha(fecha) {
+
+      if (!fecha) return "";
+
+      const fechaObj = new Date(fecha);
+
+      const year = fechaObj.getFullYear();
+
+      const month = String(fechaObj.getMonth() + 1).padStart(2, "0");
+
+      const day = String(fechaObj.getDate()).padStart(2, "0");
+
+      return `${year}-${month}-${day}`;
+
+    }
+
+
+    // ==========================================
+    // CARGAR USUARIO
+    // ==========================================
+
+    async function cargarUsuario() {
+
+      const {
+        data: { user },
+        error
+      } = await supabaseClient.auth.getUser();
+
+
+      if (error || !user) {
+
+        window.location.href = "login.html";
+
+        return null;
+
+      }
+
+
+      usuarioActual = user;
+
+      document.getElementById("email").value = user.email || "";
+
+
+      return user;
+
+    }
+
+
+    // ==========================================
+    // CARGAR COMPRAS
+    // ==========================================
+
+    async function cargarCompras() {
+
+      const purchaseLoading =
+        document.getElementById("purchaseLoading");
+
+      const purchaseSelect =
+        document.getElementById("purchase");
+
+      const noPurchases =
+        document.getElementById("noPurchases");
+
+
+      const { data, error } = await supabaseClient
+        .from("purchases")
+        .select(`
+          id,
+          price_credits,
+          status,
+          created_at,
+          products (
+            id,
+            name,
+            description,
+            category,
+            image_url,
+            account_type
+          ),
+          inventory (
+            delivery_data
+          )
+        `)
+        .eq("user_id", usuarioActual.id)
+        .order("created_at", { ascending: false });
+
+
+      purchaseLoading.style.display = "none";
+
+
+      if (error) {
+
+        console.error("Error cargando compras:", error);
+
+        mostrarMensaje(
+          "No pudimos cargar tus compras. Intenta nuevamente.",
+          "error"
+        );
+
+        return;
+
+      }
+
+
+      compras = data || [];
+
+
+      if (compras.length === 0) {
+
+        noPurchases.style.display = "block";
+
+        return;
+
+      }
+
+
+      purchaseSelect.style.display = "block";
+
+
+      compras.forEach((compra, index) => {
+
+        const option = document.createElement("option");
+
+        option.value = compra.id;
+
+
+        const nombreProducto =
+          compra.products?.name || "Producto";
+
+
+        const fecha =
+          convertirFecha(compra.created_at);
+
+
+        option.textContent =
+          `${nombreProducto} · ${fecha} · ${compra.price_credits} créditos`;
+
+
+        purchaseSelect.appendChild(option);
+
+      });
+
+    }
+
+
+    // ==========================================
+    // SELECCIONAR COMPRA
+    // ==========================================
+
+    document
+      .getElementById("purchase")
+      .addEventListener("change", function () {
+
+        const purchaseId = this.value;
+
+
+        if (!purchaseId) {
+
+          document.getElementById("platform").value = "";
+
+          document.getElementById("accountType").value = "";
+
+          document.getElementById("date").value = "";
+
+          return;
+
+        }
+
+
+        const compra =
+          compras.find(item => item.id === purchaseId);
+
+
+        if (!compra) return;
+
+
+        const producto = compra.products;
+
+
+        document.getElementById("platform").value =
+          producto?.name || "";
+
+
+        document.getElementById("accountType").value =
+          producto?.account_type || "Sin especificar";
+
+
+        document.getElementById("date").value =
+          convertirFecha(compra.created_at);
+
+
+        document.getElementById("email").value =
+          usuarioActual?.email || "";
+
+      });
+
+
+    // ==========================================
+    // ENVIAR REPORTE
+    // ==========================================
+
+    document
+      .getElementById("reportForm")
+      .addEventListener("submit", async function(event) {
+
+        event.preventDefault();
+
+
+        const submitButton =
+          document.getElementById("submitButton");
+
+
+        const purchaseId =
+          document.getElementById("purchase").value;
+
+
+        const problemType =
+          document.getElementById("type").value;
+
+
+        const description =
+          document.getElementById("description").value.trim();
+
+
+        if (!purchaseId) {
+
+          mostrarMensaje(
+            "Selecciona la compra que quieres reportar.",
+            "error"
+          );
+
+          return;
+
+        }
+
+
+        if (!problemType) {
+
+          mostrarMensaje(
+            "Selecciona el tipo de problema.",
+            "error"
+          );
+
+          return;
+
+        }
+
+
+        if (!description) {
+
+          mostrarMensaje(
+            "Describe el problema antes de enviar el reporte.",
+            "error"
+          );
+
+          return;
+
+        }
+
+
+        const compra =
+          compras.find(item => item.id === purchaseId);
+
+
+        if (!compra) {
+
+          mostrarMensaje(
+            "No pudimos identificar la compra seleccionada.",
+            "error"
+          );
+
+          return;
+
+        }
+
+
+        const producto =
+          compra.products;
+
+
+        submitButton.disabled = true;
+
+        submitButton.textContent =
+          "Enviando reporte... 🦋";
+
+
+        try {
+
+          const { error } = await supabaseClient
+            .from("reports")
+            .insert({
+
+              user_id: usuarioActual.id,
+
+              platform:
+                producto?.name || "Producto",
+
+              purchase_email:
+                usuarioActual.email || "",
+
+              purchase_date:
+                convertirFecha(compra.created_at),
+
+              problem_type:
+                problemType,
+
+              description:
+                description,
+
+              status:
+                "Pendiente",
+
+              account_type:
+                producto?.account_type || null,
+
+              purchase_id:
+                purchaseId
+
+            });
+
+
+          if (error) {
+
+            console.error("Error creando reporte:", error);
+
+            throw error;
+
+          }
+
+
+          mostrarMensaje(
+            "✨ Tu reporte fue enviado correctamente. Nuestro equipo lo revisará pronto. 🦋💜",
+            "success"
+          );
+
+
+          document.getElementById("reportForm").reset();
+
+
+          document.getElementById("email").value =
+            usuarioActual.email || "";
+
+
+          document.getElementById("platform").value = "";
+
+          document.getElementById("accountType").value = "";
+
+          document.getElementById("date").value = "";
+
+
+          window.scrollTo({
+            top: 0,
+            behavior: "smooth"
+          });
+
+
+        } catch (error) {
+
+          mostrarMensaje(
+            "No se pudo enviar el reporte. Revisa la consola para ver el error.",
+            "error"
+          );
+
+        } finally {
+
+          submitButton.disabled = false;
+
+          submitButton.textContent =
+            "🦋 Enviar reporte";
+
+        }
+
+      });
+
+
+    // ==========================================
+    // INICIO
+    // ==========================================
+
+    async function iniciar() {
+
+      const user = await cargarUsuario();
+
+
+      if (!user) return;
+
+
+      await cargarCompras();
+
+    }
+
+
+    iniciar();
+
+  </script>
 
 </body>
 </html>
