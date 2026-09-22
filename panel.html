@@ -558,8 +558,6 @@
         Bienvenido/a a tu panel de Butterfly Shop 💜
       </p>
 
-      <!-- CRÉDITOS -->
-
       <div class="credits">
         💜 Créditos:
         <span id="credits">0</span>
@@ -573,8 +571,6 @@
         </button>
       </div>
 
-      <!-- WHATSAPP -->
-
       <a
         href="https://wa.me/525534867206"
         target="_blank"
@@ -583,8 +579,6 @@
       >
         💬 WhatsApp
       </a>
-
-      <!-- CAMBIAR USERNAME -->
 
       <div class="username-box">
 
@@ -607,8 +601,6 @@
         </button>
 
       </div>
-
-      <!-- RECARGA -->
 
       <div class="topup-box">
 
@@ -642,8 +634,6 @@
 
       </div>
 
-      <!-- HISTORIAL -->
-
       <div class="topup-history-box">
 
         <h3>📋 Historial de recargas</h3>
@@ -662,8 +652,6 @@
         </button>
 
       </div>
-
-      <!-- CERRAR SESIÓN -->
 
       <button
         id="logout-button"
@@ -719,6 +707,16 @@
         Reportar problema
       </div>
 
+      <!-- NUEVO: MIS REPORTES -->
+
+      <div
+        class="action"
+        id="my-reports-action"
+      >
+        📝<br>
+        Mis reportes
+      </div>
+
       <div
         class="action admin-action"
         id="admin-action"
@@ -757,7 +755,6 @@
         Realiza tu pago utilizando los siguientes datos:
       </p>
 
-
       <div class="payment-info">
 
         <div class="payment-row">
@@ -769,7 +766,6 @@
             Nu
           </span>
         </div>
-
 
         <div class="payment-row">
 
@@ -798,7 +794,6 @@
 
         </div>
 
-
         <div class="payment-row">
 
           <span class="payment-label">
@@ -810,7 +805,6 @@
           </span>
 
         </div>
-
 
         <div class="payment-row">
 
@@ -826,7 +820,6 @@
 
       </div>
 
-
       <div class="payment-warning">
 
         ⚠️ <strong>IMPORTANTE</strong><br><br>
@@ -835,7 +828,6 @@
         <strong>no serán válidos</strong> para Butterfly Shop.
 
       </div>
-
 
       <div class="payment-proof">
 
@@ -865,10 +857,6 @@
 
     let usuarioActual = null;
 
-
-    /* ========================= */
-    /* CARGAR PANEL */
-    /* ========================= */
 
     async function cargarPanel() {
 
@@ -921,8 +909,6 @@
         perfil.username || "";
 
 
-      /* ADMIN */
-
       if (perfil.role === "admin") {
 
         document.getElementById("admin-link").style.display =
@@ -936,10 +922,6 @@
       await cargarSolicitudesRecarga();
     }
 
-
-    /* ========================= */
-    /* ACTUALIZAR SALDO */
-    /* ========================= */
 
     async function actualizarSaldo() {
 
@@ -963,10 +945,6 @@
       }
     }
 
-
-    /* ========================= */
-    /* ESTADO DE RECARGA */
-    /* ========================= */
 
     function obtenerTextoEstado(status) {
 
@@ -1004,10 +982,6 @@
     }
 
 
-    /* ========================= */
-    /* FORMATEAR FECHA */
-    /* ========================= */
-
     function formatearFecha(fecha) {
 
       if (!fecha) return "—";
@@ -1022,10 +996,6 @@
       );
     }
 
-
-    /* ========================= */
-    /* CARGAR HISTORIAL */
-    /* ========================= */
 
     async function cargarSolicitudesRecarga() {
 
@@ -1160,10 +1130,6 @@
     }
 
 
-    /* ========================= */
-    /* CAMBIAR USERNAME */
-    /* ========================= */
-
     document
       .getElementById("change-username-button")
       .addEventListener("click", async () => {
@@ -1216,10 +1182,6 @@
 
       });
 
-
-    /* ========================= */
-    /* SOLICITAR RECARGA */
-    /* ========================= */
 
     document
       .getElementById("request-topup-button")
@@ -1299,10 +1261,6 @@
       });
 
 
-    /* ========================= */
-    /* CATÁLOGO */
-    /* ========================= */
-
     document
       .getElementById("catalog-action")
       .addEventListener("click", () => {
@@ -1312,10 +1270,6 @@
 
       });
 
-
-    /* ========================= */
-    /* COMPRAR CRÉDITOS */
-    /* ========================= */
 
     document
       .getElementById("topup-action")
@@ -1329,10 +1283,6 @@
 
       });
 
-
-    /* ========================= */
-    /* HISTORIAL */
-    /* ========================= */
 
     document
       .getElementById("history-action")
@@ -1350,10 +1300,6 @@
       });
 
 
-    /* ========================= */
-    /* MIS COMPRAS */
-    /* ========================= */
-
     document
       .getElementById("purchases-action")
       .addEventListener("click", () => {
@@ -1363,10 +1309,6 @@
 
       });
 
-
-    /* ========================= */
-    /* REPORTAR */
-    /* ========================= */
 
     document
       .getElementById("report-action")
@@ -1379,8 +1321,18 @@
 
 
     /* ========================= */
-    /* ADMIN */
+    /* MIS REPORTES */
     /* ========================= */
+
+    document
+      .getElementById("my-reports-action")
+      .addEventListener("click", () => {
+
+        window.location.href =
+          "mis-reportes.html";
+
+      });
+
 
     document
       .getElementById("admin-action")
@@ -1392,10 +1344,6 @@
       });
 
 
-    /* ========================= */
-    /* ACTUALIZAR HISTORIAL */
-    /* ========================= */
-
     document
       .getElementById("refresh-history-button")
       .addEventListener("click", async () => {
@@ -1404,10 +1352,6 @@
 
       });
 
-
-    /* ========================= */
-    /* CERRAR SESIÓN */
-    /* ========================= */
 
     document
       .getElementById("logout-button")
@@ -1435,10 +1379,6 @@
 
       });
 
-
-    /* ========================= */
-    /* MODAL DE PAGO */
-    /* ========================= */
 
     const paymentModal =
       document.getElementById("payment-modal");
@@ -1472,8 +1412,6 @@
     );
 
 
-    /* CERRAR AL TOCAR FUERA */
-
     paymentModal.addEventListener(
       "click",
       (event) => {
@@ -1491,10 +1429,6 @@
       }
     );
 
-
-    /* ========================= */
-    /* COPIAR CLABE */
-    /* ========================= */
 
     document
       .getElementById("copy-clabe")
@@ -1547,10 +1481,6 @@
       });
 
 
-    /* ========================= */
-    /* ESC PARA CERRAR MODAL */
-    /* ========================= */
-
     document.addEventListener(
       "keydown",
       (event) => {
@@ -1568,10 +1498,6 @@
       }
     );
 
-
-    /* ========================= */
-    /* INICIAR */
-    /* ========================= */
 
     cargarPanel();
 
