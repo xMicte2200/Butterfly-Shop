@@ -97,17 +97,13 @@
       outline: none;
       font-size: 14px;
       background: white;
+      color: #4d3657;
     }
 
     input:focus,
     select:focus,
     textarea:focus {
       border-color: #b66ed6;
-    }
-
-    input[readonly] {
-      background: #faf7fc;
-      color: #765982;
     }
 
     textarea {
@@ -166,23 +162,6 @@
       color: #9b3d4c;
     }
 
-    .loading {
-      text-align: center;
-      color: #8b6a96;
-      font-size: 14px;
-      padding: 10px;
-    }
-
-    .no-purchases {
-      background: #faf7fc;
-      border: 1px solid #ead8f3;
-      border-radius: 12px;
-      padding: 15px;
-      color: #765982;
-      font-size: 13px;
-      line-height: 1.5;
-    }
-
     .footer {
       text-align: center;
       margin-top: 18px;
@@ -205,51 +184,17 @@
       <h1>Reportar un problema</h1>
 
       <p class="intro">
-        Selecciona la compra con la que tuviste el problema y cuéntanos qué ocurrió. 🦋
+        Cuéntanos qué ocurrió con tu compra y revisaremos tu reporte. 🦋
       </p>
 
       <div class="notice">
-        💜 Selecciona una de tus compras para que podamos identificar automáticamente
-        el producto, correo, fecha y tipo de cuenta relacionados.
+        💜 Proporciona los datos de tu compra y describe el problema con claridad
+        para que podamos ayudarte lo más rápido posible.
       </div>
 
       <div id="message" class="message"></div>
 
       <form id="reportForm">
-
-        <!-- COMPRA -->
-        <div class="group">
-          <label for="purchase">🛍️ Compra relacionada</label>
-
-          <div id="purchaseLoading" class="loading">
-            Cargando tus compras... 🦋
-          </div>
-
-          <select id="purchase" required style="display:none;">
-            <option value="">Selecciona una compra</option>
-          </select>
-
-          <div id="noPurchases" class="no-purchases" style="display:none;">
-            🦋 No encontramos compras asociadas a tu cuenta.
-            Primero debes realizar una compra para poder reportarla.
-          </div>
-
-          <div class="hint">
-            Selecciona exactamente la compra que presenta el problema.
-          </div>
-        </div>
-
-        <!-- EMAIL -->
-        <div class="group">
-          <label for="email">📧 Correo relacionado con la compra</label>
-
-          <input
-            type="email"
-            id="email"
-            placeholder="Tu correo"
-            readonly
-          >
-        </div>
 
         <!-- PLATAFORMA / PRODUCTO -->
         <div class="group">
@@ -258,51 +203,111 @@
           <input
             type="text"
             id="platform"
-            placeholder="Producto"
-            readonly
+            placeholder="Ej. Netflix"
+            required
           >
+
+          <div class="hint">
+            Escribe el nombre de la plataforma o producto relacionado con el problema.
+          </div>
         </div>
+
+
+        <!-- CORREO DE LA CUENTA COMPRADA -->
+        <div class="group">
+          <label for="email">📧 Correo de la cuenta comprada</label>
+
+          <input
+            type="email"
+            id="email"
+            placeholder="correo@ejemplo.com"
+            required
+          >
+
+          <div class="hint">
+            Escribe el correo que pertenece a la cuenta que compraste.
+          </div>
+        </div>
+
 
         <!-- TIPO DE CUENTA -->
         <div class="group">
           <label for="accountType">👤 Tipo de cuenta</label>
 
-          <input
-            type="text"
-            id="accountType"
-            placeholder="Tipo de cuenta"
-            readonly
-          >
+          <select id="accountType" required>
+
+            <option value="">
+              Selecciona una opción
+            </option>
+
+            <option value="Cuenta por perfil">
+              👤 Cuenta por perfil
+            </option>
+
+            <option value="Cuenta completa">
+              🔐 Cuenta completa
+            </option>
+
+          </select>
         </div>
 
-        <!-- FECHA -->
+
+        <!-- FECHA DE COMPRA -->
         <div class="group">
           <label for="date">📅 Fecha de compra</label>
 
           <input
             type="date"
             id="date"
-            readonly
+            required
           >
+
+          <div class="hint">
+            Selecciona la fecha en la que realizaste la compra.
+          </div>
         </div>
+
 
         <!-- TIPO DE PROBLEMA -->
         <div class="group">
           <label for="type">🔎 Tipo de problema</label>
 
           <select id="type" required>
-            <option value="">Selecciona una opción</option>
-            <option value="Producto no recibido">Producto no recibido</option>
-            <option value="Producto con problema">Producto con problema</option>
-            <option value="Datos incorrectos">Datos incorrectos</option>
-            <option value="Problema de acceso">Problema de acceso</option>
-            <option value="Otro">Otro</option>
+
+            <option value="">
+              Selecciona una opción
+            </option>
+
+            <option value="Producto no recibido">
+              Producto no recibido
+            </option>
+
+            <option value="Producto con problema">
+              Producto con problema
+            </option>
+
+            <option value="Datos incorrectos">
+              Datos incorrectos
+            </option>
+
+            <option value="Problema de acceso">
+              Problema de acceso
+            </option>
+
+            <option value="Otro">
+              Otro
+            </option>
+
           </select>
         </div>
 
+
         <!-- DESCRIPCIÓN -->
         <div class="group">
-          <label for="description">📝 Describe el problema</label>
+
+          <label for="description">
+            📝 Describe el problema
+          </label>
 
           <textarea
             id="description"
@@ -313,15 +318,22 @@
           <div class="hint">
             Describe el problema con el mayor detalle posible.
           </div>
+
         </div>
 
-        <button type="submit" class="submit" id="submitButton">
+
+        <button
+          type="submit"
+          class="submit"
+          id="submitButton"
+        >
           🦋 Enviar reporte
         </button>
 
       </form>
 
     </div>
+
 
     <div class="footer">
       Butterfly Shop · Soporte al cliente 💜
@@ -333,7 +345,6 @@
   <script>
 
     let usuarioActual = null;
-    let compras = [];
 
 
     // ==========================================
@@ -352,28 +363,7 @@
 
 
     // ==========================================
-    // FORMATEAR FECHA
-    // ==========================================
-
-    function convertirFecha(fecha) {
-
-      if (!fecha) return "";
-
-      const fechaObj = new Date(fecha);
-
-      const year = fechaObj.getFullYear();
-
-      const month = String(fechaObj.getMonth() + 1).padStart(2, "0");
-
-      const day = String(fechaObj.getDate()).padStart(2, "0");
-
-      return `${year}-${month}-${day}`;
-
-    }
-
-
-    // ==========================================
-    // CARGAR USUARIO
+    // COMPROBAR USUARIO
     // ==========================================
 
     async function cargarUsuario() {
@@ -395,161 +385,9 @@
 
       usuarioActual = user;
 
-      document.getElementById("email").value = user.email || "";
-
-
       return user;
 
     }
-
-
-    // ==========================================
-    // CARGAR COMPRAS
-    // ==========================================
-
-    async function cargarCompras() {
-
-      const purchaseLoading =
-        document.getElementById("purchaseLoading");
-
-      const purchaseSelect =
-        document.getElementById("purchase");
-
-      const noPurchases =
-        document.getElementById("noPurchases");
-
-
-      const { data, error } = await supabaseClient
-        .from("purchases")
-        .select(`
-          id,
-          price_credits,
-          status,
-          created_at,
-          products (
-            id,
-            name,
-            description,
-            category,
-            image_url,
-            account_type
-          ),
-          inventory (
-            delivery_data
-          )
-        `)
-        .eq("user_id", usuarioActual.id)
-        .order("created_at", { ascending: false });
-
-
-      purchaseLoading.style.display = "none";
-
-
-      if (error) {
-
-        console.error("Error cargando compras:", error);
-
-        mostrarMensaje(
-          "No pudimos cargar tus compras. Intenta nuevamente.",
-          "error"
-        );
-
-        return;
-
-      }
-
-
-      compras = data || [];
-
-
-      if (compras.length === 0) {
-
-        noPurchases.style.display = "block";
-
-        return;
-
-      }
-
-
-      purchaseSelect.style.display = "block";
-
-
-      compras.forEach((compra, index) => {
-
-        const option = document.createElement("option");
-
-        option.value = compra.id;
-
-
-        const nombreProducto =
-          compra.products?.name || "Producto";
-
-
-        const fecha =
-          convertirFecha(compra.created_at);
-
-
-        option.textContent =
-          `${nombreProducto} · ${fecha} · ${compra.price_credits} créditos`;
-
-
-        purchaseSelect.appendChild(option);
-
-      });
-
-    }
-
-
-    // ==========================================
-    // SELECCIONAR COMPRA
-    // ==========================================
-
-    document
-      .getElementById("purchase")
-      .addEventListener("change", function () {
-
-        const purchaseId = this.value;
-
-
-        if (!purchaseId) {
-
-          document.getElementById("platform").value = "";
-
-          document.getElementById("accountType").value = "";
-
-          document.getElementById("date").value = "";
-
-          return;
-
-        }
-
-
-        const compra =
-          compras.find(item => item.id === purchaseId);
-
-
-        if (!compra) return;
-
-
-        const producto = compra.products;
-
-
-        document.getElementById("platform").value =
-          producto?.name || "";
-
-
-        document.getElementById("accountType").value =
-          producto?.account_type || "Sin especificar";
-
-
-        document.getElementById("date").value =
-          convertirFecha(compra.created_at);
-
-
-        document.getElementById("email").value =
-          usuarioActual?.email || "";
-
-      });
 
 
     // ==========================================
@@ -563,12 +401,32 @@
         event.preventDefault();
 
 
-        const submitButton =
-          document.getElementById("submitButton");
+        if (!usuarioActual) {
+
+          mostrarMensaje(
+            "Tu sesión no está disponible. Inicia sesión nuevamente.",
+            "error"
+          );
+
+          return;
+
+        }
 
 
-        const purchaseId =
-          document.getElementById("purchase").value;
+        const platform =
+          document.getElementById("platform").value.trim();
+
+
+        const email =
+          document.getElementById("email").value.trim();
+
+
+        const accountType =
+          document.getElementById("accountType").value;
+
+
+        const purchaseDate =
+          document.getElementById("date").value;
 
 
         const problemType =
@@ -579,10 +437,46 @@
           document.getElementById("description").value.trim();
 
 
-        if (!purchaseId) {
+        if (!platform) {
 
           mostrarMensaje(
-            "Selecciona la compra que quieres reportar.",
+            "Escribe la plataforma o producto.",
+            "error"
+          );
+
+          return;
+
+        }
+
+
+        if (!email) {
+
+          mostrarMensaje(
+            "Escribe el correo de la cuenta comprada.",
+            "error"
+          );
+
+          return;
+
+        }
+
+
+        if (!accountType) {
+
+          mostrarMensaje(
+            "Selecciona el tipo de cuenta.",
+            "error"
+          );
+
+          return;
+
+        }
+
+
+        if (!purchaseDate) {
+
+          mostrarMensaje(
+            "Selecciona la fecha de compra.",
             "error"
           );
 
@@ -615,24 +509,8 @@
         }
 
 
-        const compra =
-          compras.find(item => item.id === purchaseId);
-
-
-        if (!compra) {
-
-          mostrarMensaje(
-            "No pudimos identificar la compra seleccionada.",
-            "error"
-          );
-
-          return;
-
-        }
-
-
-        const producto =
-          compra.products;
+        const submitButton =
+          document.getElementById("submitButton");
 
 
         submitButton.disabled = true;
@@ -647,16 +525,17 @@
             .from("reports")
             .insert({
 
-              user_id: usuarioActual.id,
+              user_id:
+                usuarioActual.id,
 
               platform:
-                producto?.name || "Producto",
+                platform,
 
               purchase_email:
-                usuarioActual.email || "",
+                email,
 
               purchase_date:
-                convertirFecha(compra.created_at),
+                purchaseDate,
 
               problem_type:
                 problemType,
@@ -668,17 +547,20 @@
                 "Pendiente",
 
               account_type:
-                producto?.account_type || null,
+                accountType,
 
               purchase_id:
-                purchaseId
+                null
 
             });
 
 
           if (error) {
 
-            console.error("Error creando reporte:", error);
+            console.error(
+              "Error creando reporte:",
+              error
+            );
 
             throw error;
 
@@ -691,18 +573,9 @@
           );
 
 
-          document.getElementById("reportForm").reset();
-
-
-          document.getElementById("email").value =
-            usuarioActual.email || "";
-
-
-          document.getElementById("platform").value = "";
-
-          document.getElementById("accountType").value = "";
-
-          document.getElementById("date").value = "";
+          document
+            .getElementById("reportForm")
+            .reset();
 
 
           window.scrollTo({
@@ -714,7 +587,7 @@
         } catch (error) {
 
           mostrarMensaje(
-            "No se pudo enviar el reporte. Revisa la consola para ver el error.",
+            "No se pudo enviar el reporte. Intenta nuevamente.",
             "error"
           );
 
@@ -736,13 +609,11 @@
 
     async function iniciar() {
 
-      const user = await cargarUsuario();
+      const user =
+        await cargarUsuario();
 
 
       if (!user) return;
-
-
-      await cargarCompras();
 
     }
 
