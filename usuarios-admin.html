@@ -1,7 +1,12 @@
-<!DOCTYPE html><html lang="es">
+<!DOCTYPE html>
+<html lang="es">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">  <title>Butterfly Shop | Usuarios</title>  <style>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>Butterfly Shop | Usuarios</title>
+
+  <style>
     * {
       box-sizing: border-box;
       margin: 0;
@@ -132,6 +137,13 @@
       font-size: 20px;
     }
 
+    .header-actions {
+      display: flex;
+      gap: 10px;
+      align-items: center;
+      flex-wrap: wrap;
+    }
+
     .refresh-btn {
       border: none;
       cursor: pointer;
@@ -140,6 +152,50 @@
       padding: 10px 15px;
       border-radius: 12px;
       font-weight: bold;
+    }
+
+    .search-box {
+      padding: 18px 20px;
+      background: #fcf9ff;
+      border-bottom: 1px solid #eee5f7;
+      display: flex;
+      gap: 10px;
+      align-items: center;
+      flex-wrap: wrap;
+    }
+
+    .search-input {
+      flex: 1;
+      min-width: 220px;
+      border: 1px solid #ddcbed;
+      background: white;
+      color: #4c3a56;
+      padding: 12px 14px;
+      border-radius: 12px;
+      outline: none;
+      font-size: 14px;
+    }
+
+    .search-input:focus {
+      border-color: #a16ed3;
+      box-shadow: 0 0 0 3px #b98cff22;
+    }
+
+    .clear-btn {
+      border: none;
+      cursor: pointer;
+      background: #eadcff;
+      color: #743d91;
+      padding: 11px 15px;
+      border-radius: 12px;
+      font-weight: bold;
+    }
+
+    .search-result {
+      width: 100%;
+      color: #81758a;
+      font-size: 13px;
+      margin-top: 3px;
     }
 
     .table-container {
@@ -249,146 +305,219 @@
       .back-btn {
         text-align: center;
       }
+
+      .header-actions {
+        width: 100%;
+      }
+
+      .refresh-btn {
+        width: 100%;
+      }
+
+      .search-input {
+        width: 100%;
+        min-width: 0;
+      }
+
+      .clear-btn {
+        width: 100%;
+      }
     }
-  </style></head><body>  <div id="loading" class="loading">
+  </style>
+</head>
+
+<body>
+
+  <div id="loading" class="loading">
     🦋 Verificando acceso...
-  </div>  <div id="page-content" style="display:none;"><header>
+  </div>
 
-  <div class="header-content">
+  <div id="page-content" style="display:none;">
 
-    <div class="logo">
-      🦋 Butterfly Shop
-    </div>
+    <header>
 
-    <div class="admin-tag">
-      👑 Gestión de Usuarios
-    </div>
+      <div class="header-content">
+
+        <div class="logo">
+          🦋 Butterfly Shop
+        </div>
+
+        <div class="admin-tag">
+          👑 Gestión de Usuarios
+        </div>
+
+      </div>
+
+    </header>
+
+
+    <main class="container">
+
+      <div class="top-bar">
+
+        <div class="title">
+
+          <h1>
+            👥 Usuarios
+          </h1>
+
+          <p>
+            Consulta los usuarios registrados en Butterfly Shop.
+          </p>
+
+        </div>
+
+        <a
+          href="admin.html"
+          class="back-btn"
+        >
+          ← Volver al panel
+        </a>
+
+      </div>
+
+
+      <div class="summary">
+
+        <div class="summary-card">
+
+          <div class="summary-icon">
+            👥
+          </div>
+
+          <h2 id="total-users">
+            0
+          </h2>
+
+          <p>
+            Usuarios registrados
+          </p>
+
+        </div>
+
+
+        <div class="summary-card">
+
+          <div class="summary-icon">
+            💎
+          </div>
+
+          <h2 id="total-credits">
+            0
+          </h2>
+
+          <p>
+            Créditos disponibles
+          </p>
+
+        </div>
+
+
+        <div class="summary-card">
+
+          <div class="summary-icon">
+            👑
+          </div>
+
+          <h2 id="total-admins">
+            0
+          </h2>
+
+          <p>
+            Administradores
+          </p>
+
+        </div>
+
+      </div>
+
+
+      <div class="users-box">
+
+        <div class="box-header">
+
+          <h2>
+            📋 Usuarios registrados
+          </h2>
+
+          <div class="header-actions">
+
+            <button
+              class="refresh-btn"
+              onclick="cargarUsuarios()"
+            >
+              🔄 Actualizar
+            </button>
+
+          </div>
+
+        </div>
+
+
+        <!-- BUSCADOR -->
+
+        <div class="search-box">
+
+          <input
+            type="text"
+            id="search-input"
+            class="search-input"
+            placeholder="🔎 Buscar por username o correo..."
+            oninput="filtrarUsuarios()"
+            autocomplete="off"
+          >
+
+          <button
+            class="clear-btn"
+            onclick="limpiarBusqueda()"
+          >
+            ✨ Limpiar
+          </button>
+
+          <div
+            id="search-result"
+            class="search-result"
+          >
+            Mostrando todos los usuarios.
+          </div>
+
+        </div>
+
+
+        <div class="table-container">
+
+          <div
+            id="users-container"
+            class="loading"
+          >
+            🦋 Cargando usuarios...
+          </div>
+
+        </div>
+
+      </div>
+
+    </main>
+
+
+    <footer>
+      🦋 Butterfly Shop · Gestión de usuarios
+    </footer>
 
   </div>
 
-</header>
 
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="supabase-config.js"></script>
 
-<main class="container">
+  <script>
 
-  <div class="top-bar">
+    /* =========================
+       VARIABLE GLOBAL
+    ========================= */
 
-    <div class="title">
+    let todosLosUsuarios = [];
 
-      <h1>
-        👥 Usuarios
-      </h1>
-
-      <p>
-        Consulta los usuarios registrados en Butterfly Shop.
-      </p>
-
-    </div>
-
-    <a
-      href="admin.html"
-      class="back-btn"
-    >
-      ← Volver al panel
-    </a>
-
-  </div>
-
-
-  <div class="summary">
-
-    <div class="summary-card">
-
-      <div class="summary-icon">
-        👥
-      </div>
-
-      <h2 id="total-users">
-        0
-      </h2>
-
-      <p>
-        Usuarios registrados
-      </p>
-
-    </div>
-
-
-    <div class="summary-card">
-
-      <div class="summary-icon">
-        💎
-      </div>
-
-      <h2 id="total-credits">
-        0
-      </h2>
-
-      <p>
-        Créditos disponibles
-      </p>
-
-    </div>
-
-
-    <div class="summary-card">
-
-      <div class="summary-icon">
-        👑
-      </div>
-
-      <h2 id="total-admins">
-        0
-      </h2>
-
-      <p>
-        Administradores
-      </p>
-
-    </div>
-
-  </div>
-
-
-  <div class="users-box">
-
-    <div class="box-header">
-
-      <h2>
-        📋 Usuarios registrados
-      </h2>
-
-      <button
-        class="refresh-btn"
-        onclick="cargarUsuarios()"
-      >
-        🔄 Actualizar
-      </button>
-
-    </div>
-
-
-    <div class="table-container">
-
-      <div
-        id="users-container"
-        class="loading"
-      >
-        🦋 Cargando usuarios...
-      </div>
-
-    </div>
-
-  </div>
-
-</main>
-
-
-<footer>
-  🦋 Butterfly Shop · Gestión de usuarios
-</footer>
-
-  </div>  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>  <script src="supabase-config.js"></script>  <script>
 
     /* =========================
        VERIFICAR ADMINISTRADOR
@@ -524,216 +653,29 @@
         }
 
 
-        const usuarios =
+        todosLosUsuarios =
           data || [];
 
 
-        let totalCredits = 0;
-
-        let totalAdmins = 0;
-
-
-        usuarios.forEach(usuario => {
-
-          totalCredits +=
-            Number(
-              usuario.credits || 0
-            );
+        actualizarResumen(
+          todosLosUsuarios
+        );
 
 
-          if (
-            usuario.role === "admin"
-          ) {
-
-            totalAdmins++;
-
-          }
-
-        });
+        mostrarUsuarios(
+          todosLosUsuarios
+        );
 
 
-        document.getElementById(
-          "total-users"
-        ).textContent =
-          usuarios.length;
-
-
-        document.getElementById(
-          "total-credits"
-        ).textContent =
-          totalCredits.toLocaleString(
-            "es-MX"
+        const searchInput =
+          document.getElementById(
+            "search-input"
           );
 
 
-        document.getElementById(
-          "total-admins"
-        ).textContent =
-          totalAdmins;
-
-
-        if (usuarios.length === 0) {
-
-          container.className = "empty";
-
-          container.innerHTML = `
-            🦋 No hay usuarios registrados.
-          `;
-
-          return;
-
+        if (searchInput) {
+          searchInput.value = "";
         }
-
-
-        container.className = "";
-
-
-        container.innerHTML = `
-
-          <table>
-
-            <thead>
-
-              <tr>
-
-                <th>
-                  Usuario
-                </th>
-
-                <th>
-                  Correo
-                </th>
-
-                <th>
-                  Créditos
-                </th>
-
-                <th>
-                  Rol
-                </th>
-
-                <th>
-                  Registro
-                </th>
-
-              </tr>
-
-            </thead>
-
-            <tbody>
-
-              ${
-                usuarios.map(usuario => {
-
-                  const fecha =
-                    usuario.created_at
-                      ? new Date(
-                          usuario.created_at
-                        ).toLocaleString(
-                          "es-MX",
-                          {
-                            dateStyle: "medium",
-                            timeStyle: "short"
-                          }
-                        )
-                      : "Sin fecha";
-
-
-                  const roleClass =
-                    usuario.role === "admin"
-                      ? "role admin"
-                      : "role";
-
-
-                  const roleText =
-                    usuario.role === "admin"
-                      ? "👑 Administrador"
-                      : "👤 Usuario";
-
-
-                  return `
-
-                    <tr>
-
-                      <td>
-
-                        <div class="username">
-
-                          🦋 ${
-                            escaparHTML(
-                              usuario.username ||
-                              "Sin username"
-                            )
-                          }
-
-                        </div>
-
-                      </td>
-
-
-                      <td>
-
-                        <div class="email">
-
-                          ${
-                            escaparHTML(
-                              usuario.email ||
-                              "Sin correo"
-                            )
-                          }
-
-                        </div>
-
-                      </td>
-
-
-                      <td>
-
-                        <span class="credits">
-
-                          💎 ${
-                            Number(
-                              usuario.credits || 0
-                            ).toLocaleString(
-                              "es-MX"
-                            )
-                          }
-
-                        </span>
-
-                      </td>
-
-
-                      <td>
-
-                        <span class="${roleClass}">
-
-                          ${roleText}
-
-                        </span>
-
-                      </td>
-
-
-                      <td>
-
-                        ${fecha}
-
-                      </td>
-
-                    </tr>
-
-                  `;
-
-                }).join("")
-
-              }
-
-            </tbody>
-
-          </table>
-
-        `;
 
 
       } catch (error) {
@@ -765,10 +707,380 @@
 
 
     /* =========================
+       ACTUALIZAR RESUMEN
+    ========================= */
+
+    function actualizarResumen(usuarios) {
+
+      let totalCredits = 0;
+
+      let totalAdmins = 0;
+
+
+      usuarios.forEach(usuario => {
+
+        totalCredits +=
+          Number(
+            usuario.credits || 0
+          );
+
+
+        if (
+          usuario.role === "admin"
+        ) {
+
+          totalAdmins++;
+
+        }
+
+      });
+
+
+      document.getElementById(
+        "total-users"
+      ).textContent =
+        usuarios.length;
+
+
+      document.getElementById(
+        "total-credits"
+      ).textContent =
+        totalCredits.toLocaleString(
+          "es-MX"
+        );
+
+
+      document.getElementById(
+        "total-admins"
+      ).textContent =
+        totalAdmins;
+
+    }
+
+
+    /* =========================
+       MOSTRAR USUARIOS
+    ========================= */
+
+    function mostrarUsuarios(usuarios) {
+
+      const container =
+        document.getElementById(
+          "users-container"
+        );
+
+
+      if (!usuarios || usuarios.length === 0) {
+
+        container.className = "empty";
+
+        container.innerHTML = `
+          🦋 No se encontraron usuarios.
+        `;
+
+        actualizarResultadoBusqueda(0);
+
+        return;
+
+      }
+
+
+      container.className = "";
+
+
+      container.innerHTML = `
+
+        <table>
+
+          <thead>
+
+            <tr>
+
+              <th>
+                Usuario
+              </th>
+
+              <th>
+                Correo
+              </th>
+
+              <th>
+                Créditos
+              </th>
+
+              <th>
+                Rol
+              </th>
+
+              <th>
+                Registro
+              </th>
+
+            </tr>
+
+          </thead>
+
+          <tbody>
+
+            ${
+              usuarios.map(usuario => {
+
+                const fecha =
+                  usuario.created_at
+                    ? new Date(
+                        usuario.created_at
+                      ).toLocaleString(
+                        "es-MX",
+                        {
+                          dateStyle: "medium",
+                          timeStyle: "short"
+                        }
+                      )
+                    : "Sin fecha";
+
+
+                const roleClass =
+                  usuario.role === "admin"
+                    ? "role admin"
+                    : "role";
+
+
+                const roleText =
+                  usuario.role === "admin"
+                    ? "👑 Administrador"
+                    : "👤 Usuario";
+
+
+                return `
+
+                  <tr>
+
+                    <td>
+
+                      <div class="username">
+
+                        🦋 ${
+                          escaparHTML(
+                            usuario.username ||
+                            "Sin username"
+                          )
+                        }
+
+                      </div>
+
+                    </td>
+
+
+                    <td>
+
+                      <div class="email">
+
+                        ${
+                          escaparHTML(
+                            usuario.email ||
+                            "Sin correo"
+                          )
+                        }
+
+                      </div>
+
+                    </td>
+
+
+                    <td>
+
+                      <span class="credits">
+
+                        💎 ${
+                          Number(
+                            usuario.credits || 0
+                          ).toLocaleString(
+                            "es-MX"
+                          )
+                        }
+
+                      </span>
+
+                    </td>
+
+
+                    <td>
+
+                      <span class="${roleClass}">
+
+                        ${roleText}
+
+                      </span>
+
+                    </td>
+
+
+                    <td>
+
+                      ${fecha}
+
+                    </td>
+
+                  </tr>
+
+                `;
+
+              }).join("")
+
+            }
+
+          </tbody>
+
+        </table>
+
+      `;
+
+
+      actualizarResultadoBusqueda(
+        usuarios.length
+      );
+
+    }
+
+
+    /* =========================
+       FILTRAR USUARIOS
+    ========================= */
+
+    function filtrarUsuarios() {
+
+      const input =
+        document.getElementById(
+          "search-input"
+        );
+
+
+      const texto =
+        input.value
+          .trim()
+          .toLowerCase();
+
+
+      if (!texto) {
+
+        mostrarUsuarios(
+          todosLosUsuarios
+        );
+
+        return;
+
+      }
+
+
+      const usuariosFiltrados =
+        todosLosUsuarios.filter(
+          usuario => {
+
+            const username =
+              String(
+                usuario.username || ""
+              ).toLowerCase();
+
+
+            const email =
+              String(
+                usuario.email || ""
+              ).toLowerCase();
+
+
+            return (
+              username.includes(texto) ||
+              email.includes(texto)
+            );
+
+          }
+        );
+
+
+      mostrarUsuarios(
+        usuariosFiltrados
+      );
+
+    }
+
+
+    /* =========================
+       RESULTADO DE BÚSQUEDA
+    ========================= */
+
+    function actualizarResultadoBusqueda(
+      cantidad
+    ) {
+
+      const input =
+        document.getElementById(
+          "search-input"
+        );
+
+
+      const texto =
+        input
+          ? input.value.trim()
+          : "";
+
+
+      const resultado =
+        document.getElementById(
+          "search-result"
+        );
+
+
+      if (!resultado) return;
+
+
+      if (!texto) {
+
+        resultado.textContent =
+          `Mostrando ${todosLosUsuarios.length} usuario(s).`;
+
+        return;
+
+      }
+
+
+      resultado.textContent =
+        `🔎 ${cantidad} usuario(s) encontrado(s).`;
+
+    }
+
+
+    /* =========================
+       LIMPIAR BÚSQUEDA
+    ========================= */
+
+    function limpiarBusqueda() {
+
+      const input =
+        document.getElementById(
+          "search-input"
+        );
+
+
+      input.value = "";
+
+
+      mostrarUsuarios(
+        todosLosUsuarios
+      );
+
+
+      input.focus();
+
+    }
+
+
+    /* =========================
        INICIAR
     ========================= */
 
     verificarAdministrador();
 
-  </script></body>
-</html>
+  </script>
+
+</body>
+  </html>
