@@ -93,19 +93,45 @@
             background: rgba(255,255,255,0.9);
             border: 1px solid #ead8ff;
             border-radius: 24px;
-            padding: 25px;
+            padding: 20px;
             text-align: center;
             box-shadow: 0 8px 25px rgba(130,90,170,0.07);
             transition: 0.3s;
+            overflow: hidden;
         }
 
         .product:hover {
             transform: translateY(-5px);
         }
 
+        /* =================================
+           IMAGEN DEL PRODUCTO
+        ================================= */
+
+        .product-image {
+            width: 100%;
+            height: 180px;
+            object-fit: cover;
+            border-radius: 18px;
+            margin-bottom: 16px;
+            background: #f3e7ff;
+            display: block;
+        }
+
+        /* =================================
+           ICONO DE RESPALDO
+        ================================= */
+
         .product-icon {
-            font-size: 48px;
-            margin-bottom: 15px;
+            width: 100%;
+            height: 180px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 55px;
+            background: #f8f0ff;
+            border-radius: 18px;
+            margin-bottom: 16px;
         }
 
         .product h2 {
@@ -264,51 +290,147 @@
         .modal-close:hover {
             background: #7544a8;
         }
+
+        @media (max-width: 600px) {
+
+            header {
+                padding: 15px 5%;
+            }
+
+            .logo {
+                font-size: 18px;
+            }
+
+            nav a {
+                margin-left: 8px;
+                font-size: 12px;
+            }
+
+            .title {
+                padding-top: 35px;
+            }
+
+            .title h1 {
+                font-size: 30px;
+            }
+
+            .products {
+                grid-template-columns: repeat(2, minmax(0, 1fr));
+                gap: 14px;
+                padding: 14px;
+            }
+
+            .product {
+                padding: 14px;
+                border-radius: 18px;
+            }
+
+            .product-image,
+            .product-icon {
+                height: 130px;
+                border-radius: 14px;
+            }
+
+            .product-icon {
+                font-size: 42px;
+            }
+
+            .product h2 {
+                font-size: 16px;
+            }
+
+            .product p {
+                font-size: 12px;
+            }
+
+            .price {
+                font-size: 18px;
+            }
+
+            .buy {
+                padding: 10px 17px;
+                font-size: 12px;
+            }
+        }
     </style>
 </head>
 
 <body>
 
     <header>
-        <div class="logo">🦋 Butterfly Shop</div>
+
+        <div class="logo">
+            🦋 Butterfly Shop
+        </div>
 
         <nav>
             <a href="index.html">Inicio</a>
             <a href="catalogo.html">Catálogo</a>
             <a href="login.html">Mi cuenta</a>
         </nav>
+
     </header>
 
+
     <section class="title">
-        <h1>🛍️ Nuestro catálogo</h1>
-        <p>Explora nuestros productos digitales disponibles.</p>
+
+        <h1>
+            🛍️ Nuestro catálogo
+        </h1>
+
+        <p>
+            Explora nuestros productos digitales disponibles.
+        </p>
+
     </section>
 
-    <div class="categories" id="categories">
-        <button class="category active" data-category="Todos">
+
+    <div
+        class="categories"
+        id="categories"
+    >
+
+        <button
+            class="category active"
+            data-category="Todos"
+        >
             ✨ Todos
         </button>
+
     </div>
 
-    <section class="products" id="products">
+
+    <section
+        class="products"
+        id="products"
+    >
+
         <div class="loading">
             🦋 Cargando productos...
         </div>
+
     </section>
+
 
     <footer>
         🦋 Butterfly Shop · Catálogo digital
     </footer>
 
+
     <!-- ================================
          MODAL RESULTADO DE COMPRA
     ================================= -->
 
-    <div class="modal-overlay" id="purchaseModal">
+    <div
+        class="modal-overlay"
+        id="purchaseModal"
+    >
 
         <div class="purchase-modal">
 
-            <h2>🦋 ¡Compra realizada!</h2>
+            <h2>
+                🦋 ¡Compra realizada!
+            </h2>
 
             <div class="success-text">
                 Tu producto fue entregado correctamente.
@@ -331,6 +453,7 @@
 
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <script src="supabase-config.js"></script>
+
 
     <script>
 
@@ -359,28 +482,35 @@
 
             try {
 
-                const { data: products, error } =
-                    await supabaseClient
-                        .from("products")
-                        .select(`
-                            id,
-                            name,
-                            description,
-                            price_credits,
-                            category,
-                            active,
-                            created_at
-                        `)
-                        .eq("active", true)
-                        .order("created_at", {
-                            ascending: false
-                        });
+                const {
+                    data: products,
+                    error
+                } = await supabaseClient
+                    .from("products")
+                    .select(`
+                        id,
+                        name,
+                        description,
+                        price_credits,
+                        category,
+                        active,
+                        image_url,
+                        created_at
+                    `)
+                    .eq("active", true)
+                    .order("created_at", {
+                        ascending: false
+                    });
+
 
                 if (error) {
                     throw error;
                 }
 
-                allProducts = products || [];
+
+                allProducts =
+                    products || [];
+
 
                 if (allProducts.length === 0) {
 
@@ -393,9 +523,11 @@
                     return;
                 }
 
+
                 crearCategorias();
 
                 await mostrarProductos();
+
 
             } catch (error) {
 
@@ -406,12 +538,16 @@
 
                 productsContainer.innerHTML = `
                     <div class="error">
+
                         ❌ No pudimos cargar el catálogo.
+
                         <br><br>
+
                         ${escaparHTML(
                             error.message ||
                             "Error desconocido"
                         )}
+
                     </div>
                 `;
             }
@@ -427,7 +563,10 @@
             const categorias = [
                 ...new Set(
                     allProducts
-                        .map(product => product.category)
+                        .map(
+                            product =>
+                                product.category
+                        )
                         .filter(
                             category =>
                                 category &&
@@ -436,30 +575,41 @@
                 )
             ];
 
+
             categoriesContainer.innerHTML = `
+
                 <button
                     class="category active"
                     data-category="Todos"
                 >
                     ✨ Todos
                 </button>
+
             `;
+
 
             categorias.forEach(category => {
 
                 const button =
-                    document.createElement("button");
+                    document.createElement(
+                        "button"
+                    );
 
-                button.className = "category";
+                button.className =
+                    "category";
 
-                button.dataset.category = category;
+                button.dataset.category =
+                    category;
 
                 button.textContent =
                     `💎 ${category}`;
 
+
                 categoriesContainer
                     .appendChild(button);
+
             });
+
 
             document
                 .querySelectorAll(".category")
@@ -472,17 +622,24 @@
                             currentCategory =
                                 button.dataset.category;
 
+
                             document
                                 .querySelectorAll(
                                     ".category"
                                 )
                                 .forEach(btn => {
+
                                     btn.classList
-                                        .remove("active");
+                                        .remove(
+                                            "active"
+                                        );
+
                                 });
+
 
                             button.classList
                                 .add("active");
+
 
                             await mostrarProductos();
 
@@ -499,9 +656,14 @@
 
         async function mostrarProductos() {
 
-            let productosMostrar = allProducts;
+            let productosMostrar =
+                allProducts;
 
-            if (currentCategory !== "Todos") {
+
+            if (
+                currentCategory !==
+                "Todos"
+            ) {
 
                 productosMostrar =
                     allProducts.filter(
@@ -509,36 +671,60 @@
                             product.category ===
                             currentCategory
                     );
+
             }
 
-            if (productosMostrar.length === 0) {
+
+            if (
+                productosMostrar.length ===
+                0
+            ) {
 
                 productsContainer.innerHTML = `
+
                     <div class="empty">
-                        🦋 No hay productos en esta categoría.
+
+                        🦋 No hay productos
+                        en esta categoría.
+
                     </div>
+
                 `;
 
                 return;
             }
 
+
             productsContainer.innerHTML = `
+
                 <div class="loading">
+
                     🦋 Revisando disponibilidad...
+
                 </div>
+
             `;
+
 
             const stockMap = {};
 
-            for (const product of productosMostrar) {
 
-                const { data: stock, error } =
-                    await supabaseClient.rpc(
-                        "get_product_stock",
-                        {
-                            p_product_id: product.id
-                        }
-                    );
+            for (
+                const product
+                of productosMostrar
+            ) {
+
+                const {
+                    data: stock,
+                    error
+                } = await supabaseClient.rpc(
+                    "get_product_stock",
+                    {
+                        p_product_id:
+                            product.id
+                    }
+                );
+
 
                 if (error) {
 
@@ -548,94 +734,196 @@
                         error
                     );
 
-                    stockMap[product.id] = 0;
+                    stockMap[
+                        product.id
+                    ] = 0;
 
                 } else {
 
-                    stockMap[product.id] =
-                        Number(stock || 0);
+                    stockMap[
+                        product.id
+                    ] =
+                        Number(
+                            stock || 0
+                        );
+
                 }
             }
 
-            productsContainer.innerHTML = "";
 
-            productosMostrar.forEach(product => {
+            productsContainer.innerHTML =
+                "";
 
-                const stock =
-                    stockMap[product.id] || 0;
 
-                const disponible =
-                    stock > 0;
+            productosMostrar.forEach(
+                product => {
 
-                const card =
-                    document.createElement("div");
+                    const stock =
+                        stockMap[
+                            product.id
+                        ] || 0;
 
-                card.className = "product";
 
-                card.innerHTML = `
+                    const disponible =
+                        stock > 0;
 
-                    <div class="product-icon">
-                        ${obtenerIcono(
-                            product.category
-                        )}
-                    </div>
 
-                    <h2>
-                        ${escaparHTML(
-                            product.name
-                        )}
-                    </h2>
+                    const card =
+                        document.createElement(
+                            "div"
+                        );
 
-                    <p>
-                        ${escaparHTML(
-                            product.description ||
-                            "Producto digital disponible en Butterfly Shop."
-                        )}
-                    </p>
 
-                    <div class="price">
-                        💎 ${product.price_credits} créditos
-                    </div>
+                    card.className =
+                        "product";
 
-                    <div class="stock ${
-                        disponible
-                            ? "available"
-                            : "unavailable"
-                    }">
+
+                    /*
+                     * ==================================
+                     * IMAGEN DEL PRODUCTO
+                     *
+                     * Si image_url existe:
+                     *     mostramos la imagen subida.
+                     *
+                     * Si no existe:
+                     *     mostramos el emoji de respaldo.
+                     * ==================================
+                     */
+
+                    let visualProducto;
+
+
+                    if (
+                        product.image_url &&
+                        product.image_url.trim() !== ""
+                    ) {
+
+                        visualProducto = `
+
+                            <img
+                                src="${escaparHTML(
+                                    product.image_url
+                                )}"
+                                class="product-image"
+                                alt="${escaparHTML(
+                                    product.name ||
+                                    "Producto"
+                                )}"
+                                loading="lazy"
+                                onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';"
+                            >
+
+                            <div
+                                class="product-icon"
+                                style="display:none;"
+                            >
+                                ${obtenerIcono(
+                                    product.category
+                                )}
+                            </div>
+
+                        `;
+
+                    } else {
+
+                        visualProducto = `
+
+                            <div
+                                class="product-icon"
+                            >
+                                ${obtenerIcono(
+                                    product.category
+                                )}
+                            </div>
+
+                        `;
+                    }
+
+
+                    card.innerHTML = `
+
+                        ${visualProducto}
+
+
+                        <h2>
+
+                            ${escaparHTML(
+                                product.name
+                            )}
+
+                        </h2>
+
+
+                        <p>
+
+                            ${escaparHTML(
+                                product.description ||
+                                "Producto digital disponible en Butterfly Shop."
+                            )}
+
+                        </p>
+
+
+                        <div class="price">
+
+                            💎
+                            ${product.price_credits}
+                            créditos
+
+                        </div>
+
+
+                        <div
+                            class="stock ${
+                                disponible
+                                    ? "available"
+                                    : "unavailable"
+                            }"
+                        >
+
+                            ${
+                                disponible
+                                    ? "🟢 Disponible"
+                                    : "🔴 Agotado"
+                            }
+
+                        </div>
+
+
                         ${
                             disponible
-                                ? "🟢 Disponible"
-                                : "🔴 Agotado"
+
+                                ? `
+
+                                    <button
+                                        class="buy"
+                                        type="button"
+                                        onclick="comprarProducto('${product.id}')"
+                                    >
+                                        🛒 Comprar
+                                    </button>
+
+                                  `
+
+                                : `
+
+                                    <span
+                                        class="buy disabled"
+                                    >
+                                        Agotado
+                                    </span>
+
+                                  `
                         }
-                    </div>
 
-                    ${
-                        disponible
+                    `;
 
-                            ? `
-                                <button
-                                    class="buy"
-                                    type="button"
-                                    onclick="comprarProducto('${product.id}')"
-                                >
-                                    🛒 Comprar
-                                </button>
-                              `
 
-                            : `
-                                <span
-                                    class="buy disabled"
-                                >
-                                    Agotado
-                                </span>
-                              `
-                    }
-                `;
+                    productsContainer
+                        .appendChild(card);
 
-                productsContainer
-                    .appendChild(card);
-
-            });
+                }
+            );
         }
 
 
@@ -643,7 +931,9 @@
         // COMPRAR PRODUCTO
         // ================================
 
-        async function comprarProducto(productId) {
+        async function comprarProducto(
+            productId
+        ) {
 
             try {
 
@@ -651,7 +941,11 @@
                     data: {
                         session
                     }
-                } = await supabaseClient.auth.getSession();
+                } =
+                    await supabaseClient
+                        .auth
+                        .getSession();
+
 
                 if (!session) {
 
@@ -671,16 +965,21 @@
                         "🦋 ¿Quieres comprar este producto con tus créditos?"
                     );
 
+
                 if (!confirmar) {
                     return;
                 }
 
 
-                const { data, error } =
+                const {
+                    data,
+                    error
+                } =
                     await supabaseClient.rpc(
                         "buy_product",
                         {
-                            p_product_id: productId
+                            p_product_id:
+                                productId
                         }
                     );
 
@@ -690,19 +989,16 @@
                 }
 
 
-                /*
-                 * buy_product() devuelve un JSON
-                 * con las credenciales de la cuenta
-                 * asignada.
-                 */
-
                 const compra =
                     Array.isArray(data)
                         ? data[0]
                         : data;
 
 
-                if (!compra || !compra.success) {
+                if (
+                    !compra ||
+                    !compra.success
+                ) {
 
                     throw new Error(
                         "No se recibió correctamente la información de la compra."
@@ -717,25 +1013,36 @@
                 purchaseDetails.innerHTML = `
 
                     <div class="credential-box">
-                        <span class="credential-label">
+
+                        <span
+                            class="credential-label"
+                        >
                             🛍️ Producto
                         </span>
 
-                        <div class="credential-value">
+                        <div
+                            class="credential-value"
+                        >
                             ${escaparHTML(
                                 compra.product_name ||
                                 "Producto"
                             )}
                         </div>
+
                     </div>
 
 
                     <div class="credential-box">
-                        <span class="credential-label">
+
+                        <span
+                            class="credential-label"
+                        >
                             💎 Costo
                         </span>
 
-                        <div class="credential-value">
+                        <div
+                            class="credential-value"
+                        >
                             ${escaparHTML(
                                 String(
                                     compra.price_credits ??
@@ -744,97 +1051,141 @@
                             )}
                             créditos
                         </div>
+
                     </div>
 
 
                     <div class="credential-box">
-                        <span class="credential-label">
+
+                        <span
+                            class="credential-label"
+                        >
                             📧 Correo
                         </span>
 
-                        <div class="credential-value">
+                        <div
+                            class="credential-value"
+                        >
                             ${escaparHTML(
                                 compra.email ||
                                 "No disponible"
                             )}
                         </div>
+
                     </div>
 
 
                     <div class="credential-box">
-                        <span class="credential-label">
+
+                        <span
+                            class="credential-label"
+                        >
                             🔑 Contraseña
                         </span>
 
-                        <div class="credential-value">
+                        <div
+                            class="credential-value"
+                        >
                             ${escaparHTML(
                                 compra.password ||
                                 "No disponible"
                             )}
                         </div>
+
                     </div>
 
 
                     ${
                         compra.profile_name
+
                             ? `
-                                <div class="credential-box">
-                                    <span class="credential-label">
+
+                                <div
+                                    class="credential-box"
+                                >
+
+                                    <span
+                                        class="credential-label"
+                                    >
                                         👤 Perfil
                                     </span>
 
-                                    <div class="credential-value">
+                                    <div
+                                        class="credential-value"
+                                    >
                                         ${escaparHTML(
                                             compra.profile_name
                                         )}
                                     </div>
+
                                 </div>
+
                               `
+
                             : ""
                     }
 
 
                     ${
                         compra.profile_pin
+
                             ? `
-                                <div class="credential-box">
-                                    <span class="credential-label">
+
+                                <div
+                                    class="credential-box"
+                                >
+
+                                    <span
+                                        class="credential-label"
+                                    >
                                         🔢 PIN
                                     </span>
 
-                                    <div class="credential-value">
+                                    <div
+                                        class="credential-value"
+                                    >
                                         ${escaparHTML(
                                             compra.profile_pin
                                         )}
                                     </div>
+
                                 </div>
+
                               `
+
                             : ""
                     }
 
 
                     <div class="credential-box">
-                        <span class="credential-label">
+
+                        <span
+                            class="credential-label"
+                        >
                             🧾 ID de compra
                         </span>
 
-                        <div class="credential-value">
+                        <div
+                            class="credential-value"
+                        >
                             ${escaparHTML(
                                 compra.purchase_id ||
                                 "No disponible"
                             )}
                         </div>
+
                     </div>
 
                 `;
 
 
-                purchaseModal.classList.add("show");
+                purchaseModal.classList
+                    .add("show");
 
 
                 /*
-                 * Recargar catálogo para actualizar
-                 * automáticamente el stock.
+                 * Recargar catálogo para
+                 * actualizar stock.
                  */
 
                 await cargarProductos();
@@ -847,23 +1198,22 @@
                     error
                 );
 
+
                 let mensaje =
                     error.message ||
                     "Error desconocido.";
 
-                /*
-                 * Supabase/PostgreSQL puede devolver
-                 * errores RPC con el mensaje dentro
-                 * de diferentes propiedades.
-                 */
 
                 if (
                     error.details &&
-                    typeof error.details === "string"
+                    typeof error.details ===
+                        "string"
                 ) {
+
                     mensaje =
                         error.details;
                 }
+
 
                 alert(
                     "❌ No se pudo completar la compra.\n\n" +
@@ -881,6 +1231,7 @@
 
             purchaseModal.classList
                 .remove("show");
+
         }
 
 
@@ -892,7 +1243,9 @@
                     event.target ===
                     purchaseModal
                 ) {
+
                     cerrarModalCompra();
+
                 }
 
             }
@@ -903,38 +1256,73 @@
         // ICONOS POR CATEGORÍA
         // ================================
 
-        function obtenerIcono(category) {
+        function obtenerIcono(
+            category
+        ) {
 
             if (!category) {
                 return "🎁";
             }
 
+
             const categoria =
                 category.toLowerCase();
 
+
             if (
-                categoria.includes("plataforma")
+                categoria.includes(
+                    "plataforma"
+                )
             ) {
+
                 return "📺";
+
             }
 
+
             if (
-                categoria.includes("diseño")
+                categoria.includes(
+                    "streaming"
+                )
             ) {
+
+                return "📺";
+
+            }
+
+
+            if (
+                categoria.includes(
+                    "diseño"
+                )
+            ) {
+
                 return "🎨";
+
             }
 
+
             if (
-                categoria.includes("curso")
+                categoria.includes(
+                    "curso"
+                )
             ) {
+
                 return "📚";
+
             }
 
+
             if (
-                categoria.includes("video")
+                categoria.includes(
+                    "video"
+                )
             ) {
+
                 return "🎬";
+
             }
+
 
             return "🎁";
         }
@@ -944,15 +1332,21 @@
         // PROTECCIÓN HTML
         // ================================
 
-        function escaparHTML(texto) {
+        function escaparHTML(
+            texto
+        ) {
 
             const div =
-                document.createElement("div");
+                document.createElement(
+                    "div"
+                );
+
 
             div.textContent =
                 texto == null
                     ? ""
                     : String(texto);
+
 
             return div.innerHTML;
         }
