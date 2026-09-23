@@ -1,0 +1,452 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>Estadísticas - Butterfly Shop</title>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="supabase-config.js"></script>
+
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background: linear-gradient(135deg, #f8edff, #eee1ff, #fdf7ff);
+      color: #4a3568;
+    }
+
+    header {
+      background: linear-gradient(135deg, #8e5cc7, #b77ee8);
+      color: white;
+      padding: 25px 20px;
+      text-align: center;
+      box-shadow: 0 4px 15px rgba(120, 70, 160, 0.2);
+    }
+
+    header h1 {
+      margin: 0;
+      font-size: 28px;
+    }
+
+    header p {
+      margin: 8px 0 0;
+      opacity: 0.9;
+    }
+
+    .container {
+      width: 95%;
+      max-width: 1300px;
+      margin: 30px auto;
+    }
+
+    .top-bar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 15px;
+      margin-bottom: 25px;
+      flex-wrap: wrap;
+    }
+
+    .top-bar h2 {
+      margin: 0;
+      color: #68448c;
+    }
+
+    .buttons {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    button {
+      border: none;
+      padding: 11px 18px;
+      border-radius: 12px;
+      cursor: pointer;
+      font-weight: bold;
+      transition: 0.2s;
+    }
+
+    .btn-back {
+      background: #eadcff;
+      color: #68448c;
+    }
+
+    .btn-refresh {
+      background: #9d68cf;
+      color: white;
+    }
+
+    button:hover {
+      transform: translateY(-2px);
+      opacity: 0.9;
+    }
+
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 18px;
+      margin-bottom: 30px;
+    }
+
+    .stat-card {
+      background: white;
+      border-radius: 20px;
+      padding: 25px 20px;
+      box-shadow: 0 5px 18px rgba(110, 70, 150, 0.12);
+      text-align: center;
+    }
+
+    .stat-icon {
+      font-size: 34px;
+      margin-bottom: 8px;
+    }
+
+    .stat-title {
+      font-size: 14px;
+      color: #8c76a4;
+      margin-bottom: 8px;
+    }
+
+    .stat-value {
+      font-size: 30px;
+      font-weight: bold;
+      color: #68448c;
+    }
+
+    .sections {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 20px;
+    }
+
+    .card {
+      background: white;
+      border-radius: 20px;
+      padding: 25px;
+      box-shadow: 0 5px 18px rgba(110, 70, 150, 0.12);
+    }
+
+    .card h3 {
+      margin-top: 0;
+      color: #68448c;
+    }
+
+    .info-list {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .info-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 14px;
+      background: #faf6ff;
+      border-radius: 12px;
+    }
+
+    .info-item strong {
+      color: #68448c;
+    }
+
+    .badge {
+      display: inline-block;
+      padding: 6px 10px;
+      border-radius: 10px;
+      background: #eadcff;
+      color: #68448c;
+      font-size: 13px;
+      font-weight: bold;
+    }
+
+    .message {
+      background: white;
+      padding: 18px;
+      border-radius: 15px;
+      text-align: center;
+      box-shadow: 0 4px 15px rgba(110, 70, 150, 0.1);
+      margin-bottom: 20px;
+    }
+
+    .loading {
+      color: #7b5b98;
+    }
+
+    .error {
+      color: #b3261e;
+    }
+
+    @media (max-width: 900px) {
+      .stats-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+
+      .sections {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    @media (max-width: 550px) {
+      .stats-grid {
+        grid-template-columns: 1fr;
+      }
+
+      header h1 {
+        font-size: 24px;
+      }
+
+      .stat-value {
+        font-size: 26px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+<header>
+  <h1>🦋 Butterfly Shop</h1>
+  <p>Panel de estadísticas</p>
+</header>
+
+<div class="container">
+
+  <div class="top-bar">
+    <h2>📊 Estadísticas generales</h2>
+
+    <div class="buttons">
+      <button class="btn-back" onclick="window.location.href='admin.html'">
+        ← Volver al panel
+      </button>
+
+      <button class="btn-refresh" onclick="cargarEstadisticas()">
+        🔄 Actualizar
+      </button>
+    </div>
+  </div>
+
+  <div id="message" class="message loading">
+    Cargando estadísticas...
+  </div>
+
+  <div class="stats-grid">
+
+    <div class="stat-card">
+      <div class="stat-icon">🛒</div>
+      <div class="stat-title">Total de ventas</div>
+      <div class="stat-value" id="total-sales">0</div>
+    </div>
+
+    <div class="stat-card">
+      <div class="stat-icon">💎</div>
+      <div class="stat-title">Créditos generados</div>
+      <div class="stat-value" id="total-credits">0</div>
+    </div>
+
+    <div class="stat-card">
+      <div class="stat-icon">👥</div>
+      <div class="stat-title">Clientes con compras</div>
+      <div class="stat-value" id="total-clients">0</div>
+    </div>
+
+    <div class="stat-card">
+      <div class="stat-icon">📦</div>
+      <div class="stat-title">Ventas con inventario</div>
+      <div class="stat-value" id="sales-inventory">0</div>
+    </div>
+
+  </div>
+
+  <div class="sections">
+
+    <div class="card">
+      <h3>📦 Estado del inventario vendido</h3>
+
+      <div class="info-list">
+
+        <div class="info-item">
+          <span>Ventas con inventario asignado</span>
+          <span class="badge" id="with-inventory">0</span>
+        </div>
+
+        <div class="info-item">
+          <span>Ventas sin inventario asignado</span>
+          <span class="badge" id="without-inventory">0</span>
+        </div>
+
+      </div>
+    </div>
+
+    <div class="card">
+      <h3>💰 Resumen económico</h3>
+
+      <div class="info-list">
+
+        <div class="info-item">
+          <span>Ventas completadas</span>
+          <strong id="completed-sales">0</strong>
+        </div>
+
+        <div class="info-item">
+          <span>Créditos generados</span>
+          <strong id="summary-credits">0</strong>
+        </div>
+
+        <div class="info-item">
+          <span>Promedio por venta</span>
+          <strong id="average-sale">0 créditos</strong>
+        </div>
+
+      </div>
+    </div>
+
+  </div>
+
+</div>
+
+<script>
+
+async function verificarAdmin() {
+
+  const {
+    data: { user },
+    error
+  } = await supabaseClient.auth.getUser();
+
+  if (error || !user) {
+    window.location.href = "login.html";
+    return false;
+  }
+
+  const { data: profile, error: profileError } =
+    await supabaseClient
+      .from("profiles")
+      .select("role")
+      .eq("id", user.id)
+      .single();
+
+  if (
+    profileError ||
+    !profile ||
+    profile.role !== "admin"
+  ) {
+    alert("No tienes permisos de administrador.");
+    window.location.href = "panel.html";
+    return false;
+  }
+
+  return true;
+}
+
+
+async function cargarEstadisticas() {
+
+  const message = document.getElementById("message");
+
+  message.className = "message loading";
+  message.textContent = "Cargando estadísticas...";
+
+  const { data, error } =
+    await supabaseClient.rpc("get_admin_statistics");
+
+  if (error) {
+
+    console.error("Error cargando estadísticas:", error);
+
+    message.className = "message error";
+    message.textContent =
+      "No se pudieron cargar las estadísticas.";
+
+    return;
+  }
+
+  if (!data || data.length === 0) {
+
+    message.className = "message";
+    message.textContent =
+      "No hay estadísticas disponibles todavía.";
+
+    return;
+  }
+
+  const stats = data[0];
+
+  const totalSales =
+    Number(stats.total_sales || 0);
+
+  const totalCredits =
+    Number(stats.total_credits || 0);
+
+  const totalClients =
+    Number(stats.total_clients || 0);
+
+  const salesWithInventory =
+    Number(stats.sales_with_inventory || 0);
+
+  const salesWithoutInventory =
+    Number(stats.sales_without_inventory || 0);
+
+  document.getElementById("total-sales").textContent =
+    totalSales;
+
+  document.getElementById("total-credits").textContent =
+    totalCredits;
+
+  document.getElementById("total-clients").textContent =
+    totalClients;
+
+  document.getElementById("sales-inventory").textContent =
+    salesWithInventory;
+
+  document.getElementById("with-inventory").textContent =
+    salesWithInventory;
+
+  document.getElementById("without-inventory").textContent =
+    salesWithoutInventory;
+
+  document.getElementById("completed-sales").textContent =
+    totalSales;
+
+  document.getElementById("summary-credits").textContent =
+    totalCredits;
+
+  const average =
+    totalSales > 0
+      ? (totalCredits / totalSales).toFixed(2)
+      : "0";
+
+  document.getElementById("average-sale").textContent =
+    `${average} créditos`;
+
+  message.className = "message";
+  message.textContent =
+    "✨ Estadísticas actualizadas correctamente.";
+
+}
+
+
+async function iniciar() {
+
+  const esAdmin = await verificarAdmin();
+
+  if (!esAdmin) return;
+
+  await cargarEstadisticas();
+
+}
+
+iniciar();
+
+</script>
+
+</body>
+</html>
