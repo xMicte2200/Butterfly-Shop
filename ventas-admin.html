@@ -34,7 +34,7 @@
     }
 
     .header-content {
-      max-width: 1250px;
+      max-width: 1400px;
       margin: auto;
       display: flex;
       justify-content: space-between;
@@ -55,7 +55,7 @@
     }
 
     .container {
-      max-width: 1250px;
+      max-width: 1400px;
       margin: 30px auto;
       padding: 0 18px;
     }
@@ -156,7 +156,7 @@
     table {
       width: 100%;
       border-collapse: collapse;
-      min-width: 850px;
+      min-width: 1250px;
     }
 
     th {
@@ -186,6 +186,7 @@
       border-radius: 20px;
       font-size: 12px;
       font-weight: bold;
+      white-space: nowrap;
     }
 
     .badge-completed {
@@ -201,6 +202,39 @@
     .badge-cancelled {
       background: #ffe1e5;
       color: #a33d4c;
+    }
+
+    .account-badge {
+      display: inline-block;
+      background: #eee3ff;
+      color: #70458d;
+      padding: 6px 10px;
+      border-radius: 12px;
+      font-size: 12px;
+      font-weight: bold;
+      white-space: nowrap;
+    }
+
+    .inventory-ok {
+      display: inline-block;
+      background: #e4f8e9;
+      color: #328047;
+      padding: 6px 10px;
+      border-radius: 12px;
+      font-size: 12px;
+      font-weight: bold;
+      white-space: nowrap;
+    }
+
+    .inventory-none {
+      display: inline-block;
+      background: #fff3d7;
+      color: #9a711b;
+      padding: 6px 10px;
+      border-radius: 12px;
+      font-size: 12px;
+      font-weight: bold;
+      white-space: nowrap;
     }
 
     .empty,
@@ -228,11 +262,26 @@
     .credits {
       color: #743d91;
       font-weight: bold;
+      white-space: nowrap;
     }
 
     .date {
       white-space: nowrap;
       color: #81758a;
+    }
+
+    .purchase-id {
+      font-size: 11px;
+      color: #8b7b91;
+      max-width: 180px;
+      word-break: break-all;
+    }
+
+    .inventory-id {
+      font-size: 11px;
+      color: #8b7b91;
+      max-width: 180px;
+      word-break: break-all;
     }
 
     footer {
@@ -369,6 +418,23 @@
 
         <p>
           Clientes con compras
+        </p>
+
+      </div>
+
+
+      <div class="stat">
+
+        <div class="stat-icon">
+          📦
+        </div>
+
+        <h2 id="productos-entregados">
+          0
+        </h2>
+
+        <p>
+          Productos con inventario
         </p>
 
       </div>
@@ -613,6 +679,13 @@
           ).size;
 
 
+        const productosEntregados =
+          ventas.filter(
+            venta =>
+              venta.inventory_id
+          ).length;
+
+
         document.getElementById(
           "total-ventas"
         ).textContent =
@@ -629,6 +702,12 @@
           "clientes"
         ).textContent =
           clientes;
+
+
+        document.getElementById(
+          "productos-entregados"
+        ).textContent =
+          productosEntregados;
 
 
         if (ventas.length === 0) {
@@ -658,7 +737,11 @@
 
                 <th>Producto</th>
 
+                <th>Tipo de cuenta</th>
+
                 <th>Créditos</th>
+
+                <th>Inventario</th>
 
                 <th>Estado</th>
 
@@ -689,6 +772,12 @@
                       : "Sin fecha";
 
 
+                  const tieneInventario =
+                    Boolean(
+                      venta.inventory_id
+                    );
+
+
                   return `
 
                     <tr>
@@ -704,6 +793,7 @@
                         </strong>
                       </td>
 
+
                       <td>
                         ${
                           escaparHTML(
@@ -712,6 +802,7 @@
                           )
                         }
                       </td>
+
 
                       <td class="product-name">
                         ${
@@ -722,13 +813,62 @@
                         }
                       </td>
 
+
+                      <td>
+
+                        <span class="account-badge">
+
+                          ${
+                            escaparHTML(
+                              venta.account_type ||
+                              "Sin especificar"
+                            )
+                          }
+
+                        </span>
+
+                      </td>
+
+
                       <td class="credits">
+
                         💎 ${
                           Number(
                             venta.price_credits || 0
                           )
                         }
+
                       </td>
+
+
+                      <td>
+
+                        ${
+                          tieneInventario
+
+                            ? `
+                              <span class="inventory-ok">
+                                📦 Asignado
+                              </span>
+
+                              <div class="inventory-id">
+                                ${
+                                  escaparHTML(
+                                    venta.inventory_id
+                                  )
+                                }
+                              </div>
+                            `
+
+                            : `
+                              <span class="inventory-none">
+                                ⚠️ No asignado
+                              </span>
+                            `
+                        }
+
+                      </td>
+
 
                       <td>
 
@@ -739,6 +879,7 @@
                             )
                           }"
                         >
+
                           ${
                             escaparHTML(
                               traducirEstado(
@@ -746,26 +887,35 @@
                               )
                             )
                           }
+
                         </span>
 
                       </td>
 
+
                       <td class="date">
+
                         ${
                           escaparHTML(
                             fecha
                           )
                         }
+
                       </td>
 
+
                       <td>
-                        <small>
+
+                        <div class="purchase-id">
+
                           ${
                             escaparHTML(
                               venta.purchase_id
                             )
                           }
-                        </small>
+
+                        </div>
+
                       </td>
 
                     </tr>
